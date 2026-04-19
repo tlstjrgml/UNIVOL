@@ -1,0 +1,96 @@
+body{
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    background-color: #ffffff;
+    /* text-align: left; */
+    /* font-family: "Playfair Display", "Roboto Serif", serif; */
+}
+
+.login {
+    width: 100%;
+    /* max-width: 400px; */
+    padding: 20px;
+}
+
+/* 로고 및 제목 스타일 */
+.banner, .subject{
+    text-align: left;
+    padding-left: 40px;
+}
+
+.banner .textBan {
+    display: inline-block;
+    margin-top: 50px;
+
+    font-size: 40px;
+    font-family: "Newsreader", serif;
+    font-weight: 500;
+    color: #426B1F; /* 로고 색상 */
+    letter-spacing: 2px;
+}
+
+.subject .textSub {
+    font-size: 24px;
+    font-weight:400;
+    margin: 15px 0;
+    color: #000;
+}
+
+/* 구분선 스타일 */
+.divLine {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+    width: 100%;
+    margin:0 0 40px 0;
+}
+
+/* 입력 필드 구역 */
+.id, .pwd {
+    display: flex;
+    align-items: center;
+    background-color: #F8F9F5; 
+    border: 1px solid #F0F0F0;
+    border-radius: 12px;
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+.textId, .textPwd {
+    width: 70px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* 실제 입력창(Input) 스타일 */
+.div {
+    flex: 1;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    outline: none;
+    background-color: #fff;
+}
+
+/* 버튼 구역 스타일 */
+.loginForm {
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    margin: 0 auto;
+}
+.buttonL {
+    background-color: #426B1F; /* 버튼 배경색 */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background 0.3s;
+}
+.buttonL:hover {
+    background-color: #3d5124;
+}
