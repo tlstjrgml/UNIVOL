@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVOL 관리자 페이지</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f5f5f5;
+            --surface: #ffffff;
+            --primary: #424B1F;
+            --text: #222222;
+            --muted: #777777;
+            --border: #cccccc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 30px;
+        }
+
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 40px;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 10px 0 20px 0;
+        }
+
+        .card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f0f0f0;
+            width: 140px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #2f3616;
+        }
+
+        .ban-btn {
+            background-color: #888888;
+        }
+
+        .ban-btn:hover {
+            background-color: #666666;
+        }
+
+        .btn-area {
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">UNIVOL</div>
+        <div class="page-title">관리자 페이지</div>
+        <hr class="divider">
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>아이디</th>
+                        <th>이름</th>
+                        <th>전화번호</th>
+                        <th>성별</th>
+                        <th>회원 상태 변경</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>user1</td>
+                        <td>홍길동</td>
+                        <td>010-1234-5678</td>
+                        <td>남성</td>
+                        <td>
+                            <div class="button-group">
+                                <button type="button" class="active-btn">활동</button>
+                                <button type="button" class="ban-btn">정지</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>user2</td>
+                        <td>김영희</td>
+                        <td>010-9876-5432</td>
+                        <td>여성</td>
+                        <td>
+                            <div class="button-group">
+                                <button type="button" class="active-btn">활동</button>
+                                <button type="button" class="ban-btn">정지</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="btn-area">
+                <button type="submit">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll(".active-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                alert("회원 상태를 활동으로 변경했습니다");
+            });
+        });
+
+        document.querySelectorAll(".ban-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                alert("회원 상태를 정지로 변경했습니다");
+            });
+        });
+    </script>
+</body>
+</html>
