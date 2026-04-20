@@ -78,3 +78,54 @@ CREATE TABLE C_LIKE (
     CONSTRAINT FK_C_LIKE_USER   FOREIGN KEY (USER_ID)  REFERENCES USERS (USER_ID),
     CONSTRAINT FK_C_LIKE_REPLY  FOREIGN KEY (C_NUMBER) REFERENCES REPLY (C_NUMBER)
 );
+
+
+
+-- USERS
+INSERT INTO USERS VALUES ('user1', 'pw1234', '홍길동', 22, 'M', '010-1111-2222', '서울시 강남구', 'N');
+INSERT INTO USERS VALUES ('user2', 'pw1234', '김영희', 21, 'F', '010-3333-4444', '서울시 마포구', 'N');
+INSERT INTO USERS VALUES ('user3', 'pw1234', '이민준', 23, 'M', '010-5555-6666', '서울시 송파구', 'N');
+INSERT INTO USERS VALUES ('user4', 'pw1234', '박지수', 20, 'F', '010-7777-8888', '서울시 관악구', 'N');
+INSERT INTO USERS VALUES ('admin1', 'admin123', '관리자', 30, 'M', '010-0000-0000', '서울시 중구', 'Y');
+
+-- POST (P_TYPE: V=봉사, R=일반)
+INSERT INTO POST (P_TITLE, CONTENTS, P_TYPE, USER_ID) VALUES ('겨울방학 청소년 멘토링 봉사 모집', '청소년 멘토링 봉사활동입니다.', 'V', 'user1');
+INSERT INTO POST (P_TITLE, CONTENTS, P_TYPE, USER_ID) VALUES ('노인복지관 말벗 봉사 모집', '어르신 말벗 봉사활동입니다.', 'V', 'user2');
+INSERT INTO POST (P_TITLE, CONTENTS, P_TYPE, USER_ID) VALUES ('환경 정화 봉사 모집', '한강 환경 정화 봉사입니다.', 'V', 'user3');
+INSERT INTO POST (P_TITLE, CONTENTS, P_TYPE, USER_ID) VALUES ('봉사 후기 공유합니다', '멘토링 봉사 다녀왔어요!', 'R', 'user1');
+INSERT INTO POST (P_TITLE, CONTENTS, P_TYPE, USER_ID) VALUES ('봉사 처음인데 질문있어요', '처음 봉사 신청하는 방법이 궁금해요.', 'R', 'user4');
+
+-- VOLUNTEER (P_TYPE='V' 인 POST만)
+INSERT INTO VOLUNTEER VALUES (1, '겨울방학 청소년 멘토링 봉사', TO_DATE('2025-01-04', 'YYYY-MM-DD'), '서울시 종로구 대왕빌딩');
+INSERT INTO VOLUNTEER VALUES (2, '노인복지관 말벗 봉사', TO_DATE('2025-01-10', 'YYYY-MM-DD'), '서울시 노원구 복지관');
+INSERT INTO VOLUNTEER VALUES (3, '환경 정화 봉사', TO_DATE('2025-01-15', 'YYYY-MM-DD'), '서울시 영등포구 한강공원');
+
+-- REPLY
+INSERT INTO REPLY (COMMENTS, P_NUMBER, USER_ID) VALUES ('좋은 봉사네요!', 1, 'user2');
+INSERT INTO REPLY (COMMENTS, P_NUMBER, USER_ID) VALUES ('저도 신청했어요!', 1, 'user3');
+INSERT INTO REPLY (COMMENTS, P_NUMBER, USER_ID) VALUES ('유익한 후기 감사해요.', 4, 'user2');
+INSERT INTO REPLY (COMMENTS, P_NUMBER, USER_ID) VALUES ('저도 처음인데 같이 해요!', 5, 'user3');
+INSERT INTO REPLY (COMMENTS, P_NUMBER, USER_ID) VALUES ('신청 방법은 게시판 공지 참고하세요.', 5, 'user1');
+
+-- P_LIKE
+INSERT INTO P_LIKE VALUES ('user2', 1);
+INSERT INTO P_LIKE VALUES ('user3', 1);
+INSERT INTO P_LIKE VALUES ('user1', 2);
+INSERT INTO P_LIKE VALUES ('user4', 3);
+INSERT INTO P_LIKE VALUES ('user3', 4);
+
+-- APPLY
+INSERT INTO APPLY (USER_ID, P_NUMBER) VALUES ('user2', 1);
+INSERT INTO APPLY (USER_ID, P_NUMBER) VALUES ('user3', 1);
+INSERT INTO APPLY (USER_ID, P_NUMBER) VALUES ('user1', 2);
+INSERT INTO APPLY (USER_ID, P_NUMBER) VALUES ('user4', 2);
+INSERT INTO APPLY (USER_ID, P_NUMBER) VALUES ('user3', 3);
+
+-- C_LIKE
+INSERT INTO C_LIKE VALUES ('user1', 1);
+INSERT INTO C_LIKE VALUES ('user3', 2);
+INSERT INTO C_LIKE VALUES ('user2', 3);
+INSERT INTO C_LIKE VALUES ('user4', 4);
+INSERT INTO C_LIKE VALUES ('user1', 5);
+
+COMMIT;

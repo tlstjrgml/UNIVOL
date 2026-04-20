@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UNIVOL - 봉사게시판</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
     body { background: #f5f5f0; min-height: 100vh; }
@@ -21,8 +22,10 @@
       top: 0;
       z-index: 10;
     }
-    .logo { font-size: 22px; font-weight: 800; color: #4a7c59; letter-spacing: 2px; cursor: pointer; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; color: #426B1F; letter-spacing: 2px; cursor: pointer; }
+
     .nav { display: flex; gap: 24px; justify-content: center; }
+    
     .nav a {
       font-size: 14px;
       color: #444;
@@ -31,14 +34,14 @@
       border-bottom: 2px solid transparent;
       transition: color 0.15s, border-color 0.15s;
     }
-    .nav a.active, .nav a:hover { color: #4a7c59; border-bottom-color: #4a7c59; }
+    .nav a.active, .nav a:hover { color: #426B1F; border-bottom-color: #426B1F; }
     .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
     .username { font-size: 14px; color: #666; }
     .header-btn {
       font-size: 13px; padding: 6px 14px; border-radius: 8px;
-      border: 1px solid #4a7c59; cursor: pointer; text-decoration: none; transition: background 0.15s;
+      border: 1px solid #426B1F; cursor: pointer; text-decoration: none; transition: background 0.15s;
     }
-    .btn-outline { background: transparent; color: #4a7c59; }
+    .btn-outline { background: transparent; color: #426B1F; }
     .btn-outline:hover { background: #eaf3de; }
 
     /* 컨테이너 */
@@ -65,19 +68,19 @@
       cursor: pointer;
       transition: border-color 0.15s;
     }
-    select:focus, .search-input:focus { border-color: #4a7c59; }
+    select:focus, .search-input:focus { border-color: #426B1F; }
     .search-input { flex: 1; min-width: 160px; cursor: text; }
     .search-btn {
       font-size: 13px; padding: 7px 16px; border-radius: 8px;
-      border: none; background: #4a7c59; color: #fff; cursor: pointer; transition: background 0.15s;
+      border: none; background: #426B1F; color: #fff; cursor: pointer; transition: background 0.15s;
     }
-    .search-btn:hover { background: #3b6d11; }
+    .search-btn:hover { background: #305215; }
     .write-btn {
       font-size: 13px; padding: 7px 18px; border-radius: 8px;
-      border: none; background: #4a7c59; color: #fff; cursor: pointer;
+      border: none; background: #426B1F; color: #fff; cursor: pointer;
       white-space: nowrap; transition: background 0.15s;
     }
-    .write-btn:hover { background: #3b6d11; }
+    .write-btn:hover { background: #305215; }
 
     /* 게시판 카드 */
     .card {
@@ -129,7 +132,7 @@
     /* 공지 배지 */
     .badge-notice {
       display: inline-block; font-size: 10px; font-weight: 700;
-      background: #eaf3de; color: #4a7c59; border-radius: 4px;
+      background: #eaf3de; color: #426B1F; border-radius: 4px;
       padding: 2px 6px; margin-right: 6px; vertical-align: middle;
     }
 
@@ -145,8 +148,8 @@
       display: flex; align-items: center; justify-content: center;
       transition: background 0.12s, color 0.12s;
     }
-    .page-btn:hover { background: #eaf3de; color: #4a7c59; border-color: #4a7c59; }
-    .page-btn.active { background: #4a7c59; color: #fff; border-color: #4a7c59; }
+    .page-btn:hover { background: #eaf3de; color: #426B1F; border-color: #426B1F; }
+    .page-btn.active { background: #426B1F; color: #fff; border-color: #426B1F; }
 
     /* 빈 목록 */
     .empty { padding: 3rem; text-align: center; color: #bbb; font-size: 14px; }
