@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNIVOL - 마이페이지</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
+    body { background: #f5f5f0; min-height: 100vh; }
+
+    /* 헤더 */
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e0e0d8;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      height: 58px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: #4a7c59;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+    .nav { display: flex; gap: 24px; justify-content: center; }
+    .nav a {
+      font-size: 14px;
+      color: #444;
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .nav a.active, .nav a:hover { color: #4a7c59; border-bottom-color: #4a7c59; }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .username {
+      font-size: 14px;
+      color: #666;
+      margin-right: 4px;
+    }
+    .header-btn {
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid #4a7c59;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-admin {
+      background: #4a7c59;
+      color: #fff;
+    }
+    .btn-admin:hover { background: #3b6d11; }
+    .btn-outline {
+      background: transparent;
+      color: #4a7c59;
+    }
+    .btn-outline:hover { background: #eaf3de; }
+
+    /* 컨테이너 */
+    .container {
+      max-width: 1200px;
+      margin: 2.5rem auto;
+      padding: 0 3rem;
+    }
+    .page-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 1.5rem;
+    }
+
+    /* 카드 */
+    .card {
+      background: #fff;
+      border: 1px solid #e0e0d8;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid #e0e0d8;
+    }
+    .card-header h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #222;
+    }
+    .card-header p {
+      font-size: 13px;
+      color: #888;
+      margin-top: 3px;
+    }
+
+    /* 리스트 헤더 */
+    .list-header {
+      display: grid;
+      grid-template-columns: 90px 1fr 120px 100px;
+      gap: 12px;
+      padding: 9px 1.5rem;
+      background: #f7f7f2;
+      border-bottom: 1px solid #e0e0d8;
+    }
+    .list-header span {
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .list-header span:not(:nth-child(2)) { text-align: center; }
+
+    /* 리스트 아이템 */
+    .list-item {
+      display: grid;
+      grid-template-columns: 90px 1fr 120px 100px;
+      gap: 12px;
+      padding: 14px 1.5rem;
+      border-bottom: 1px solid #f0f0ea;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .list-item:hover { background: #f7faf5; }
+    .list-item .num {
+      font-size: 13px;
+      color: #aaa;
+      text-align: center;
+    }
+    .list-item .title {
+      font-size: 14px;
+      color: #222;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .list-item .author {
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+    }
+    .list-item .date {
+      font-size: 13px;
+      color: #aaa;
+      text-align: center;
+    }
+
+    /* 비어있을 때 */
+    .empty {
+      padding: 3rem;
+      text-align: center;
+      color: #bbb;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo" onclick="location.href='/'">UNIVOL</div>
+  <nav class="nav">
+    <a href="/mypage" class="active">마이페이지</a>
+  </nav>
+  <div class="header-right">
+    <span class="username" id="username-display">홍길동님</span>
+    <a href="/admin" class="header-btn btn-admin" id="admin-btn">관리자페이지</a>
+    <a href="/mypage/edit" class="header-btn btn-outline">개인정보수정</a>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">마이페이지</h1>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>신청현황</h2>
+      <p id="list-subtitle">내가 신청한 봉사 댓글 리스트</p>
+    </div>
+
+    <div class="list-header">
+      <span>글번호</span>
+      <span style="text-align:left;">제목</span>
+      <span>작성자</span>
+      <span>신청일</span>
+    </div>
+
+    <div id="application-list">
+      <div class="list-item" onclick="location.href='/posts/1042'">
+        <span class="num">#1042</span>
+        <span class="title">2024 겨울 무료급식 봉사 모집</span>
+        <span class="author">김민준</span>
+        <span class="date">2024.11.28</span>
+      </div>
+      <div class="list-item" onclick="location.href='/posts/1038'">
+        <span class="num">#1038</span>
+        <span class="title">노인복지관 말벗 봉사활동 신청</span>
+        <span class="author">이서연</span>
+        <span class="date">2024.11.25</span>
+      </div>
+      <div class="list-item" onclick="location.href='/posts/1031'">
+        <span class="num">#1031</span>
+        <span class="title">환경정화 캠페인 자원봉사 모집</span>
+        <span class="author">박지호</span>
+        <span class="date">2024.11.22</span>
+      </div>
+      <div class="list-item" onclick="location.href='/posts/1025'">
+        <span class="num">#1025</span>
+        <span class="title">청소년 멘토링 봉사 프로그램</span>
+        <span class="author">최수아</span>
+        <span class="date">2024.11.20</span>
+      </div>
+      <div class="list-item" onclick="location.href='/posts/1018'">
+        <span class="num">#1018</span>
+        <span class="title">장애인 체육대회 보조 봉사</span>
+        <span class="author">정다은</span>
+        <span class="date">2024.11.18</span>
+      </div>
+      <!-- 신청 내역이 없을 경우 아래 div를 표시하세요 -->
+      <!-- <div class="empty">신청한 봉사가 없습니다.</div> -->
+    </div>
+  </div>
+</main>
+
+<script>
+  /*
+   * ============================================================
+   *  로그인 세션 정보를 여기에 주입하세요.
+   *  (서버 사이드 템플릿 엔진 사용 시 아래 변수를 서버 값으로 교체)
+   * ============================================================
+   *  예) Thymeleaf:
+   *    const isAdmin = [[${session.isAdmin}]];
+   *    const username = [[${session.username}]];
+   * ============================================================
+   */
+  const isAdmin = true;          // 관리자 여부 (true / false)
+  const username = '홍길동';     // 로그인한 사용자 이름
+
+  // 사용자 이름 적용
+  document.getElementById('username-display').textContent = username + '님';
+
+  // 신청 리스트 부제목 적용
+  document.getElementById('list-subtitle').textContent =
+    username + '이(가) 신청한 봉사 댓글 리스트';
+
+  // 관리자 버튼 표시/숨김
+  const adminBtn = document.getElementById('admin-btn');
+  if (!isAdmin) {
+    adminBtn.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
