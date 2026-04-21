@@ -2,76 +2,119 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>게시글 작성</title>
+
+  <!-- 폰트 -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-}
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 30px;
+    }
 
-.container {
-  width: 500px;
-  margin: 50px auto;
-  background: #fff;
-  padding: 20px 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+    /* 로고 */
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      color: #424B1F;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    /* 페이지 제목 */
+    .page-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
 
-.form-group {
-  margin-bottom: 15px;
-}
+    /* 구분선 */
+    .divider {
+      border: none;
+      border-top: 1px solid #ccc;
+      width: 90%;
+      max-width: 500px;
+      margin: 10px auto 20px auto;
+    }
 
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
+    .container {
+      width: 90%;
+      max-width: 500px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
 
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-textarea {
-  resize: none;
-}
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
 
-.btn-group {
-  text-align: center;
-}
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
-button {
-  padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  background-color: #4CAF50;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
+    textarea {
+      resize: none;
+    }
 
-button[type="reset"] {
-  background-color: #888;
-}
+    .btn-group {
+      text-align: center;
+    }
 
-button:hover {
-  opacity: 0.9;
-}
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      background-color: #424B1F;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button[type="reset"] {
+      background-color: #888;
+    }
+
+    button:hover {
+      background-color: #2f3616;
+    }
   </style>
 </head>
 <body>
 
+  <!-- 로고 -->
+  <div class="logo">UNIVOL</div>
+
+  <!-- 페이지 제목 -->
+  <div class="page-title">게시글 작성</div>
+
+  <hr class="divider">
+
   <div class="container">
-    <h2>봉사 게시글 작성</h2>
+    <!-- 구분선 -->
+
 
     <form>
       <div class="form-group">
