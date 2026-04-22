@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNIVOL</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #f4f6f1, #e9f0e1);
+}
+
+/* 전체 박스 */
+.container {
+    width: 900px;
+    margin: 50px auto;
+    padding: 40px;
+}
+
+/* 공통 줄 */
+.row {
+    position: relative;
+    height: 100px;
+}
+
+/* 중앙 박스 */
+.center-box {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 70px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-weight: bold;
+    background: #fafafa;
+    transition: 0.3s;
+}
+
+.center-box:hover {
+    background: #426B1F;
+    color: white;
+    border-color: #426B1F;
+}
+
+/* UNIVOL */
+.title {
+    border: none;
+    font-size: 40px;
+    padding: 0;
+    color: #426B1F;
+    cursor: pointer;
+    letter-spacing: 3px;
+    transition: 0.3s;
+}
+
+.title:hover {
+    transform: translateX(-50%) scale(1.05);
+}
+
+/* 오른쪽 메뉴 */
+.menu {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 버튼 */
+button {
+    padding: 10px 18px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.25s;
+}
+
+button:hover {
+    background: #426B1F;
+    color: white;
+    border-color: #426B1F;
+    transform: translateY(-2px);
+}
+
+/* 카드 */
+.card {
+    width: 85%;
+    margin: 30px auto;
+    height: 200px;
+    border-radius: 16px;
+    background: white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #555;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- 1줄 (UNIVOL + 로그인/회원가입) -->
+    <div class="row">
+        <div class="center-box title">UNIVOL</div>
+
+        <div class="menu">
+            <button onclick="location.href='/logIn'">로그인</button>
+            <button onclick="location.href='/signUp'">회원가입</button>
+            <button>마이페이지</button>
+        </div>
+    </div>
+
+    <!-- 2줄 (게시판 + 마이페이지) -->
+    <div class="row">
+        <div class="center-box">게시판</div>
+
+    
+    </div>
+
+    <!-- 카드 -->
+    <div class="card">
+        봉사 게시판 최근게시물 5개
+    </div>
+
+    <div class="card">
+        후기 게시판 최근게시물 5개
+    </div>
+
+</div>
+
+</body>
+</html>
