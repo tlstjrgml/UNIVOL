@@ -1,149 +1,231 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UNIVOL</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIVOL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
+    body { background: #f5f5f0; min-height: 100vh; }
 
-<style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #f4f6f1, #e9f0e1);
-}
+    .container {
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
 
-/* 전체 박스 */
-.container {
-    width: 900px;
-    margin: 50px auto;
-    padding: 40px;
-}
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #426B1F;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-/* 공통 줄 */
-.row {
-    position: relative;
-    height: 100px;
-}
+    .section-title a {
+      font-size: 13px;
+      font-weight: 400;
+      color: #426B1F;
+      text-decoration: none;
+    }
 
-/* 중앙 박스 */
-.center-box {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 12px 70px;
-    border: 2px solid #ddd;
-    border-radius: 12px;
-    font-weight: bold;
-    background: #fafafa;
-    transition: 0.3s;
-}
+    .section-title a:hover {
+      text-decoration: underline;
+    }
 
-.center-box:hover {
-    background: #426B1F;
-    color: white;
-    border-color: #426B1F;
-}
+    /* 테이블 */
+    .board-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      margin-bottom: 3rem;
+    }
 
-/* UNIVOL */
-.title {
-    border: none;
-    font-size: 40px;
-    padding: 0;
-    color: #426B1F;
-    cursor: pointer;
-    letter-spacing: 3px;
-    transition: 0.3s;
-}
+    .board-table thead tr {
+      background: #426B1F;
+      color: white;
+    }
 
-.title:hover {
-    transform: translateX(-50%) scale(1.05);
-}
+    .board-table thead th {
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+    }
 
-/* 오른쪽 메뉴 */
-.menu {
-    position: absolute;
-    right: 0;
-    top: 10px;
-    z-index: 2;
+    .board-table thead th:nth-child(2) {
+      text-align: left;
+    }
 
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+    .board-table tbody tr {
+      border-bottom: 1px solid #f0f0ea;
+      transition: background 0.12s;
+      cursor: pointer;
+    }
 
-/* 버튼 */
-button {
-    padding: 10px 18px;
-    border: 1px solid #ccc;
-    background: white;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: 0.25s;
-}
+    .board-table tbody tr:last-child {
+      border-bottom: none;
+    }
 
-button:hover {
-    background: #426B1F;
-    color: white;
-    border-color: #426B1F;
-    transform: translateY(-2px);
-}
+    .board-table tbody tr:hover {
+      background: #f7faf5;
+    }
 
-/* 카드 */
-.card {
-    width: 85%;
-    margin: 30px auto;
-    height: 200px;
-    border-radius: 16px;
-    background: white;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #555;
-    font-size: 16px;
-    transition: 0.3s;
-}
+    .board-table tbody td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #444;
+      text-align: center;
+    }
 
-.card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
-</style>
+    .board-table tbody td:nth-child(2) {
+      text-align: left;
+      color: #222;
+    }
+
+    .board-table tbody td.views {
+      color: #888;
+      font-size: 13px;
+    }
+
+    .board-table tbody td.likes {
+      color: #c0392b;
+      font-size: 13px;
+    }
+
+    /* 빈 목록 */
+    .empty {
+      text-align: center;
+      padding: 2rem;
+      color: #bbb;
+      font-size: 14px;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+  <div th:replace="views/common/navbar.html"></div>
 
-    <!-- 1줄 (UNIVOL + 로그인/회원가입) -->
-    <div class="row">
-        <div class="center-box title">UNIVOL</div>
+  <div class="container">
 
-        <div class="menu">
-            <button onclick="location.href='/logIn'">로그인</button>
-            <button onclick="location.href='/signUp'">회원가입</button>
-            <button>마이페이지</button>
-        </div>
+    <!-- 봉사게시판 -->
+    <div class="section-title">
+      봉사게시판
+      <a th:href="@{/volunteer}">더보기 &rsaquo;</a>
     </div>
+    <table class="board-table">
+      <thead>
+        <tr>
+          <th style="width:70px;">글번호</th>
+          <th>제목</th>
+          <th style="width:100px;">작성자</th>
+          <th style="width:80px;">조회수</th>
+          <th style="width:70px;">좋아요</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 더미데이터 (나중에 Thymeleaf th:each로 교체) -->
+        <tr onclick="location.href='/volunteer/1'">
+          <td>1</td>
+          <td>겨울방학 청소년 멘토링 봉사 모집</td>
+          <td>홍길동</td>
+          <td class="views">1,085</td>
+          <td class="likes">♥ 34</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/2'">
+          <td>2</td>
+          <td>노인복지관 말벗 봉사 모집</td>
+          <td>김영희</td>
+          <td class="views">876</td>
+          <td class="likes">♥ 28</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/3'">
+          <td>3</td>
+          <td>환경 정화 봉사 모집</td>
+          <td>이민준</td>
+          <td class="views">654</td>
+          <td class="likes">♥ 19</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/4'">
+          <td>4</td>
+          <td>장애인 체육대회 보조 봉사</td>
+          <td>박지수</td>
+          <td class="views">430</td>
+          <td class="likes">♥ 11</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/5'">
+          <td>5</td>
+          <td>지역 아동센터 교육 봉사 모집</td>
+          <td>관리자</td>
+          <td class="views">388</td>
+          <td class="likes">♥ 9</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <!-- 2줄 (게시판 + 마이페이지) -->
-    <div class="row">
-        <div class="center-box">게시판</div>
-
-    
+    <!-- 후기게시판 -->
+    <div class="section-title">
+      후기게시판
+      <a th:href="@{/review}">더보기 &rsaquo;</a>
     </div>
+    <table class="board-table">
+      <thead>
+        <tr>
+          <th style="width:70px;">글번호</th>
+          <th>제목</th>
+          <th style="width:100px;">작성자</th>
+          <th style="width:80px;">조회수</th>
+          <th style="width:70px;">좋아요</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr onclick="location.href='/review/1'">
+          <td>1</td>
+          <td>멘토링 봉사 다녀왔어요!</td>
+          <td>홍길동</td>
+          <td class="views">320</td>
+          <td class="likes">♥ 12</td>
+        </tr>
+        <tr onclick="location.href='/review/2'">
+          <td>2</td>
+          <td>처음 봉사 신청하는 방법이 궁금해요</td>
+          <td>박지수</td>
+          <td class="views">210</td>
+          <td class="likes">♥ 7</td>
+        </tr>
+        <tr onclick="location.href='/review/3'">
+          <td>3</td>
+          <td>노인복지관 봉사 후기 공유합니다</td>
+          <td>김영희</td>
+          <td class="views">185</td>
+          <td class="likes">♥ 5</td>
+        </tr>
+        <tr onclick="location.href='/review/4'">
+          <td>4</td>
+          <td>환경 정화 봉사 너무 뿌듯했어요</td>
+          <td>이민준</td>
+          <td class="views">143</td>
+          <td class="likes">♥ 4</td>
+        </tr>
+        <tr onclick="location.href='/review/5'">
+          <td>5</td>
+          <td>청소년 멘토링 봉사 참여 후기</td>
+          <td>관리자</td>
+          <td class="views">98</td>
+          <td class="likes">♥ 3</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <!-- 카드 -->
-    <div class="card">
-        봉사 게시판 최근게시물 5개
-    </div>
-
-    <div class="card">
-        후기 게시판 최근게시물 5개
-    </div>
-
-</div>
+  </div>
 
 </body>
 </html>

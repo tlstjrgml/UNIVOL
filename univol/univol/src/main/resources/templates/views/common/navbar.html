@@ -88,8 +88,8 @@
     <!-- 로그인 했을 때 -->
     <span th:if="${session.loginUser != null}">
       <span class="username" th:text="${session.loginUser.userName} + '님'"></span>
-      <a th:href="@{/mypage}" class="header-btn btn-outline">마이페이지</a>
-      <a th:href="@{/logout}" class="header-btn btn-outline">로그아웃</a>
+      <a th:href="@{/myPage}" class="header-btn btn-outline">마이페이지</a>
+      <a th:href="@{/logOut}" class="header-btn btn-outline">로그아웃</a>
     </span>
   </div>
 </header>

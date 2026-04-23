@@ -10,7 +10,25 @@
 		where user_id=#{userId} and user_pw=#{userPw}
 	</select>
 
-
+	<!-- 회원가입 -->
+	<insert id="signUp">
+    INSERT INTO USERS (USER_ID, USER_PW, USER_NAME, BIRTH, GENDER, PHONE, ADDRESS)
+    VALUES (
+        #{userId},
+        #{userPw},
+        #{userName},
+        TO_DATE(#{birth}, 'YYYY-MM-DD'),
+        #{gender},
+        #{phone},
+        #{address}
+    )
+	</insert>
+	
+	<select id="myPage" resultType="Member">
+	select *
+	from users
+	where user_id=#{userId}
+	</select>
 
 
 

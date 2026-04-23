@@ -16,10 +16,11 @@ public class Member {
 	private String userId;
 	private String userPw;
 	private String userName;
-	private int age;
-	private char gender;
+	private String birth;
+	private String gender;
 	private String phone;
 	private String address;
-	private char isAdmin;
+	private String isAdmin;
+	private String memberStatus;
 	
 }
