@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNIVOL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
+    body { background: #f5f5f0; min-height: 100vh; }
+
+    .container {
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #426B1F;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-title a {
+      font-size: 13px;
+      font-weight: 400;
+      color: #426B1F;
+      text-decoration: none;
+    }
+
+    .section-title a:hover {
+      text-decoration: underline;
+    }
+
+    /* 테이블 */
+    .board-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      margin-bottom: 3rem;
+    }
+
+    .board-table thead tr {
+      background: #426B1F;
+      color: white;
+    }
+
+    .board-table thead th {
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .board-table thead th:nth-child(2) {
+      text-align: left;
+    }
+
+    .board-table tbody tr {
+      border-bottom: 1px solid #f0f0ea;
+      transition: background 0.12s;
+      cursor: pointer;
+    }
+
+    .board-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .board-table tbody tr:hover {
+      background: #f7faf5;
+    }
+
+    .board-table tbody td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #444;
+      text-align: center;
+    }
+
+    .board-table tbody td:nth-child(2) {
+      text-align: left;
+      color: #222;
+    }
+
+    .board-table tbody td.views {
+      color: #888;
+      font-size: 13px;
+    }
+
+    .board-table tbody td.likes {
+      color: #c0392b;
+      font-size: 13px;
+    }
+
+    /* 빈 목록 */
+    .empty {
+      text-align: center;
+      padding: 2rem;
+      color: #bbb;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div th:replace="views/common/navbar.html"></div>
+
+  <div class="container">
+
+    <!-- 봉사게시판 -->
+    <div class="section-title">
+      봉사게시판
+      <a th:href="@{/volunteer}">더보기 &rsaquo;</a>
+    </div>
+    <table class="board-table">
+      <thead>
+        <tr>
+          <th style="width:70px;">글번호</th>
+          <th>제목</th>
+          <th style="width:100px;">작성자</th>
+          <th style="width:80px;">조회수</th>
+          <th style="width:70px;">좋아요</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 더미데이터 (나중에 Thymeleaf th:each로 교체) -->
+        <tr onclick="location.href='/volunteer/1'">
+          <td>1</td>
+          <td>겨울방학 청소년 멘토링 봉사 모집</td>
+          <td>홍길동</td>
+          <td class="views">1,085</td>
+          <td class="likes">♥ 34</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/2'">
+          <td>2</td>
+          <td>노인복지관 말벗 봉사 모집</td>
+          <td>김영희</td>
+          <td class="views">876</td>
+          <td class="likes">♥ 28</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/3'">
+          <td>3</td>
+          <td>환경 정화 봉사 모집</td>
+          <td>이민준</td>
+          <td class="views">654</td>
+          <td class="likes">♥ 19</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/4'">
+          <td>4</td>
+          <td>장애인 체육대회 보조 봉사</td>
+          <td>박지수</td>
+          <td class="views">430</td>
+          <td class="likes">♥ 11</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/5'">
+          <td>5</td>
+          <td>지역 아동센터 교육 봉사 모집</td>
+          <td>관리자</td>
+          <td class="views">388</td>
+          <td class="likes">♥ 9</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 후기게시판 -->
+    <div class="section-title">
+      후기게시판
+      <a th:href="@{/review}">더보기 &rsaquo;</a>
+    </div>
+    <table class="board-table">
+      <thead>
+        <tr>
+          <th style="width:70px;">글번호</th>
+          <th>제목</th>
+          <th style="width:100px;">작성자</th>
+          <th style="width:80px;">조회수</th>
+          <th style="width:70px;">좋아요</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr onclick="location.href='/review/1'">
+          <td>1</td>
+          <td>멘토링 봉사 다녀왔어요!</td>
+          <td>홍길동</td>
+          <td class="views">320</td>
+          <td class="likes">♥ 12</td>
+        </tr>
+        <tr onclick="location.href='/review/2'">
+          <td>2</td>
+          <td>처음 봉사 신청하는 방법이 궁금해요</td>
+          <td>박지수</td>
+          <td class="views">210</td>
+          <td class="likes">♥ 7</td>
+        </tr>
+        <tr onclick="location.href='/review/3'">
+          <td>3</td>
+          <td>노인복지관 봉사 후기 공유합니다</td>
+          <td>김영희</td>
+          <td class="views">185</td>
+          <td class="likes">♥ 5</td>
+        </tr>
+        <tr onclick="location.href='/review/4'">
+          <td>4</td>
+          <td>환경 정화 봉사 너무 뿌듯했어요</td>
+          <td>이민준</td>
+          <td class="views">143</td>
+          <td class="likes">♥ 4</td>
+        </tr>
+        <tr onclick="location.href='/review/5'">
+          <td>5</td>
+          <td>청소년 멘토링 봉사 참여 후기</td>
+          <td>관리자</td>
+          <td class="views">98</td>
+          <td class="likes">♥ 3</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</body>
+</html>
