@@ -67,4 +67,6 @@ public class MemberController {
 	/* 마이페이지 */
 	
 	/* 관리자페이지 */
+	
+	/* 게시글 상세조회 */
 }
