@@ -12,9 +12,13 @@ import lombok.RequiredArgsConstructor;
 
 public class MemberService {
 	private final MemberMapper mapper;
+
+	/* 로그인 */
 	public Member logIn(Member m) {
 		return mapper.logIn(m);
 	}
+
+	/* 회원가입 */
 	public void signUp(Member m) {
 		mapper.signUp(m);
 	}
