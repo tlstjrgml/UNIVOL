@@ -12,7 +12,7 @@ public interface MemberMapper {
 
 	void signUp(Member m);
 	
-	// 주석 테스트 tlw
+	// 주석 테스트ppppp
 
     
 }
