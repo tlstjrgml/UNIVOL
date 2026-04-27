@@ -21,7 +21,7 @@ public class MemberController {
 
 	private final MemberService mService;
 
-	// 맥북 테스트---s //
+	// 맥zzzz//
 	
 	
 	/* 메인 페이지 */
