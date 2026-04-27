@@ -78,7 +78,7 @@ public class MemberController {
 		ArrayList<Member> mlist = mService.selectAll();
 		model.addAttribute("mlist", mlist);
 		Member loginUser = (Member)session.getAttribute("loginUser");
-		if(loginUser != null &&  loginUser.getIsAdmin().equals("Y")) {
+		if(loginUser != null &&  loginUser.getIsAdmin().equals("Y")) {     
 			return "users/adminPage";
 		}else {
 			return "redirect:/common/errorPage";
