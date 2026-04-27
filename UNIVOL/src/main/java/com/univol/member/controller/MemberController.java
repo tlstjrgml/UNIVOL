@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService mService;
+	
 
 	/* 메인 페이지 */
 	@GetMapping("/")
