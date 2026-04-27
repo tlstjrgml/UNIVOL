@@ -21,6 +21,9 @@ public class MemberController {
 
 	private final MemberService mService;
 
+	// 맥북 테스트 //
+	
+	
 	/* 메인 페이지 */
 	@GetMapping("/")
 	public String main() {
