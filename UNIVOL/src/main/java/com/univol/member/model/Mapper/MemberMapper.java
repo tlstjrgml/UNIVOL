@@ -11,6 +11,8 @@ public interface MemberMapper {
     Member logIn(Member m);
 
 	void signUp(Member m);
+	
+	// 주석 테스트
 
     
 }
