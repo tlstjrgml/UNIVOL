@@ -82,16 +82,22 @@
   </nav>
   <div class="header-right">
     <!-- 로그인 안 했을 때 -->
-    <span th:if="${session.loginUser == null}">
+    <span th:if="${session.loginUser == null or session.loginUser.memberStatus == 'N'}">
       <a th:href="@{/logIn}" class="header-btn btn-outline">로그인</a>
       <a th:href="@{/signUp}" class="header-btn btn-outline">회원가입</a>
     </span>
     <!-- 로그인 했을 때 -->
-    <span th:if="${session.loginUser != null}">
+    <span th:if="${session.loginUser != null && session.loginUser.isAdmin == 'N' && session.loginUser.memberStatus == 'Y'}">
       <span class="username" th:text="${session.loginUser.userName} + '님'"></span>
       <a th:href="@{/mypage}" class="header-btn btn-outline">마이페이지</a>
       <a th:href="@{/logout}" class="header-btn btn-outline">로그아웃</a>
     </span>
+    <!-- 관리자 로그인시 -->
+	<span th:if="${session.loginUser != null && session.loginUser.isAdmin == 'Y'}">
+		<span class="username" th:text="${session.loginUser.userName} + '님'"></span>
+		<a th:href="@{/adminPage}" class="header-btn btn-outline">관리자 페이지</a>
+		<a th:href="@{/logout}" class="header-btn btn-outline">로그아웃</a>
+	</span>    
   </div>
 </header>
 
