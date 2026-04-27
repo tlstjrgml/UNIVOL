@@ -18,4 +18,5 @@
 	<select id="selectAll" resultType="com.univol.member.model.vo.Member">
 		select * from users
 	</select>
+	
 </mapper>
