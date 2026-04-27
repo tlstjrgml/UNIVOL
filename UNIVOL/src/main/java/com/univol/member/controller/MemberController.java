@@ -1,5 +1,7 @@
 package com.univol.member.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,11 +69,19 @@ public class MemberController {
 	/* 마이페이지 */
 	
 	/* 관리자페이지 */
-	
 	@GetMapping("/adminPage")
-	public String adminPage() {
-		return "users/adminPage";
+	public String adminPage(@ModelAttribute Member m, Model model, HttpSession session) {
+		ArrayList<Member> mlist = mService.selectAll();
+		model.addAttribute("mlist", mlist);
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		if(loginUser != null &&  loginUser.getIsAdmin().equals("Y")) {
+			return "users/adminPage";
+		}else {
+			return "redirect:/common/errorPage";
+		}
 	}
+	
+	
 	/* 게시글 상세조회 */
 	
 	/* 봉사게시판 */

@@ -1,5 +1,7 @@
 package com.univol.member.model.Mapper;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.univol.member.model.vo.Member;
@@ -12,5 +14,5 @@ public interface MemberMapper {
 
 	void signUp(Member m);
 
-    
+    ArrayList<Member> selectAll();
 }

@@ -14,4 +14,8 @@
         	#{userId}, #{userPw}, #{userName}, TO_DATE(#{birth}, 'YYYY-MM-DD'), #{gender}, #{phone}, #{address}
         	)
 	</insert>
+	
+	<select id="selectAll" resultType="com.univol.member.model.vo.Member">
+		select * from users
+	</select>
 </mapper>
