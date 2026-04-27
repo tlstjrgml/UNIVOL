@@ -129,18 +129,7 @@
 </head>
 <body>
 
-<header class="header">
-  <div class="logo" onclick="location.href='/'">UNIVOL</div>
-  <nav class="nav">
-    <a href="/volunteer" class="active">봉사게시판</a>
-    <a href="/review">후기게시판</a>
-  </nav>
-  <div class="header-right">
-    <span class="username">홍길동님</span>
-    <a href="/mypage" class="header-btn btn-outline">마이페이지</a>
-    <a href="/mypage/edit" class="header-btn btn-outline">개인정보수정</a>
-  </div>
-</header>
+<div th:replace="common/navbar"></div>
 
 <main class="container">
   <h1 class="page-title">봉사게시판</h1>
