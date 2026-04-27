@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService mService;
+	
 
 	// 맥zzzz//
 	
@@ -71,6 +72,10 @@ public class MemberController {
 	
 	/* 관리자페이지 */
 	
+	@GetMapping("/adminPage")
+	public String adminPage() {
+		return "users/adminPage";
+	}
 	/* 게시글 상세조회 */
 	
 	/* 봉사게시판 */
