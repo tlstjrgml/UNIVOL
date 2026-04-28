@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNIVOL - 봉사게시판</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
+    body { background: #f5f5f0; min-height: 100vh; }
+
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e0e0d8;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      height: 58px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; color: #426B1F; letter-spacing: 2px; cursor: pointer; }
+    .nav { display: flex; gap: 24px; justify-content: center; }
+    .nav a { font-size: 14px; color: #444; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; }
+    .nav a.active, .nav a:hover { color: #426B1F; border-bottom-color: #426B1F; }
+    .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+    .username { font-size: 14px; color: #666; }
+    .header-btn { font-size: 13px; padding: 6px 14px; border-radius: 8px; border: 1px solid #426B1F; cursor: pointer; text-decoration: none; transition: background 0.15s; }
+    .btn-outline { background: transparent; color: #426B1F; }
+    .btn-outline:hover { background: #eaf3de; }
+
+    .container { max-width: 1200px; margin: 2.5rem auto; padding: 0 3rem; }
+    .page-title { font-size: 22px; font-weight: 700; color: #222; margin-bottom: 1.5rem; }
+
+    .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
+    .filter-group { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+    select, .search-input { font-size: 13px; padding: 7px 12px; border: 1px solid #d0d0c8; border-radius: 8px; background: #fff; color: #333; outline: none; cursor: pointer; transition: border-color 0.15s; }
+    select:focus, .search-input:focus { border-color: #426B1F; }
+    .search-input { flex: 1; min-width: 160px; cursor: text; }
+    .search-btn { font-size: 13px; padding: 7px 16px; border-radius: 8px; border: none; background: #426B1F; color: #fff; cursor: pointer; transition: background 0.15s; }
+    .search-btn:hover { background: #305215; }
+    .write-btn { font-size: 13px; padding: 7px 18px; border-radius: 8px; border: none; background: #426B1F; color: #fff; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+    .write-btn:hover { background: #305215; }
+
+    .card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; overflow: hidden; }
+
+    /* 테이블 스타일 */
+    .board-table { width: 100%; border-collapse: collapse; }
+
+    .board-table thead tr { background: #f7f7f2; border-bottom: 1px solid #e0e0d8; }
+    .board-table thead th { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 12px; text-align: center; }
+    .board-table thead th.col-title { text-align: left; }
+
+    .board-table tbody tr { border-bottom: 1px solid #f0f0ea; cursor: pointer; transition: background 0.12s; }
+    .board-table tbody tr:last-child { border-bottom: none; }
+    .board-table tbody tr:hover { background: #f7faf5; }
+
+    .board-table tbody td { padding: 14px 12px; text-align: center; vertical-align: middle; }
+    .board-table tbody td.col-title { text-align: left; }
+
+    .num { font-size: 13px; color: #aaa; }
+    .title-wrap { display: flex; flex-direction: column; gap: 3px; }
+    .title { font-size: 14px; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 500px; }
+    .date { font-size: 11px; color: #bbb; }
+    .author { font-size: 13px; color: #555; }
+    .views { font-size: 13px; color: #888; }
+    .likes { font-size: 13px; color: #c0392b; }
+
+    .badge-notice { display: inline-block; font-size: 10px; font-weight: 700; background: #eaf3de; color: #426B1F; border-radius: 4px; padding: 2px 6px; margin-right: 6px; vertical-align: middle; }
+
+    .col-num    { width: 70px; }
+    .col-title  { }
+    .col-author { width: 90px; }
+    .col-views  { width: 80px; }
+    .col-likes  { width: 70px; }
+
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 1.5rem; }
+    .page-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e0e0d8; background: #fff; font-size: 13px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s; }
+    .page-btn:hover { background: #eaf3de; color: #426B1F; border-color: #426B1F; }
+    .page-btn.active { background: #426B1F; color: #fff; border-color: #426B1F; }
+    .empty { padding: 3rem; text-align: center; color: #bbb; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo" onclick="location.href='/'">UNIVOL</div>
+  <nav class="nav">
+    <a href="/volunteer" class="active">봉사게시판</a>
+    <a href="/review">후기게시판</a>
+  </nav>
+  <div class="header-right">
+    <span class="username">홍길동님</span>
+    <a href="/mypage" class="header-btn btn-outline">마이페이지</a>
+    <a href="/mypage/edit" class="header-btn btn-outline">개인정보수정</a>
+  </div>
+</header>
+
+<main class="container">
+  <h1 class="page-title">봉사게시판</h1>
+
+  <div class="toolbar">
+    <div class="filter-group">
+      <select id="sort-field" onchange="applyFilter()">
+        <option value="latest">최신순</option>
+        <option value="views_desc">조회수 높은순</option>
+        <option value="views_asc">조회수 낮은순</option>
+        <option value="likes_desc">좋아요 높은순</option>
+        <option value="likes_asc">좋아요 낮은순</option>
+      </select>
+      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
+      <button class="search-btn" onclick="applyFilter()">검색</button>
+    </div>
+    <button class="write-btn" onclick="location.href='/volunteer/write'">+ 글쓰기</button>
+  </div>
+
+  <div class="card">
+    <table class="board-table">
+      <thead>
+        <tr>
+          <th class="col-num">글번호</th>
+          <th class="col-title">제목</th>
+          <th class="col-author">작성자</th>
+          <th class="col-views">조회수</th>
+          <th class="col-likes">좋아요</th>
+        </tr>
+      </thead>
+      <tbody id="board-list">
+        <tr onclick="location.href='/volunteer/1050'">
+          <td class="col-num num">공지</td>
+          <td class="col-title">
+            <div class="title-wrap">
+              <span class="title"><span class="badge-notice">공지</span>봉사 신청 방법 안내</span>
+              <span class="date">2024.12.01</span>
+            </div>
+          </td>
+          <td class="col-author author">관리자</td>
+          <td class="col-views views">3,241</td>
+          <td class="col-likes likes">♥ 52</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/1049'">
+          <td class="col-num num">#1049</td>
+          <td class="col-title">
+            <div class="title-wrap">
+              <span class="title">2025 겨울 무료급식 봉사 모집</span>
+              <span class="date">2024.11.28</span>
+            </div>
+          </td>
+          <td class="col-author author">김민준</td>
+          <td class="col-views views">1,085</td>
+          <td class="col-likes likes">♥ 34</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/1048'">
+          <td class="col-num num">#1048</td>
+          <td class="col-title">
+            <div class="title-wrap">
+              <span class="title">노인복지관 말벗 봉사활동 신청</span>
+              <span class="date">2024.11.25</span>
+            </div>
+          </td>
+          <td class="col-author author">이서연</td>
+          <td class="col-views views">876</td>
+          <td class="col-likes likes">♥ 28</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/1047'">
+          <td class="col-num num">#1047</td>
+          <td class="col-title">
+            <div class="title-wrap">
+              <span class="title">환경정화 캠페인 자원봉사 모집</span>
+              <span class="date">2024.11.22</span>
+            </div>
+          </td>
+          <td class="col-author author">박지호</td>
+          <td class="col-views views">654</td>
+          <td class="col-likes likes">♥ 19</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/1046'">
+          <td class="col-num num">#1046</td>
+          <td class="col-title">
+            <div class="title-wrap">
+              <span class="title">청소년 멘토링 봉사 프로그램 참가자 모집</span>
+              <span class="date">2024.11.20</span>
+            </div>
+          </td>
+          <td class="col-author author">최수아</td>
+          <td class="col-views views">512</td>
+          <td class="col-likes likes">♥ 15</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/1045'">
+          <td class="col-num num">#1045</td>
+          <td class="col-title">
+            <div class="title-wrap">
+              <span class="title">장애인 체육대회 보조 봉사</span>
+              <span class="date">2024.11.18</span>
+            </div>
+          </td>
+          <td class="col-author author">정다은</td>
+          <td class="col-views views">430</td>
+          <td class="col-likes likes">♥ 11</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/1044'">
+          <td class="col-num num">#1044</td>
+          <td class="col-title">
+            <div class="title-wrap">
+              <span class="title">지역 아동센터 교육 봉사 모집</span>
+              <span class="date">2024.11.15</span>
+            </div>
+          </td>
+          <td class="col-author author">한지수</td>
+          <td class="col-views views">388</td>
+          <td class="col-likes likes">♥ 9</td>
+        </tr>
+        <tr onclick="location.href='/volunteer/1043'">
+          <td class="col-num num">#1043</td>
+          <td class="col-title">
+            <div class="title-wrap">
+              <span class="title">유기동물 보호소 봉사활동</span>
+              <span class="date">2024.11.12</span>
+            </div>
+          </td>
+          <td class="col-author author">오민재</td>
+          <td class="col-views views">295</td>
+          <td class="col-likes likes">♥ 7</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button class="page-btn" onclick="changePage(currentPage-1)">&#8249;</button>
+    <button class="page-btn active" id="page-1" onclick="changePage(1)">1</button>
+    <button class="page-btn" id="page-2" onclick="changePage(2)">2</button>
+    <button class="page-btn" id="page-3" onclick="changePage(3)">3</button>
+    <button class="page-btn" id="page-4" onclick="changePage(4)">4</button>
+    <button class="page-btn" id="page-5" onclick="changePage(5)">5</button>
+    <button class="page-btn" onclick="changePage(currentPage+1)">&#8250;</button>
+  </div>
+</main>
+
+</body>
+</html>
