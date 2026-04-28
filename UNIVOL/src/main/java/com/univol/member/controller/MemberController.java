@@ -88,11 +88,7 @@ public class MemberController {
 	
 	/* 게시글 상세조회 */
 	
-	/* 봉사게시판 */
-	@GetMapping("/volunteer")
-	public String volunteer() {
-		return "volunteer/volunteer";
-	}
+
 	/* 후기게시판 */
 	@GetMapping("/review")
 	public String review() {
