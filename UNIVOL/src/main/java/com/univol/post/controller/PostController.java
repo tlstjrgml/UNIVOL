@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class PostController {
 	private final PostService pService;
 	
-	@GetMapping("/volunteer")
+	@GetMapping("/post")
 	public String selectAll(Model model) {
 		ArrayList<Post> plist = pService.selectAll();
 		System.out.println("plist: " + plist);
