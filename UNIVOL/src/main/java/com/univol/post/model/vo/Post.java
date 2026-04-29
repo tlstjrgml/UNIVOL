@@ -20,7 +20,9 @@ public class Post {
 	private int views;
 	private Date pDate;
 	private char pType;
-
+	private String userName;
+	private char pStatus;
+	private int likes;
 }
 
 

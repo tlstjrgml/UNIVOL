@@ -75,7 +75,7 @@
     .col-title  { }
     .col-author { width: 90px; }
     .col-views  { width: 80px; }
-    .col-likes  { width: 70px; }  /* commit test */
+    .col-likes  { width: 70px; }
 
     .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 1.5rem; }
     .page-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e0e0d8; background: #fff; font-size: 13px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s; }
@@ -119,16 +119,17 @@
       </thead>
       <tbody id="board-list">
         <tr th:each="p:${plist}">
-          <td class="col-num num">공지</td>
+          <td class="col-num num" th:text="${p.pNumber}"></td>
           <td class="col-title">
             <div class="title-wrap">
-              <span class="title"><span class="badge-notice">공지</span>봉사 신청 방법 안내</span>
-              <span class="date" >2024.12.01</span>
+              <span class="badge-notice"></span>
+              <span class="title" th:text="${p.pTitle}"></span>
+              <span class="date" th:text="${p.pDate}"></span>
             </div>
           </td>
-          <td class="col-author author">관리자</td>
+          <td class="col-author author" th:text="${p.userName}"></td>
           <td class="col-views views" th:text="${p.views}"></td>
-          <td class="col-likes likes">♥ 52</td>
+          <td class="col-likes likes" th:text="${p.likes}"></td>
         </tr>
         
         
