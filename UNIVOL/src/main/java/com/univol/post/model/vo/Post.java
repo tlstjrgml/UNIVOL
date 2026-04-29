@@ -19,12 +19,9 @@ public class Post {
 	private String contents;
 	private int views;
 	private Date pDate;
-<<<<<<< HEAD
-	private char pType;
 
-=======
+
 	private char pType; /* commit test */ /* pushTest */
->>>>>>> b418efc44aab4e7549f6903085c3940deb2c8e2b
 }
 
 
