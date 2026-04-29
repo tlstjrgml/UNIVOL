@@ -24,7 +24,7 @@ public class MemberController {
 	private final MemberService mService;
 	
 
-	// 맥zzzㅋㅋㅋㅋz//
+	
 	
 	
 	/* 메인 페이지 */
