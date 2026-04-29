@@ -1,6 +1,7 @@
 package com.univol.member.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,10 @@ public class MemberService {
 	public ArrayList<Member> selectAll() {
 		return mapper.selectAll();
 	}
-
+	
+	public ArrayList<HashMap<String, Object>> getApplyList(String id) {
+		return mapper.getApplyList(id);
+	}
 	
 
 }

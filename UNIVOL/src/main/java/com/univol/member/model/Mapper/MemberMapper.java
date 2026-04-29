@@ -1,6 +1,7 @@
 package com.univol.member.model.Mapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,4 +18,6 @@ public interface MemberMapper {
 	// 주석 테스트ppppp
 
     ArrayList<Member> selectAll();
+
+	ArrayList<HashMap<String, Object>> getApplyList(String id);
 }
