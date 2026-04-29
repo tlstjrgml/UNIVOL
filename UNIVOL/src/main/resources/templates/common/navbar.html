@@ -77,7 +77,7 @@
 <header class="header">
   <div class="logo" onclick="location.href='/'">UNIVOL</div>
   <nav class="nav">
-    <a th:href="@{/volunteer}" th:classappend="${currentPage == 'volunteer'} ? 'active'">봉사게시판</a>
+    <a th:href="@{/post}" th:classappend="${currentPage == 'volunteer'} ? 'active'">봉사게시판</a>
     <a th:href="@{/review}" th:classappend="${currentPage == 'review'} ? 'active'">후기게시판</a>
   </nav>
   <div class="header-right">
@@ -89,7 +89,7 @@
     <!-- 로그인 했을 때 -->
     <span th:if="${session.loginUser != null && session.loginUser.isAdmin == 'N' && session.loginUser.memberStatus == 'Y'}">
       <span class="username" th:text="${session.loginUser.userName} + '님'"></span>
-      <a th:href="@{/mypage}" class="header-btn btn-outline">마이페이지</a>
+      <a th:href="@{/myPage}" class="header-btn btn-outline">마이페이지</a>
       <a th:href="@{/logout}" class="header-btn btn-outline">로그아웃</a>
     </span>
     <!-- 관리자 로그인시 -->

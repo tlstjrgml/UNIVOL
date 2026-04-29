@@ -1,6 +1,7 @@
 package com.univol.member.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.univol.member.model.service.MemberService;
 import com.univol.member.model.vo.Member;
@@ -71,6 +73,19 @@ public class MemberController {
 	}
 	 
 	/* 마이페이지 */
+	@GetMapping("/myPage")
+	public ModelAndView myPage(HttpSession session, ModelAndView mv) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		if(loginUser != null) {
+			String id = loginUser.getUserId();
+			ArrayList<HashMap<String, Object>> applyList = mService.getApplyList(id);
+			
+			mv.addObject("applyList", applyList);
+			mv.setViewName("users/myPage");
+		}
+		return mv;
+
+	}
 	
 	/* 관리자페이지 */
 	@GetMapping("/adminPage")

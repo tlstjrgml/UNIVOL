@@ -19,4 +19,14 @@
 		select * from users
 	</select>
 	
+	<select id="getApplyList" parameterType="String" resultType="map">
+    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
+           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE
+    FROM REPLY R
+    	JOIN POST P ON R.P_NUMBER = P.P_NUMBER
+    	JOIN USERS U ON P.USER_ID = U.USER_ID
+    	WHERE R.USER_ID = #{userId}
+    ORDER BY R.C_NUMBER DESC
+	</select>
+	
 </mapper>

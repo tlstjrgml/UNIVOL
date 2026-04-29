@@ -7,8 +7,6 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
     body { background: #f5f5f0; min-height: 100vh; }
-
-    /* 헤더 */
     .header {
       background: #fff;
       border-bottom: 1px solid #e0e0d8;
@@ -21,130 +19,37 @@
       top: 0;
       z-index: 10;
     }
-    .logo {
-      font-size: 22px;
-      font-weight: 800;
-      color: #426B1F;
-      letter-spacing: 2px;
-      cursor: pointer;
-    }
+    .logo { font-size: 22px; font-weight: 800; color: #426B1F; letter-spacing: 2px; cursor: pointer; }
     .nav { display: flex; gap: 24px; justify-content: center; }
-    .nav a {
-      font-size: 14px;
-      color: #444;
-      text-decoration: none;
-      padding: 4px 0;
-      border-bottom: 2px solid transparent;
-      transition: color 0.15s, border-color 0.15s;
-    }
+    .nav a { font-size: 14px; color: #444; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; }
     .nav a.active, .nav a:hover { color: #426B1F; border-bottom-color: #426B1F; }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      justify-content: flex-end;
-    }
+    .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
     .username { font-size: 14px; color: #666; margin-right: 4px; }
-    .header-btn {
-      font-size: 13px;
-      padding: 6px 14px;
-      border-radius: 8px;
-      border: 1px solid #426B1F;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s;
-    }
+    .header-btn { font-size: 13px; padding: 6px 14px; border-radius: 8px; border: 1px solid #426B1F; cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; }
     .btn-admin { background: #426B1F; color: #fff; }
     .btn-admin:hover { background: #355818; }
     .btn-outline { background: transparent; color: #426B1F; }
     .btn-outline:hover { background: #eaf3de; }
-
-    /* 컨테이너 */
-    .container {
-      max-width: 1200px;
-      margin: 2.5rem auto;
-      padding: 0 3rem;
-    }
-    .page-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #222;
-      margin-bottom: 1.5rem;
-    }
-
-    /* 카드 */
-    .card {
-      background: #fff;
-      border: 1px solid #e0e0d8;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .card-header {
-      padding: 1.1rem 1.5rem;
-      border-bottom: 1px solid #e0e0d8;
-    }
+    .container { max-width: 1200px; margin: 2.5rem auto; padding: 0 3rem; }
+    .page-title { font-size: 22px; font-weight: 700; color: #222; margin-bottom: 1.5rem; }
+    .card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; overflow: hidden; }
+    .card-header { padding: 1.1rem 1.5rem; border-bottom: 1px solid #e0e0d8; }
     .card-header h2 { font-size: 16px; font-weight: 700; color: #222; }
     .card-header p { font-size: 13px; color: #888; margin-top: 3px; }
-
-    /* 테이블 */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    thead tr {
-      background: #f7f7f2;
-      border-bottom: 1px solid #e0e0d8;
-    }
-    thead th {
-      padding: 10px 16px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      text-align: center;
-    }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: #f7f7f2; border-bottom: 1px solid #e0e0d8; }
+    thead th { padding: 10px 16px; font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; }
     thead th:nth-child(2) { text-align: left; }
-    tbody tr {
-      border-bottom: 1px solid #f0f0ea;
-      cursor: pointer;
-      transition: background 0.12s;
-    }
+    tbody tr { border-bottom: 1px solid #f0f0ea; cursor: pointer; transition: background 0.12s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: #f7faf5; }
-    tbody td {
-      padding: 14px 16px;
-      font-size: 14px;
-      color: #444;
-      text-align: center;
-    }
+    tbody td { padding: 14px 16px; font-size: 14px; color: #444; text-align: center; }
     tbody td:nth-child(2) { text-align: left; color: #222; }
-
-    /* 비어있을 때 */
-    .empty {
-      padding: 3rem;
-      text-align: center;
-      color: #bbb;
-      font-size: 14px;
-    }
+    .empty { padding: 3rem; text-align: center; color: #bbb; font-size: 14px; }
   </style>
 </head>
 <body>
-
-<header class="header">
-  <div class="logo" th:onclick="location.href='/'">UNIVOL</div>
-  <nav class="nav">
-    <a href="/mypage" class="active">마이페이지</a>
-  </nav>
-  <div class="header-right">
-    <span class="username" th:text="${session.loginUser.userName} + '님'"></span>
-    <!-- 관리자일 때만 보이기 -->
-    <a th:if="${session.loginUser.isAdmin == 'Y'}"
-       th:href="@{/admin}" class="header-btn btn-admin">관리자페이지</a>
-    <a th:href="@{/mypage/edit}" class="header-btn btn-outline">개인정보수정</a>
-    <a th:href="@{/logout}" class="header-btn btn-outline">로그아웃</a>
-  </div>
-</header>
+<div th:replace="common/navbar.html"></div>
 
 <main class="container">
   <h1 class="page-title">마이페이지</h1>
@@ -165,44 +70,29 @@
         </tr>
       </thead>
       <tbody>
-        <!-- 나중에 th:each로 교체 -->
-        <tr onclick="location.href='/posts/1042'">
-          <td>#1042</td>
-          <td>2024 겨울 무료급식 봉사 모집</td>
-          <td>김민준</td>
-          <td>2024.11.28</td>
-        </tr>
-        <tr onclick="location.href='/posts/1038'">
-          <td>#1038</td>
-          <td>노인복지관 말벗 봉사활동 신청</td>
-          <td>이서연</td>
-          <td>2024.11.25</td>
-        </tr>
-        <tr onclick="location.href='/posts/1031'">
-          <td>#1031</td>
-          <td>환경정화 캠페인 자원봉사 모집</td>
-          <td>박지호</td>
-          <td>2024.11.22</td>
-        </tr>
-        <tr onclick="location.href='/posts/1025'">
-          <td>#1025</td>
-          <td>청소년 멘토링 봉사 프로그램</td>
-          <td>최수아</td>
-          <td>2024.11.20</td>
-        </tr>
-        <tr onclick="location.href='/posts/1018'">
-          <td>#1018</td>
-          <td>장애인 체육대회 보조 봉사</td>
-          <td>정다은</td>
-          <td>2024.11.18</td>
-        </tr>
-        <!-- 신청 내역 없을 때 -->
-        <!-- <tr><td colspan="4" class="empty">신청한 봉사가 없습니다.</td></tr> -->
-      </tbody>
+	  <tbody>
+		 <tr th:each="apply : ${applyList}"
+		    th:onclick="|location.href='/posts/' + ${apply['P_NUMBER']}|">
+		  <td th:text="'#' + ${apply['P_NUMBER']}"></td>
+		  <td th:text="${apply['P_TITLE']}"></td>
+		  <td th:text="${apply['USER_NAME']}"></td>
+		  <td th:text="${apply['C_DATE']}"></td>
+		</tr>
+     </tbody>
     </table>
-
   </div>
 </main>
 
+<!-- 세션 체크: 로그인 안 되어 있으면 로그인 페이지로 이동 -->
+ <script th:inline="javascript">
+  window.onload = () => {
+    const loginUser = /*[[${session.loginUser}]]*/ null;
+    if (loginUser == null) {
+      alert('로그인 후 이용하세요.');
+      location.href = '/login';
+    }
+  };
+  
+</script> 
 </body>
 </html>
