@@ -87,6 +87,14 @@ public class MemberController {
 
 	}
 	
+	/*개인정보수정 페이지 이동*/
+	@GetMapping("/edit")
+	public String edit() {
+		return "users/edit";
+	}
+	
+	/*개인정보수정*/
+	
 	/* 관리자페이지 */
 	@GetMapping("/adminPage")
 	public String adminPage(@ModelAttribute Member m, Model model, HttpSession session) {
