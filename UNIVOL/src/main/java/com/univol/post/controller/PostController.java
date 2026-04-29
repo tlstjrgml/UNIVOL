@@ -33,19 +33,6 @@ public class PostController {
 		return "post/post";
 	}
 
-	
-	
-	
-	/*커밋 테스트*/
-	/*STS 연결 테스트!!!!!!!!!!!!!!!!*/
 
-	
-	
-	
-	
-	
-	
-	
-
-	}
+}
 
