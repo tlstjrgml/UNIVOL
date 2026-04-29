@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th ="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -75,7 +75,7 @@
     .col-title  { }
     .col-author { width: 90px; }
     .col-views  { width: 80px; }
-    .col-likes  { width: 70px; }
+    .col-likes  { width: 70px; }  /* commit test */
 
     .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 1.5rem; }
     .page-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e0e0d8; background: #fff; font-size: 13px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s; }
@@ -86,18 +86,7 @@
 </head>
 <body>
 
-<header class="header">
-  <div class="logo" onclick="location.href='/'">UNIVOL</div>
-  <nav class="nav">
-    <a href="/volunteer" class="active">봉사게시판</a>
-    <a href="/review">후기게시판</a>
-  </nav>
-  <div class="header-right">
-    <span class="username">홍길동님</span>
-    <a href="/mypage" class="header-btn btn-outline">마이페이지</a>
-    <a href="/mypage/edit" class="header-btn btn-outline">개인정보수정</a>
-  </div>
-</header>
+<div th:replace="common/navbar"></div>
 
 <main class="container">
   <h1 class="page-title">봉사게시판</h1>
@@ -129,30 +118,19 @@
         </tr>
       </thead>
       <tbody id="board-list">
-        <tr onclick="location.href='/volunteer/1050'">
+        <tr th:each="p:${plist}">
           <td class="col-num num">공지</td>
           <td class="col-title">
             <div class="title-wrap">
               <span class="title"><span class="badge-notice">공지</span>봉사 신청 방법 안내</span>
-              <span class="date">2024.12.01</span>
+              <span class="date" >2024.12.01</span>
             </div>
           </td>
           <td class="col-author author">관리자</td>
-          <td class="col-views views">3,241</td>
+          <td class="col-views views" th:text="${p.views}"></td>
           <td class="col-likes likes">♥ 52</td>
         </tr>
-        <tr onclick="location.href='/volunteer/1049'">
-          <td class="col-num num">#1049</td>
-          <td class="col-title">
-            <div class="title-wrap">
-              <span class="title">2025 겨울 무료급식 봉사 모집</span>
-              <span class="date">2024.11.28</span>
-            </div>
-          </td>
-          <td class="col-author author">김민준</td>
-          <td class="col-views views">1,085</td>
-          <td class="col-likes likes">♥ 34</td>
-        </tr>
+        
         
       </tbody>
     </table>
