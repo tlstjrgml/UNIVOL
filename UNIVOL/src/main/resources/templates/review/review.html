@@ -82,71 +82,90 @@
 </head>
 <body>
 
-<div th:replace="common/navbar"></div>
-
-<main class="container">
-  <h1 class="page-title">후기게시판</h1>
-
-  <div class="toolbar">
-    <div class="filter-group">
-      <select id="sort-field">
-        <option value="latest">최신순</option>
-        <option value="views_desc">조회수 높은순</option>
-        <option value="views_asc">조회수 낮은순</option>
-        <option value="likes_desc">좋아요 높은순</option>
-        <option value="likes_asc">좋아요 낮은순</option>
-      </select>
-      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
-      <button class="search-btn">검색</button>
-    </div>
-    <button class="write-btn" onclick="location.href='/review/write'">+ 글쓰기</button>
-  </div>
-
-  <div class="card">
-    <table class="board-table">
-      <thead>
-        <tr>
-          <th class="col-num">글번호</th>
-          <th class="col-title">제목</th>
-          <th class="col-author">작성자</th>
-          <th class="col-views">조회수</th>
-          <th class="col-likes">좋아요</th>
-        </tr>
-      </thead>
-      <tbody id="board-list">
-        <tr th:each="r : ${list}">
-          <td class="col-num num" th:text="${r.rNumber}"></td>
-          <td class="col-title">
-            <div class="title-wrap">
-              <span class="title" th:text="${r.rTitle}"></span>
-              <span class="date"  th:text="${r.rDate}"></span>
-            </div>
-          </td>
-          <td class="col-author author" th:text="${r.userId}"></td>
-          <td class="col-views views"   th:text="${r.rViews}"></td>
-          <td class="col-likes likes"></td>
-        </tr>
-
-        <!-- 게시글이 없을 때 -->
-        <tr th:if="${#list.isEmpty(rlist)}">
-          <td colspan="5" class="empty">게시글이 없습니다.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 페이지네이션 -->
-  <div class="pagination">
-    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage - 1}|" th:disabled="${currentPage == 1}">&#8249;</button>
-    <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
-      <button class="page-btn" th:classappend="${i == currentPage} ? 'active'"
-              th:text="${i}"
-              th:onclick="|location.href='?page=' + ${i}|"></button>
-    </th:block>
-    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage + 1}|" th:disabled="${currentPage == totalPages}">&#8250;</button>
-  </div>
-
-</main>
+	<div th:replace="common/navbar"></div>
+	
+	<main class="container">
+	  <h1 class="page-title">후기게시판</h1>
+	
+	  <div class="toolbar">
+	    <div class="filter-group">
+	      <select id="sort-field">
+	        <option value="latest">최신순</option>
+	        <option value="views_desc">조회수 높은순</option>
+	        <option value="views_asc">조회수 낮은순</option>
+	        <option value="likes_desc">좋아요 높은순</option>
+	        <option value="likes_asc">좋아요 낮은순</option>
+	      </select>
+	      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
+	      <button class="search-btn">검색</button>
+	    </div>
+	    <button th:if="${session.loginUser}"class="write-btn" onclick="location.href='/review/write'">+ 글쓰기</button>
+	  </div>
+	
+	  <div class="card">
+	    <table class="board-table">
+	      <thead>
+	        <tr>
+	          <th class="col-num">글번호</th>
+	          <th class="col-title">제목</th>
+	          <th class="col-author">작성자</th>
+	          <th class="col-views">조회수</th>
+	          <th class="col-likes">좋아요</th>
+	        </tr>
+	      </thead>
+	      <tbody id="board-list">
+	        <tr th:each="r : ${list}">
+	          <td class="col-num num" th:text="${r.rNumber}"></td>
+	          <td class="col-title">
+	            <div class="title-wrap">
+	              <span class="title" th:text="${r.rTitle}"></span>
+	              <span class="date"  th:text="${r.rDate}"></span>
+	            </div>
+	          </td>
+	          <td class="col-author author" th:text="${r.userName}"></td>
+	          <td class="col-views views"   th:text="${r.rViews}"></td>
+	          <td class="col-likes likes"></td>
+	        </tr>
+	
+	<!--         게시글이 없을 때 -->
+	<!--         <tr th:if="${#list.isEmpty(list)}"> -->
+	<!--           <td colspan="5" class="empty">게시글이 없습니다.</td> -->
+	<!--         </tr> -->
+	      </tbody>
+	    </table>
+	  </div>
+	
+	  <!-- 페이지네이션 -->
+<!-- 	  <div class="pagination"> -->
+<!-- 	    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage - 1}|" th:disabled="${currentPage == 1}">&#8249;</button> -->
+<!-- 	    <th:block th:each="i : ${#numbers.sequence(1, totalPages)}"> -->
+<!-- 	      <button class="page-btn" th:classappend="${i == currentPage} ? 'active'" -->
+<!-- 	              th:text="${i}" -->
+<!-- 	              th:onclick="|location.href='?page=' + ${i}|"></button> -->
+<!-- 	    </th:block> -->
+<!-- 	    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage + 1}|" th:disabled="${currentPage == totalPages}">&#8250;</button> -->
+<!-- 	  </div> -->
+	
+	</main>
+	
+	<script>
+		window.onload = () => {
+			const tbody = document.querySelector('tbody');
+			console.log(tbody);
+			const tds = tbody.querySelectorAll('td');
+			console.log(tds);
+			for(const td of tds){
+				td.addEventListener('click', e => {
+					const trTds = e.target.parentElement.querySelectorAll('td');
+					console.log(trTds);
+// 					const boardId = trTds[0].innerText;
+// 					console.log(boardId);
+				})
+			}
+		}
+		
+		
+	</script>
 
 </body>
 </html>
