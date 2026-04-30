@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,6 @@
     color: #222;
   }
 
-  /* Header */
   .header {
     background: #fff;
     border-bottom: 1px solid #e0e0d8;
@@ -64,7 +63,6 @@
     justify-content: flex-end;
   }
 
-  /* Container */
   .container {
     max-width: 620px;
     margin: 2.5rem auto;
@@ -78,7 +76,6 @@
     margin-bottom: 1.5rem;
   }
 
-  /* Card */
   .card {
     background: #fff;
     border: 1px solid #e0e0d8;
@@ -104,7 +101,6 @@
     padding: 1.25rem 1.5rem;
   }
 
-  /* Grid layouts */
   .grid-name {
     display: grid;
     grid-template-columns: 160px 1fr;
@@ -119,7 +115,6 @@
     margin-bottom: 10px;
   }
 
-  /* Field */
   .uv-field {
     display: flex;
     flex-direction: column;
@@ -142,7 +137,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* Input */
   .uv-input {
     padding: 9px 11px;
     border: 1px solid #dde4d4;
@@ -162,12 +156,17 @@
     box-shadow: 0 0 0 3px rgba(99, 153, 34, 0.1);
   }
 
+  .uv-input[readonly] {
+    background: #ececec;
+    color: #888;
+    cursor: not-allowed;
+  }
+
   .uv-input::placeholder {
     color: #bbb;
     font-size: 12px;
   }
 
-  /* Gender toggle */
   .uv-gender {
     display: flex;
     border: 1px solid #dde4d4;
@@ -206,14 +205,12 @@
 
   .uv-gender label:has(input:checked) { background: #EAF3DE; }
 
-  /* Password hint */
   .uv-hint {
     font-size: 11px;
     margin-top: 3px;
     min-height: 14px;
   }
 
-  /* Actions */
   .uv-actions {
     display: flex;
     flex-direction: column;
@@ -257,120 +254,107 @@
 </head>
 <body>
 
-<div th:replace="common/navbar.html"></div>
+<div th:replace="~{common/navbar.html}"></div>
 
 <main class="container">
   <h1 class="page-title">개인정보 수정</h1>
 
-  <div class="card">
-    <div class="card-header"><h2>기본 정보</h2></div>
-    <div class="card-body">
+  <!-- form action/method 추가 -->
+  <form th:action="@{/myPage}" method="POST">
 
-      <div class="grid-name">
-        <div class="uv-field">
-          <label class="uv-label" for="name">이름</label>
-          <input class="uv-input" type="text" id="name" name="name" >
-        </div>
-        <div class="uv-field">
-          <label class="uv-label" for="uid">아이디</label>
-          <input class="uv-input" type="text" id="uid" name="id">
-        </div>
-      </div>
+    <div class="card">
+      <div class="card-header"><h2>기본 정보</h2></div>
+      <div class="card-body">
 
-      <div class="grid-equal">
-        <div class="uv-field">
-          <label class="uv-label" for="birth">생년월일</label>
-          <input class="uv-input" type="date" id="birth" name="birth">
-        </div>
-        <div class="uv-field">
-          <label class="uv-label">성별</label>
-          <div class="uv-gender">
-            <label><input type="radio" name="gender" value="M" checked><span>남자</span></label>
-            <label><input type="radio" name="gender" value="F"><span>여자</span></label>
+        <div class="grid-name">
+          <div class="uv-field">
+            <label class="uv-label" for="userName">이름</label>
+            <input class="uv-input" type="text" id="userName" name="userName"
+                   th:value="${session.loginUser.userName}">
+          </div>
+          <div class="uv-field">
+            <label class="uv-label" for="userId">아이디</label>
+            <input class="uv-input" type="text" id="userId" name="userId" readonly th:value="${session.loginUser.userId}">
           </div>
         </div>
-      </div>
 
-      <div class="uv-field-full">
-        <label class="uv-label" for="phone">전화번호</label>
-        <input class="uv-input" type="tel" id="phone" name="phone">
-      </div>
-
-      <div class="uv-field-full">
-        <label class="uv-label" for="address">주소</label>
-        <input class="uv-input" type="text" id="address" name="address" >
-      </div>
-
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header"><h2>비밀번호 변경</h2></div>
-    <div class="card-body">
-
-      <div class="grid-equal">
-        <div class="uv-field">
-          <label class="uv-label" for="pwd">새 비밀번호</label>
-          <input class="uv-input" type="password" id="pwd" name="pwd">
+        <div class="grid-equal">
+          <div class="uv-field">
+            <label class="uv-label" for="birth">생년월일</label>
+            <input class="uv-input" type="date" id="birth" name="birth"
+                   th:value="${session.loginUser.birth}">
+          </div>
+          <div class="uv-field">
+            <label class="uv-label">성별</label>
+            <div class="uv-gender">
+              <label>
+                <input type="radio" id="man" name="gender" value="M"
+                       th:checked="${session.loginUser.gender == 'M'}">
+                <span>남자</span>
+              </label>
+              <label>
+                <input type="radio" id="woman" name="gender" value="F"
+                       th:checked="${session.loginUser.gender == 'F'}">
+                <span>여자</span>
+              </label>
+            </div>
+          </div>
         </div>
-        <div class="uv-field">
-          <label class="uv-label" for="pwdCheck">비밀번호 확인</label>
-          <input class="uv-input" type="password" id="pwdCheck" name="pwdCheck" >
-          <div class="uv-hint" id="mHint"></div>
+
+        <div class="uv-field-full">
+          <label class="uv-label" for="phone">전화번호</label>
+          <input class="uv-input" type="tel" id="phone" name="phone"
+                 th:value="${session.loginUser.phone}">
         </div>
+
+        <div class="uv-field-full">
+          <label class="uv-label" for="address">주소</label>
+          <input class="uv-input" type="text" id="address" name="address"
+                 th:value="${session.loginUser.address}">
+        </div>
+
       </div>
-
     </div>
-  </div>
 
-  <div class="uv-actions">
-    <button class="uv-btn-primary" type="button" onclick="handleSubmit()">수정사항 저장하기</button>
-    <button class="uv-btn-ghost" type="button">취소</button>
-  </div>
+    <div class="card">
+      <div class="card-header"><h2>비밀번호 변경</h2></div>
+      <div class="card-body">
+
+        <div class="grid-equal">
+          <div class="uv-field">
+            <label class="uv-label" for="userPw">새 비밀번호</label>
+            <input class="uv-input" type="password" id="pwd" name="userPw">
+          </div>
+          <div class="uv-field">
+            <label class="uv-label" for="pwdCheck">비밀번호 확인</label>
+            <input class="uv-input" type="password" id="pwdCheck" name="pwdCheck">
+            <div class="uv-hint" id="mHint"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="uv-actions">
+      <button class="uv-btn-primary" type="submit">수정사항 저장하기</button>
+      <button class="uv-btn-ghost" type="button" onclick="history.back()">취소</button>
+    </div>
+
+  </form>
 </main>
 
 <script th:inline="javascript">
 
-window.onload = () => {
+  // 세션 미로그인 시 리다이렉트
+  window.onload = () => {
     const loginUser = /*[[${session.loginUser}]]*/ null;
     if (loginUser == null) {
       alert('로그인 후 이용하세요.');
       location.href = '/logIn';
     }
   };
-  
- 
- /*  const pwd = document.getElementById('pwd');
-  const pwdCheck = document.getElementById('pwdCheck');
-  const mHint = document.getElementById('mHint');
 
-  function checkMatch() {
-    if (!pwdCheck.value) { mHint.textContent = ''; return; }
-    const match = pwd.value === pwdCheck.value;
-    mHint.textContent = match ? '일치합니다' : '일치하지 않습니다';
-    mHint.style.color = match ? '#3B6D11' : '#E24B4A';
-  }
 
-  pwd.addEventListener('input', checkMatch);
-  pwdCheck.addEventListener('input', checkMatch);
-
-  const phone = document.getElementById('phone');
-  phone.addEventListener('input', () => {
-    let v = phone.value.replace(/\D/g, '').slice(0, 11);
-    if (v.length > 7) v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
-    else if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3);
-    phone.value = v;
-  });
-
-  function handleSubmit() {
-    if (pwd.value && pwd.value !== pwdCheck.value) {
-      mHint.textContent = '비밀번호가 일치하지 않습니다';
-      mHint.style.color = '#E24B4A';
-      pwdCheck.focus();
-      return;
-    }
-    alert('수정사항이 저장되었습니다.');
-  } */
 </script>
 
 </body>
