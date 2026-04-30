@@ -10,6 +10,11 @@
 
 		where p.p_Type='V' 
 
+
+		where p.P_type='V'
+
+		where p.P_type='V'
+
 	</select>
 	
 	<insert id="insertPost">

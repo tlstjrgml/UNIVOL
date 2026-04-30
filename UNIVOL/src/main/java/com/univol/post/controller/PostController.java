@@ -49,14 +49,8 @@ public class PostController {
 		return "redirect:/post";
 	
 	}
-	
-	@GetMapping("/{pNumber}/{page}")
-	public String postDetail() {
-		
-		return null;
-		
-	}
-	
-	}
 
 
+
+
+}
