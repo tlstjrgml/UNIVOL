@@ -23,17 +23,11 @@
     }
     .logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #426B1F; letter-spacing: 2px; cursor: pointer; }
     .nav { display: flex; gap: 24px; justify-content: center; }
-    .nav a {
-      font-size: 14px; color: #444; text-decoration: none;
-      padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s;
-    }
+    .nav a { font-size: 14px; color: #444; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; }
     .nav a.active, .nav a:hover { color: #426B1F; border-bottom-color: #426B1F; }
     .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
     .username { font-size: 14px; color: #666; }
-    .header-btn {
-      font-size: 13px; padding: 6px 14px; border-radius: 8px;
-      border: 1px solid #426B1F; cursor: pointer; text-decoration: none; transition: background 0.15s;
-    }
+    .header-btn { font-size: 13px; padding: 6px 14px; border-radius: 8px; border: 1px solid #426B1F; cursor: pointer; text-decoration: none; transition: background 0.15s; }
     .btn-outline { background: transparent; color: #426B1F; }
     .btn-outline:hover { background: #eaf3de; }
 
@@ -42,65 +36,45 @@
 
     .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
     .filter-group { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
-    select, .search-input {
-      font-size: 13px; padding: 7px 12px;
-      border: 1px solid #d0d0c8; border-radius: 8px;
-      background: #fff; color: #333; outline: none; cursor: pointer; transition: border-color 0.15s;
-    }
+    select, .search-input { font-size: 13px; padding: 7px 12px; border: 1px solid #d0d0c8; border-radius: 8px; background: #fff; color: #333; outline: none; cursor: pointer; transition: border-color 0.15s; }
     select:focus, .search-input:focus { border-color: #426B1F; }
     .search-input { flex: 1; min-width: 160px; cursor: text; }
-    .search-btn {
-      font-size: 13px; padding: 7px 16px; border-radius: 8px;
-      border: none; background: #426B1F; color: #fff; cursor: pointer; transition: background 0.15s;
-    }
+    .search-btn { font-size: 13px; padding: 7px 16px; border-radius: 8px; border: none; background: #426B1F; color: #fff; cursor: pointer; transition: background 0.15s; }
     .search-btn:hover { background: #305215; }
-    .write-btn {
-      font-size: 13px; padding: 7px 18px; border-radius: 8px;
-      border: none; background: #426B1F; color: #fff; cursor: pointer;
-      white-space: nowrap; transition: background 0.15s;
-    }
+    .write-btn { font-size: 13px; padding: 7px 18px; border-radius: 8px; border: none; background: #426B1F; color: #fff; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
     .write-btn:hover { background: #305215; }
 
     .card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; overflow: hidden; }
 
-    .list-header {
-      display: grid;
-      grid-template-columns: 70px 1fr 90px 80px 70px;
-      gap: 8px;
-      padding: 10px 1.5rem;
-      background: #f7f7f2;
-      border-bottom: 1px solid #e0e0d8;
-    }
-    .list-header span { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.04em; }
-    .list-header span:not(:nth-child(2)) { text-align: center; }
+    .board-table { width: 100%; border-collapse: collapse; }
 
-    .list-item {
-      display: grid;
-      grid-template-columns: 70px 1fr 90px 80px 70px;
-      gap: 8px;
-      padding: 14px 1.5rem;
-      border-bottom: 1px solid #f0f0ea;
-      align-items: center;
-      cursor: pointer;
-      transition: background 0.12s;
-    }
-    .list-item:last-child { border-bottom: none; }
-    .list-item:hover { background: #f7faf5; }
-    .list-item .num { font-size: 13px; color: #aaa; text-align: center; }
-    .list-item .title-wrap { display: flex; flex-direction: column; gap: 3px; }
-    .list-item .title { font-size: 14px; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .list-item .date { font-size: 11px; color: #bbb; }
-    .list-item .author { font-size: 13px; color: #555; text-align: center; }
-    .list-item .views { font-size: 13px; color: #888; text-align: center; }
-    .list-item .likes { font-size: 13px; color: #c0392b; text-align: center; display: flex; align-items: center; justify-content: center; gap: 3px; }
+    .board-table thead tr { background: #f7f7f2; border-bottom: 1px solid #e0e0d8; }
+    .board-table thead th { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 12px; text-align: center; }
+    .board-table thead th.col-title { text-align: left; }
+
+    .board-table tbody tr { border-bottom: 1px solid #f0f0ea; cursor: pointer; transition: background 0.12s; }
+    .board-table tbody tr:last-child { border-bottom: none; }
+    .board-table tbody tr:hover { background: #f7faf5; }
+
+    .board-table tbody td { padding: 14px 12px; text-align: center; vertical-align: middle; }
+    .board-table tbody td.col-title { text-align: left; }
+
+    .num    { font-size: 13px; color: #aaa; }
+    .title-wrap { display: flex; flex-direction: column; gap: 3px; }
+    .title  { font-size: 14px; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 500px; }
+    .date   { font-size: 11px; color: #bbb; }
+    .author { font-size: 13px; color: #555; }
+    .views  { font-size: 13px; color: #888; }
+    .likes  { font-size: 13px; color: #c0392b; }
+
+    .col-num    { width: 70px; }
+    .col-title  { }
+    .col-author { width: 90px; }
+    .col-views  { width: 80px; }
+    .col-likes  { width: 70px; }
 
     .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 1.5rem; }
-    .page-btn {
-      width: 34px; height: 34px; border-radius: 8px;
-      border: 1px solid #e0e0d8; background: #fff;
-      font-size: 13px; color: #555; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s;
-    }
+    .page-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e0e0d8; background: #fff; font-size: 13px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s; }
     .page-btn:hover { background: #eaf3de; color: #426B1F; border-color: #426B1F; }
     .page-btn.active { background: #426B1F; color: #fff; border-color: #426B1F; }
     .empty { padding: 3rem; text-align: center; color: #bbb; font-size: 14px; }
@@ -108,134 +82,90 @@
 </head>
 <body>
 
-<div th:replace="common/navbar"></div>
-
-<main class="container">
-  <h1 class="page-title">후기게시판</h1>
-
-  <div class="toolbar">
-    <div class="filter-group">
-      <select id="sort-field" onchange="applyFilter()">
-        <option value="latest">최신순</option>
-        <option value="views_desc">조회수 높은순</option>
-        <option value="views_asc">조회수 낮은순</option>
-        <option value="likes_desc">좋아요 높은순</option>
-        <option value="likes_asc">좋아요 낮은순</option>
-      </select>
-      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
-      <button class="search-btn" onclick="applyFilter()">검색</button>
-    </div>
-    <button class="write-btn" onclick="location.href='/review/write'">+ 글쓰기</button>
-  </div>
-
-  <div class="card">
-    <div class="list-header">
-      <span>글번호</span>
-      <span style="text-align:left;">제목</span>
-      <span>작성자</span>
-      <span>조회수</span>
-      <span>좋아요</span>
-    </div>
-    <div id="board-list">
-      <!-- JS로 렌더링됩니다 -->
-    </div>
-  </div>
-
-  <div class="pagination">
-    <button class="page-btn" onclick="changePage(currentPage-1)">&#8249;</button>
-    <button class="page-btn active" id="page-1" onclick="changePage(1)">1</button>
-    <button class="page-btn" id="page-2" onclick="changePage(2)">2</button>
-    <button class="page-btn" id="page-3" onclick="changePage(3)">3</button>
-    <button class="page-btn" id="page-4" onclick="changePage(4)">4</button>
-    <button class="page-btn" id="page-5" onclick="changePage(5)">5</button>
-    <button class="page-btn" onclick="changePage(currentPage+1)">&#8250;</button>
-  </div>
-</main>
-
-<script>
-  const allPosts = [
-    { id: 512, title: '무료급식 봉사 후기 - 정말 보람찼어요!',     author: '김민준', views: 920, likes: 41, date: '2024.11.29', stars: 5 },
-    { id: 511, title: '말벗 봉사 다녀왔습니다 :)',                 author: '이서연', views: 734, likes: 33, date: '2024.11.26', stars: 5 },
-    { id: 510, title: '환경정화 캠페인 참여 후기',                  author: '박지호', views: 598, likes: 22, date: '2024.11.23', stars: 4 },
-    { id: 509, title: '멘토링 봉사 - 아이들이 너무 귀여워요',       author: '최수아', views: 477, likes: 18, date: '2024.11.21', stars: 5 },
-    { id: 508, title: '체육대회 보조 봉사 후기',                    author: '정다은', views: 361, likes: 13, date: '2024.11.19', stars: 4 },
-    { id: 507, title: '아동센터 교육 봉사를 마치고',                author: '한지수', views: 290, likes: 10, date: '2024.11.16', stars: 4 },
-    { id: 506, title: '유기견 보호소 - 강아지들이 너무 예뻐요',     author: '오민재', views: 248, likes:  8, date: '2024.11.13', stars: 5 },
-    { id: 505, title: '도서관 봉사 후기 (조용하고 좋았어요)',        author: '윤하은', views: 197, likes:  6, date: '2024.11.11', stars: 3 },
-    { id: 504, title: '헌혈 캠페인 봉사 후기',                      author: '송준호', views: 162, likes:  4, date: '2024.11.09', stars: 4 },
-    { id: 503, title: '한국어 교육 봉사 — 다문화가정 아이들과 함께', author: '강예림', views: 133, likes:  3, date: '2024.11.06', stars: 5 },
-  ];
-
-  const PAGE_SIZE = 8;
-  let currentPage = 1;
-
-  function applyFilter() {
-    const sortField = document.getElementById('sort-field').value;
-    const keyword = document.getElementById('search-input').value.trim().toLowerCase();
-
-    let filtered = allPosts.filter(p =>
-      p.title.toLowerCase().includes(keyword) ||
-      p.author.toLowerCase().includes(keyword)
-    );
-
-    const sortMap = {
-      latest:     (a, b) => b.id - a.id,
-      views_desc: (a, b) => b.views - a.views,
-      views_asc:  (a, b) => a.views - b.views,
-      likes_desc: (a, b) => b.likes - a.likes,
-      likes_asc:  (a, b) => a.likes - b.likes,
-    };
-    filtered.sort(sortMap[sortField]);
-
-    renderList(filtered, 1);
-  }
-
-  function renderList(posts, page) {
-    currentPage = page;
-    const list = document.getElementById('board-list');
-    const start = (page - 1) * PAGE_SIZE;
-    const paged = posts.slice(start, start + PAGE_SIZE);
-
-    if (paged.length === 0) {
-      list.innerHTML = '<div class="empty">게시글이 없습니다.</div>';
-      return;
-    }
-
-    list.innerHTML = paged.map(p => `
-      <div class="list-item" onclick="location.href='/review/${p.id}'">
-        <span class="num">#${p.id}</span>
-        <div class="title-wrap">
-          <span class="title">${p.title}</span>
-          <span class="date">${p.date}</span>
-        </div>
-        <span class="author">${p.author}</span>
-        <span class="views">${p.views.toLocaleString()}</span>
-        <span class="likes">♥ ${p.likes}</span>
-      </div>
-    `).join('');
-
-    updatePagination(posts.length, page);
-  }
-
-  function updatePagination(total, page) {
-    const totalPages = Math.ceil(total / PAGE_SIZE);
-    for (let i = 1; i <= 5; i++) {
-      const btn = document.getElementById('page-' + i);
-      if (btn) {
-        btn.classList.toggle('active', i === page);
-        btn.style.display = i <= totalPages ? '' : 'none';
-      }
-    }
-  }
-
-  function changePage(page) {
-    if (page < 1) return;
-    applyFilter();
-  }
-
-  // 초기 렌더링
-  applyFilter();
-</script>
+	<div th:replace="common/navbar"></div>
+	
+	<main class="container">
+	  <h1 class="page-title">후기게시판</h1>
+	
+	  <div class="toolbar">
+	    <div class="filter-group">
+	      <select id="sort-field">
+	        <option value="latest">최신순</option>
+	        <option value="views_desc">조회수 높은순</option>
+	        <option value="views_asc">조회수 낮은순</option>
+	        <option value="likes_desc">좋아요 높은순</option>
+	        <option value="likes_asc">좋아요 낮은순</option>
+	      </select>
+	      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
+	      <button class="search-btn">검색</button>
+	    </div>
+	    <button th:if="${session.loginUser}"class="write-btn" onclick="location.href='/review/write'">+ 글쓰기</button>
+	  </div>
+	
+	  <div class="card">
+	    <table class="board-table">
+	      <thead>
+	        <tr>
+	          <th class="col-num">글번호</th>
+	          <th class="col-title">제목</th>
+	          <th class="col-author">작성자</th>
+	          <th class="col-views">조회수</th>
+	          <th class="col-likes">좋아요</th>
+	        </tr>
+	      </thead>
+	      <tbody id="board-list">
+	        <tr th:each="r : ${list}">
+	          <td class="col-num num" th:text="${r.rNumber}"></td>
+	          <td class="col-title">
+	            <div class="title-wrap">
+	              <span class="title" th:text="${r.rTitle}"></span>
+	              <span class="date"  th:text="${r.rDate}"></span>
+	            </div>
+	          </td>
+	          <td class="col-author author" th:text="${r.userName}"></td>
+	          <td class="col-views views"   th:text="${r.rViews}"></td>
+	          <td class="col-likes likes"></td>
+	        </tr>
+	
+	<!--         게시글이 없을 때 -->
+	<!--         <tr th:if="${#list.isEmpty(list)}"> -->
+	<!--           <td colspan="5" class="empty">게시글이 없습니다.</td> -->
+	<!--         </tr> -->
+	      </tbody>
+	    </table>
+	  </div>
+	
+	  <!-- 페이지네이션 -->
+<!-- 	  <div class="pagination"> -->
+<!-- 	    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage - 1}|" th:disabled="${currentPage == 1}">&#8249;</button> -->
+<!-- 	    <th:block th:each="i : ${#numbers.sequence(1, totalPages)}"> -->
+<!-- 	      <button class="page-btn" th:classappend="${i == currentPage} ? 'active'" -->
+<!-- 	              th:text="${i}" -->
+<!-- 	              th:onclick="|location.href='?page=' + ${i}|"></button> -->
+<!-- 	    </th:block> -->
+<!-- 	    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage + 1}|" th:disabled="${currentPage == totalPages}">&#8250;</button> -->
+<!-- 	  </div> -->
+	
+	</main>
+	
+	<script>
+		window.onload = () => {
+			const tbody = document.querySelector('tbody');
+			console.log(tbody);
+			const tds = tbody.querySelectorAll('td');
+			console.log(tds);
+			for(const td of tds){
+				td.addEventListener('click', e => {
+					const trTds = e.target.parentElement.querySelectorAll('td');
+					console.log(trTds);
+// 					const boardId = trTds[0].innerText;
+// 					console.log(boardId);
+				})
+			}
+		}
+		
+		
+	</script>
 
 </body>
 </html>
