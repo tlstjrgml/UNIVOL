@@ -20,4 +20,6 @@ public interface MemberMapper {
     ArrayList<Member> selectAll();
 
 	ArrayList<HashMap<String, Object>> getApplyList(String id);
+
+	int updateMember(Member m);
 }

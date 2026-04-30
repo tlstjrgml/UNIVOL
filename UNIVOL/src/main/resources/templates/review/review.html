@@ -82,6 +82,7 @@
 </head>
 <body>
 
+<<<<<<< HEAD
 	<div th:replace="common/navbar"></div>
 	
 	<main class="container">
@@ -166,6 +167,136 @@
 		
 		
 	</script>
+=======
+<div th:replace="~{common/navbar.html}"></div>
+
+<main class="container">
+  <h1 class="page-title">후기게시판</h1>
+
+  <div class="toolbar">
+    <div class="filter-group">
+      <select id="sort-field" onchange="applyFilter()">
+        <option value="latest">최신순</option>
+        <option value="views_desc">조회수 높은순</option>
+        <option value="views_asc">조회수 낮은순</option>
+        <option value="likes_desc">좋아요 높은순</option>
+        <option value="likes_asc">좋아요 낮은순</option>
+      </select>
+      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
+      <button class="search-btn" onclick="applyFilter()">검색</button>
+    </div>
+    <button class="write-btn" onclick="location.href='/review/write'">+ 글쓰기</button>
+  </div>
+
+  <div class="card">
+    <div class="list-header">
+      <span>글번호</span>
+      <span style="text-align:left;">제목</span>
+      <span>작성자</span>
+      <span>조회수</span>
+      <span>좋아요</span>
+    </div>
+    <div id="board-list">
+      <!-- JS로 렌더링됩니다 -->
+    </div>
+  </div>
+
+  <div class="pagination">
+    <button class="page-btn" onclick="changePage(currentPage-1)">&#8249;</button>
+    <button class="page-btn active" id="page-1" onclick="changePage(1)">1</button>
+    <button class="page-btn" id="page-2" onclick="changePage(2)">2</button>
+    <button class="page-btn" id="page-3" onclick="changePage(3)">3</button>
+    <button class="page-btn" id="page-4" onclick="changePage(4)">4</button>
+    <button class="page-btn" id="page-5" onclick="changePage(5)">5</button>
+    <button class="page-btn" onclick="changePage(currentPage+1)">&#8250;</button>
+  </div>
+</main>
+
+<script>
+  const allPosts = [
+    { id: 512, title: '무료급식 봉사 후기 - 정말 보람찼어요!',     author: '김민준', views: 920, likes: 41, date: '2024.11.29', stars: 5 },
+    { id: 511, title: '말벗 봉사 다녀왔습니다 :)',                 author: '이서연', views: 734, likes: 33, date: '2024.11.26', stars: 5 },
+    { id: 510, title: '환경정화 캠페인 참여 후기',                  author: '박지호', views: 598, likes: 22, date: '2024.11.23', stars: 4 },
+    { id: 509, title: '멘토링 봉사 - 아이들이 너무 귀여워요',       author: '최수아', views: 477, likes: 18, date: '2024.11.21', stars: 5 },
+    { id: 508, title: '체육대회 보조 봉사 후기',                    author: '정다은', views: 361, likes: 13, date: '2024.11.19', stars: 4 },
+    { id: 507, title: '아동센터 교육 봉사를 마치고',                author: '한지수', views: 290, likes: 10, date: '2024.11.16', stars: 4 },
+    { id: 506, title: '유기견 보호소 - 강아지들이 너무 예뻐요',     author: '오민재', views: 248, likes:  8, date: '2024.11.13', stars: 5 },
+    { id: 505, title: '도서관 봉사 후기 (조용하고 좋았어요)',        author: '윤하은', views: 197, likes:  6, date: '2024.11.11', stars: 3 },
+    { id: 504, title: '헌혈 캠페인 봉사 후기',                      author: '송준호', views: 162, likes:  4, date: '2024.11.09', stars: 4 },
+    { id: 503, title: '한국어 교육 봉사 — 다문화가정 아이들과 함께', author: '강예림', views: 133, likes:  3, date: '2024.11.06', stars: 5 },
+  ];
+
+  const PAGE_SIZE = 8;
+  let currentPage = 1;
+
+  function applyFilter() {
+    const sortField = document.getElementById('sort-field').value;
+    const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+
+    let filtered = allPosts.filter(p =>
+      p.title.toLowerCase().includes(keyword) ||
+      p.author.toLowerCase().includes(keyword)
+    );
+
+    const sortMap = {
+      latest:     (a, b) => b.id - a.id,
+      views_desc: (a, b) => b.views - a.views,
+      views_asc:  (a, b) => a.views - b.views,
+      likes_desc: (a, b) => b.likes - a.likes,
+      likes_asc:  (a, b) => a.likes - b.likes,
+    };
+    filtered.sort(sortMap[sortField]);
+
+    renderList(filtered, 1);
+  }
+
+  function renderList(posts, page) {
+    currentPage = page;
+    const list = document.getElementById('board-list');
+    const start = (page - 1) * PAGE_SIZE;
+    const paged = posts.slice(start, start + PAGE_SIZE);
+
+    if (paged.length === 0) {
+      list.innerHTML = '<div class="empty">게시글이 없습니다.</div>';
+      return;
+    }
+
+    list.innerHTML = paged.map(p => `
+      <div class="list-item" onclick="location.href='/review/${p.id}'">
+        <span class="num">#${p.id}</span>
+        <div class="title-wrap">
+          <span class="title">${p.title}</span>
+          <span class="date">${p.date}</span>
+        </div>
+        <span class="author">${p.author}</span>
+        <span class="views">${p.views.toLocaleString()}</span>
+        <span class="likes">♥ ${p.likes}</span>
+      </div>
+    `).join('');
+
+    updatePagination(posts.length, page);
+  }
+
+  function updatePagination(total, page) {
+    const totalPages = Math.ceil(total / PAGE_SIZE);
+    for (let i = 1; i <= 5; i++) {
+      const btn = document.getElementById('page-' + i);
+      if (btn) {
+        btn.classList.toggle('active', i === page);
+        btn.style.display = i <= totalPages ? '' : 'none';
+      }
+    }
+  }
+
+  function changePage(page) {
+    if (page < 1) return;
+    applyFilter();
+  }
+
+  // 초기 렌더링
+  applyFilter();
+</script>
+>>>>>>> origin/정현종
 
 </body>
 </html>

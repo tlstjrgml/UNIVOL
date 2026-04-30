@@ -33,6 +33,10 @@ public class MemberService {
 	public ArrayList<HashMap<String, Object>> getApplyList(String id) {
 		return mapper.getApplyList(id);
 	}
+
+	public int updateMember(Member m) {
+		return mapper.updateMember(m);
+	}
 	
 
 }
