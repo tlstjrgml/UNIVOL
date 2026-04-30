@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.univol.member.model.vo.Member;
 import com.univol.member.model.vo.PageInfo;
 import com.univol.review.model.service.ReviewService;
 import com.univol.review.model.vo.Review;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import templates.common.Pagination;
 

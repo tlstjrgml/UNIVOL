@@ -20,6 +20,7 @@ public class Post {
 	private int views;
 	private Date pDate;
 
+
 	private String userName;
 	private char pStatus;
 	private int likes;
@@ -27,6 +28,8 @@ public class Post {
 
 
 	private char pType; /* commit test */ /* pushTest */
+
+
 
 }
 

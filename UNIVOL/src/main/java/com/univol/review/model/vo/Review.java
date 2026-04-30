@@ -22,4 +22,5 @@ public class Review {
 	private String pType;
 	private String userId;
 	private String rStatus;
+	private String userName;
 }
