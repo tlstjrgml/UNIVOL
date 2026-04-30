@@ -19,4 +19,8 @@ public class PostService {
 	public ArrayList<Post> selectAll(){
 		return mapper.selectAll();
 	}
+
+	public int insertPost(Post p) {
+		return mapper.insertPost(p);
+	}
 }

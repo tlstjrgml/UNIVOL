@@ -7,7 +7,18 @@
 		select p.*, u.user_name 
 		from post p
 			join users u on p.user_id = u.user_id
-		where p.pType='V'
+
+		where p.p_Type='V' 
+
+		where p.P_type='V'
+
+		where p.P_type='V'
+
 	</select>
+	
+	<insert id="insertPost">
+		insert into post
+		values(ISEQ$$_73096.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default)
+	</insert>
 
 </mapper>	

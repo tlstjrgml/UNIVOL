@@ -86,7 +86,7 @@
 </head>
 <body>
 
-<div th:replace="common/navbar"></div>
+<div th:replace="~{common/navbar.html}"></div>
 
 <main class="container">
   <h1 class="page-title">봉사게시판</h1>
@@ -103,7 +103,7 @@
       <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
       <button class="search-btn" onclick="applyFilter()">검색</button>
     </div>
-    <button class="write-btn" onclick="location.href='/volunteer/write'">+ 글쓰기</button>
+    <button class="write-btn">+ 글쓰기</button>
   </div>
 
   <div class="card">
@@ -139,6 +139,10 @@
 	
  
 </main>
-
+<script>
+	document.getElementsByClassName('write-btn')[0].addEventListener('click', ()=>{
+		location.href='/post/write';
+	})
+</script>
 </body>
 </html>
