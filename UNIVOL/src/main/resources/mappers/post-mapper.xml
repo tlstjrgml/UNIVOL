@@ -7,7 +7,11 @@
 		select p.*, u.user_name 
 		from post p
 			join users u on p.user_id = u.user_id
+<<<<<<< HEAD
 		where p.p_Type='V' 
+=======
+		where p.P_type='V'
+>>>>>>> origin/이효영
 	</select>
 	
 	<insert id="insertPost">
