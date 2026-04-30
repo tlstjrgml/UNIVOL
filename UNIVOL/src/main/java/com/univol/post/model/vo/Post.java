@@ -19,11 +19,13 @@ public class Post {
 	private String contents;
 	private int views;
 	private Date pDate;
-	private char pType;
+	private char pType; /* commit test */ /* pushTest */
 	private String userName;
 	private char pStatus;
 	private int likes;
+
 	private String userId;
+
 }
 
 
