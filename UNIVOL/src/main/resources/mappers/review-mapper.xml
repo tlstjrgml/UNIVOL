@@ -24,7 +24,19 @@
 		<result column="USER_ID" property="userId"/>
 		<result column="P_STATUS" property="rStatus"/>
 	</resultMap>
+	
+	<select id="selectReview" resultMap="reviewResultSet">
+		select *
+		from post
+			 join users using(user_id)
+		where p_status = 'Y' and p_number = #{id}
+	</select>
 
+	<update id="updateRViews">
+		update post
+		set views = views + 1
+		where p_number = #{id}
+	</update>
 
 
 
