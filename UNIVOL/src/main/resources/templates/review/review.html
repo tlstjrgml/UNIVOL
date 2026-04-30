@@ -117,11 +117,16 @@
 	        <tr th:each="r : ${list}">
 	          <td class="col-num num" th:text="${r.rNumber}"></td>
 	          <td class="col-title">
-	            <div class="title-wrap">
-	              <span class="title" th:text="${r.rTitle}"></span>
-	              <span class="date"  th:text="${r.rDate}"></span>
-	            </div>
-	          </td>
+				  <span class="title" th:text="${r.rTitle}"></span>
+				  <span class="date"  th:text="${r.rDate}"></span>
+				  
+			  </td>
+<!-- 	          <td class="col-title"> -->
+<!-- 	            <div class="title-wrap"> -->
+<!-- 	              <span class="title" th:text="${r.rTitle}"></span> -->
+<!-- 	              <span class="date"  th:text="${r.rDate}"></span> -->
+<!-- 	            </div> -->
+<!-- 	          </td> -->
 	          <td class="col-author author" th:text="${r.userName}"></td>
 	          <td class="col-views views"   th:text="${r.rViews}"></td>
 	          <td class="col-likes likes"></td>
@@ -158,8 +163,9 @@
 				td.addEventListener('click', e => {
 					const trTds = e.target.parentElement.querySelectorAll('td');
 					console.log(trTds);
-// 					const boardId = trTds[0].innerText;
-// 					console.log(boardId);
+					const reviewId = trTds[0].innerText;
+					console.log(reviewId);
+					location.href = '/review/' + reviewId;
 				})
 			}
 		}
