@@ -3,14 +3,16 @@ package com.univol.post.controller;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.univol.member.model.vo.Member;
 import com.univol.post.model.service.PostService;
 import com.univol.post.model.vo.Post;
 
-import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +35,28 @@ public class PostController {
 		return "post/post";
 	}
 
+	@GetMapping("/post/write")
+	public String postWrite() {
+		return "post/write";
+	}
+	
+	@PostMapping("/post/write")
+	public String insertPost(@ModelAttribute Post p, HttpSession session) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		p.setPType('V');
+		p.setUserId(loginUser.getUserId());
+		pService.insertPost(p);
+		return "redirect:/post";
+	
+	}
+	
+	@GetMapping("/{pNumber}/{page}")
+	public String postDetail() {
+		
+		return null;
+		
+	}
+	
+	}
 
-}
 
