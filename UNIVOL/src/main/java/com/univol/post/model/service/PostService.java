@@ -13,10 +13,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 
 public class PostService {
-	
+
 	private final PostMapper mapper;
-	
+
 	public ArrayList<Post> selectAll(){
 		return mapper.selectAll();
+	}
+
+	public Post selectOne(int pNumber) {
+		return mapper.selectOne(pNumber);
 	}
 }

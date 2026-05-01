@@ -4,10 +4,26 @@
 <mapper namespace="com.univol.post.model.Mapper.PostMapper">
 
 	<select id="selectAll" resultType="com.univol.post.model.vo.Post">
-		select p.*, u.user_name 
+		select p.P_NUMBER as pNumber, p.P_TITLE as pTitle, p.CONTENTS as contents,
+		       p.VIEWS as views, p.P_DATE as pDate, p.P_TYPE as pType, p.USER_ID as userId,
+		       u.USER_NAME as userName
 		from post p
-			join users u on p.user_id = u.user_id
-		where p.P_type='V'
+		join users u on p.USER_ID = u.USER_ID
+		where p.P_TYPE = 'V'
+	</select>
+
+	<select id="selectOne" parameterType="int" resultType="com.univol.post.model.vo.Post">
+		SELECT P.P_NUMBER as pNumber,
+		       P.P_TITLE as pTitle,
+		       P.CONTENTS as contents,
+		       P.VIEWS as views,
+		       P.P_DATE as pDate,
+		       P.P_TYPE as pType,
+		       U.USER_NAME as userName,
+		       P.USER_ID as userId
+		FROM POST P
+		JOIN USERS U ON P.USER_ID = U.USER_ID
+		WHERE P.P_NUMBER = #{pNumber}
 	</select>
 
 </mapper>	

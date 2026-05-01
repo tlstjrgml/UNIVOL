@@ -11,4 +11,6 @@ import com.univol.post.model.vo.Post;
 public interface PostMapper {
 
 	ArrayList<Post> selectAll();
+
+	Post selectOne(int pNumber);
 }

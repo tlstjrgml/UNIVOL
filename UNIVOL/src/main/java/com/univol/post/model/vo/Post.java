@@ -21,8 +21,7 @@ public class Post {
 	private Date pDate;
 	private char pType;
 	private String userName;
-	private char pStatus;
-	private int likes;
+	private String userId;
 }
 
 
