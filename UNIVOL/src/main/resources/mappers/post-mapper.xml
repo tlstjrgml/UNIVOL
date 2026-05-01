@@ -8,7 +8,6 @@
 		       p.VIEWS as views, p.P_DATE as pDate, p.P_TYPE as pType, p.USER_ID as userId,
 		       u.USER_NAME as userName
 		from post p
-<<<<<<< HEAD
 		join users u on p.USER_ID = u.USER_ID
 		where p.P_TYPE = 'V'
 	</select>
@@ -25,22 +24,11 @@
 		FROM POST P
 		JOIN USERS U ON P.USER_ID = U.USER_ID
 		WHERE P.P_NUMBER = #{pNumber}
-=======
-			join users u on p.user_id = u.user_id
-
-		where p.p_Type='V' 
-
-
-		where p.P_type='V'
-
-		where p.P_type='V'
-
->>>>>>> branch '이효영' of https://github.com/tlstjrgml/UNIVOL.git
 	</select>
-	
+
 	<insert id="insertPost">
 		insert into post
 		values(ISEQ$$_73096.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default)
 	</insert>
 
-</mapper>	
+</mapper>

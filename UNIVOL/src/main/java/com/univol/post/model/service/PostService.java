@@ -20,12 +20,11 @@ public class PostService {
 		return mapper.selectAll();
 	}
 
-<<<<<<< HEAD
 	public Post selectOne(int pNumber) {
 		return mapper.selectOne(pNumber);
-=======
+	}
+
 	public int insertPost(Post p) {
 		return mapper.insertPost(p);
->>>>>>> branch '이효영' of https://github.com/tlstjrgml/UNIVOL.git
 	}
 }
