@@ -27,8 +27,6 @@ public class MemberController {
 	
 
 	
-	
-	
 	/* 메인 페이지 */
 	@GetMapping("/")
 	public String main() {
@@ -87,6 +85,32 @@ public class MemberController {
 
 	}
 	
+	/*개인정보수정 페이지 이동*/
+	@GetMapping("/edit")
+	public String edit() {
+		return "users/edit";
+	}
+	
+	/*개인정보수정 (이메일 미포함 , else문쪽 throw 미포함상태)*/
+	@PostMapping("/edit")
+	public String updateMember(@ModelAttribute Member m, Model model) {
+
+	    int result = mService.updateMember(m);
+
+	    if(result > 0) {
+	    	model.addAttribute("loginUser", mService.logIn(m));
+	        return "redirect:/myPage";
+	    } else {
+	        return "users/edit";
+	    }
+	}
+	
+	
+	
+	/*개인정보수정 에서 비밀번호 수정*/
+	
+	
+	
 	/* 관리자페이지 */
 	@GetMapping("/adminPage")
 	public String adminPage(@ModelAttribute Member m, Model model, HttpSession session) {
@@ -105,8 +129,8 @@ public class MemberController {
 	
 
 	/* 후기게시판 */
-	@GetMapping("/review")
-	public String review() {
-		return "review/review";
-	}
+//	@GetMapping("/review")
+//	public String review() {
+//		return "review/review";
+//	}
 }

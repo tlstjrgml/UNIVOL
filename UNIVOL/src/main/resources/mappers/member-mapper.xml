@@ -29,4 +29,10 @@
     ORDER BY R.C_NUMBER DESC
 	</select>
 	
+	<update id="updateMember">
+		update users
+		set USER_NAME=#{userName}, BIRTH=#{birth}, GENDER=#{gender}, PHONE=#{phone}, ADDRESS=#{address}
+		where USER_ID=#{userId}
+	</update>
+	
 </mapper>

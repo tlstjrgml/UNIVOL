@@ -12,5 +12,9 @@ public interface PostMapper {
 
 	ArrayList<Post> selectAll();
 
+<<<<<<< HEAD
 	Post selectOne(int pNumber);
+=======
+	int insertPost(Post p);
+>>>>>>> branch '이효영' of https://github.com/tlstjrgml/UNIVOL.git
 }

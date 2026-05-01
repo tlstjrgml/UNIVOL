@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.univol.review.mapper.ReviewMapper">
+	<select id="getListCount">
+		select count(*)
+		from post
+		where p_type = #{c}
+	</select>
+	
+	<select id="selectReviewList" resultMap="reviewResultSet">
+		select *
+		from post
+			 join users using(user_id)
+		where p_type = #{c}
+		order by p_number desc
+	</select>
+	<resultMap type="com.univol.review.model.vo.Review" id="reviewResultSet">
+		<result column="p_number" property="rNumber"/>
+		<result column="P_TITLE" property="rTitle"/>
+		<result column="CONTENTS" property="rContents"/>
+		<result column="VIEWS" property="rViews"/>
+		<result column="P_DATE" property="rDate"/>
+		<result column="P_TYPE" property="pType"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="P_STATUS" property="rStatus"/>
+	</resultMap>
+	
+	<select id="selectReview" resultMap="reviewResultSet">
+		select *
+		from post
+			 join users using(user_id)
+		where p_status = 'Y' and p_number = #{id}
+	</select>
+
+	<update id="updateRViews">
+		update post
+		set views = views + 1
+		where p_number = #{id}
+	</update>
+
+
+
+
+
+
+
+
+</mapper>
+

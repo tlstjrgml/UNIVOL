@@ -19,9 +19,31 @@ public class Post {
 	private String contents;
 	private int views;
 	private Date pDate;
-	private char pType;
+
+
 	private String userName;
+<<<<<<< HEAD
 	private String userId;
+=======
+	private char pStatus;
+	private int likes;
+
+<<<<<<< HEAD
+	private String userId;
+
+=======
+
+	private String userId;
+
+
+
+	private char pType; /* commit test */ /* pushTest */
+
+
+
+
+>>>>>>> origin/신석희
+>>>>>>> branch '이효영' of https://github.com/tlstjrgml/UNIVOL.git
 }
 
 
