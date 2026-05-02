@@ -30,7 +30,7 @@ public class ReviewService {
 		Review r = mapper.selectReview(bId);
 		if(r != null) {
 			if(id != null && !r.getUserId().equals(id)) {
-				int result = mapper.updateRViews(bId);
+				int result = mapper.updateReview(bId);
 				if(result > 0) {
 					r.setRViews(r.getRViews() + 1);
 				}

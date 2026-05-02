@@ -1,155 +1,318 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>게시글 작성</title>
-
-  <!-- 폰트 -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
+  <title>게시글 작성 - UNIVOL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
+    body { background: #f5f5f0; min-height: 100vh; }
 
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      padding: 30px;
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f5f5f0;
     }
 
     /* 로고 */
-    .logo {
+    .unv-logo {
       font-family: 'Playfair Display', serif;
       font-size: 40px;
       color: #424B1F;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
       text-align: center;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
     }
 
     /* 페이지 제목 */
-    .page-title {
+    .unv-page-title {
       font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 10px;
+      font-weight: 700;
+      color: #222;
       text-align: center;
+      margin-bottom: 14px;
     }
 
     /* 구분선 */
-    .divider {
+    .unv-divider {
       border: none;
-      border-top: 1px solid #ccc;
-      width: 90%;
-      max-width: 500px;
-      margin: 10px auto 20px auto;
+      border-top: 2px solid #426B1F;
+      max-width: 1200px;
+      margin: 0 auto 28px auto;
     }
 
-    .container {
-      width: 90%;
-      max-width: 500px;
+    /* 전체 레이아웃 */
+    .unv-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      max-width: 1200px;
       margin: 0 auto;
-      background: #fff;
-      padding: 20px 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      align-items: start;
     }
 
-    .form-group {
-      margin-bottom: 15px;
+    /* 폼 카드 */
+    .unv-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 0.5px solid #ddd;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+      padding: 40px 44px;
+    }
+
+    .unv-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 24px;
+    }
+
+    .unv-field {
+      margin-bottom: 24px;
+    }
+
+    .unv-field.full {
+      grid-column: 1 / -1;
+    }
+    
+    .unv-wrap{
+    	padding: 2.5rem 2rem;
     }
 
     label {
       display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
+      font-size: 14px;
+      font-weight: 700;
+      color: #424B1F;
+      margin-bottom: 8px;
     }
 
-    input, textarea {
+    input[type="text"],
+    input[type="date"],
+    textarea {
       width: 100%;
-      padding: 10px;
+      padding: 13px 16px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: #222;
+      background: #fafaf7;
+      outline: none;
+      transition: border 0.15s;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    textarea:focus {
+      border-color: #426B1F;
+      background: #fff;
     }
 
     textarea {
       resize: none;
     }
 
-    .btn-group {
-      text-align: center;
+    /* 버튼 */
+    .unv-btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
     }
 
     button {
-      padding: 10px 20px;
-      margin: 5px;
+      padding: 12px 40px;
       border: none;
-      background-color: #424B1F;
-      color: white;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Noto Sans KR', sans-serif;
       cursor: pointer;
+      transition: background 0.15s;
     }
 
-    button[type="reset"] {
-      background-color: #888;
+    .btn-primary {
+      background: #424B1F;
+      color: #fff;
     }
 
-    button:hover {
-      background-color: #2f3616;
+    .btn-primary:hover {
+      background: #2f3616;
+    }
+
+    .btn-secondary {
+      background: #e8e8e3;
+      color: #555;
+    }
+
+    .btn-secondary:hover {
+      background: #d5d5ce;
+    }
+
+    /* 작성 가이드 패널 */
+    .unv-guide {
+      background: #fff;
+      border-radius: 12px;
+      border: 0.5px solid #ddd;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+      padding: 30px 26px;
+    }
+
+    .unv-guide-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #424B1F;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #426B1F;
+    }
+
+    .unv-guide-section {
+      margin-bottom: 22px;
+    }
+
+    .unv-guide-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #424B1F;
+      margin-bottom: 10px;
+    }
+
+    .unv-guide-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .unv-guide-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #426B1F;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .unv-guide-text {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .unv-guide-notice {
+      background: #f5f5f0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-top: 4px;
+    }
+
+    .unv-guide-notice p {
+      font-size: 12px;
+      color: #777;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .unv-guide-notice strong {
+      color: #424B1F;
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
 
-  <!-- 로고 -->
-  <div class="logo">UNIVOL</div>
+  <!-- 네비게이션 바 -->
+  <div th:replace="common/navbar"></div>
 
-  <!-- 페이지 제목 -->
-  <div class="page-title">게시글 작성</div>
-
-  <hr class="divider">
-
-  <div class="container">
-    <!-- 구분선 -->
+  
 
 
-    <form class=writeform method="POST">
-    <div>
-    	<input/>
+
+  
+
+  <!-- 본문 레이아웃 -->
+	<div class="unv-wrap">
+  <div class="unv-layout">
+    <!-- 작성 폼 -->
+    <div class="unv-card">
+      <form th:action="@{/post/write}" method="post">
+        <div class="unv-row">
+
+          <div class="unv-field full">
+            <label for="pTitle">제목</label>
+            <input type="text" id="pTitle" name="pTitle" placeholder="제목을 입력하세요" required>
+          </div>
+
+          <div class="unv-field">
+            <label for="pPlace">봉사 장소</label>
+            <input type="text" id="pPlace" name="pPlace" placeholder="봉사 장소를 입력하세요" required>
+          </div>
+
+          <div class="unv-field">
+            <label for="pDate">봉사 날짜</label>
+            <input type="date" id="pDate" name="pDate" required>
+          </div>
+
+          <div class="unv-field full">
+            <label for="contents">내용</label>
+            <textarea id="contents" name="contents" rows="13" placeholder="내용을 입력하세요" required></textarea>
+          </div>
+
+        </div>
+
+        <div class="unv-btn-group">
+          <button type="submit" class="btn-primary">등록</button>
+          <button type="button" class="btn-secondary">취소</button>
+        </div>
+      </form>
     </div>
-      <div class="form-group">
-        <label for="title">제목</label>
-        <input type="text" id="title" placeholder="제목을 입력하세요">
+
+    <!-- 작성 가이드 패널 -->
+    <div class="unv-guide">
+      <div class="unv-guide-title">작성 가이드</div>
+
+      <div class="unv-guide-section">
+        <div class="unv-guide-section-title">제목 작성 시</div>
+        <div class="unv-guide-item">
+          <div class="unv-guide-dot"></div>
+          <div class="unv-guide-text">봉사 활동명이 잘 드러나도록 작성해 주세요.</div>
+        </div>
+        <div class="unv-guide-item">
+          <div class="unv-guide-dot"></div>
+          <div class="unv-guide-text">특수문자나 광고성 문구는 삼가 주세요.</div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="place">봉사 장소</label>
-        <input type="text" id="place" placeholder="봉사 장소를 입력하세요">
+      <div class="unv-guide-section">
+        <div class="unv-guide-section-title">봉사 장소 작성 시</div>
+        <div class="unv-guide-item">
+          <div class="unv-guide-dot"></div>
+          <div class="unv-guide-text">시·구·동까지 포함한 상세 주소를 입력해 주세요.</div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="date">봉사 날짜</label>
-        <input type="date" id="date">
+      <div class="unv-guide-section">
+        <div class="unv-guide-section-title">내용 작성 시</div>
+        <div class="unv-guide-item">
+          <div class="unv-guide-dot"></div>
+          <div class="unv-guide-text">모집 인원, 활동 내용, 준비물 등을 포함해 주세요.</div>
+        </div>
+        <div class="unv-guide-item">
+          <div class="unv-guide-dot"></div>
+          <div class="unv-guide-text">연락처나 신청 방법도 함께 안내해 주시면 좋아요.</div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="content">내용</label>
-        <textarea id="content" rows="10" placeholder="내용을 입력하세요"></textarea>
+      <div class="unv-guide-notice">
+        <p><strong>유의사항</strong><br>허위 정보나 부적절한 내용이 포함된 게시글은 관리자에 의해 삭제될 수 있습니다.</p>
       </div>
-
-      <div class="btn-group">
-        <button type="submit">등록</button>
-        <button type="reset">취소</button>
-      </div>
-    </form>
+    </div>
+	
   </div>
-<script>
-	window.onload = () => {
-		
-	}
-</script>
+</div>
+
+<script></script>
 </body>
 </html>

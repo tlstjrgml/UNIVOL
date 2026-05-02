@@ -32,7 +32,7 @@
 		where p_status = 'Y' and p_number = #{id}
 	</select>
 
-	<update id="updateRViews">
+	<update id="updateReview">
 		update post
 		set views = views + 1
 		where p_number = #{id}

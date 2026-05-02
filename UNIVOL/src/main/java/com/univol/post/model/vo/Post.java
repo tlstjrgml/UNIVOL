@@ -26,8 +26,12 @@ public class Post {
 	private int likes;
 
 
+	private String userId;
+
+
 
 	private char pType; /* commit test */ /* pushTest */
+
 
 
 

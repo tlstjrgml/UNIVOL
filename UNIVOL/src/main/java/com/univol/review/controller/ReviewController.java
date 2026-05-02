@@ -39,8 +39,9 @@ public class ReviewController {
 		return mv;
 	}
 	
-	@GetMapping("/{id}")
-	public String selectBoard(@PathVariable("id") int bId, HttpSession session, Model model) {
+	@GetMapping("/{id}/{page}")
+	public String selectReview(@PathVariable("id") int bId, @PathVariable("page") int page,
+							HttpSession session, Model model) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		String id = null;
 		if(loginUser != null) {
@@ -50,7 +51,7 @@ public class ReviewController {
 		Review r = rService.selectReview(bId, id);
 		if(r != null) {
 			model.addAttribute("r", r);
-//			model.addAttribute("page", page);
+			model.addAttribute("page", page);
 			return "review/detail";
 		} else {
 			throw new ReviewException("게시글 상세보기를 실패하였습니다.");
