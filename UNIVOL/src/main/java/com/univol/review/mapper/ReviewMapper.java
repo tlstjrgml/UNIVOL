@@ -16,6 +16,6 @@ public interface ReviewMapper {
 
 	Review selectReview(int bId);
 
-	int updateRViews(int bId);
+	int updateReview(int bId);
 
 }
