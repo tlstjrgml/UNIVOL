@@ -4,7 +4,7 @@
 <mapper namespace="com.univol.member.model.Mapper.MemberMapper">
 	
 	<select id="logIn" resultType="Member">
-		select * from users where user_id=#{userId} and user_pw=#{userPw}
+		select * from users where user_id=#{userId}
 	</select>
 	
 	

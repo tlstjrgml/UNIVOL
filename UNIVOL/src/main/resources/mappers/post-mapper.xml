@@ -4,21 +4,28 @@
 <mapper namespace="com.univol.post.model.Mapper.PostMapper">
 
 	<select id="selectAll" resultType="com.univol.post.model.vo.Post">
-		select p.*, u.user_name 
-		from post p
-			join users u on p.user_id = u.user_id
-
-		where p.p_Type='V' 
-
-		where p.P_type='V'
-
-		where p.P_type='V'
-
+		select * from (
+			select rownum as rn, A.* from(
+				select p.*, u.user_name
+				from post p
+				join users u on p.user_id = u.user_id
+				where p.p_type = 'V'
+			) A
+			where rownum &lt;= #{endRow}
+		)
+		where rn >= #{startRow}
+		
+	</select>
+	
+	<select id="getListCount" resultType="_int">
+		select count(*) from post
 	</select>
 	
 	<insert id="insertPost">
 		insert into post
-		values(ISEQ$$_73096.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default)
+		values(ISEQ$$_73096.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId})
 	</insert>
+	
+	
 
 </mapper>	

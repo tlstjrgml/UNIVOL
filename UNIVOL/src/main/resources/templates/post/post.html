@@ -136,13 +136,19 @@
       </tbody>
     </table>
   </div>
-	
- 
+  <div class="pagination">
+      <button th:each="n:${#numbers.sequence(pi.startPage, pi.endPage)}" 
+  		  	  th:text="${n}"
+			  th:onClick="|location.href='/post?page=${n}'|">
+	  </button>		
+  </div>
 </main>
 <script>
 	document.getElementsByClassName('write-btn')[0].addEventListener('click', ()=>{
 		location.href='/post/write';
 	})
+	
+	
 </script>
 </body>
 </html>
