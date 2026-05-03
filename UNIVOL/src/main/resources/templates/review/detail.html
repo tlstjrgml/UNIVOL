@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -181,16 +181,43 @@
           </tr>
         </table>
       </div>
+      
 
-      <div class="post-content">
-        [[${r.rContents}]]
-      </div>
+	<div id="view-mode">
 
-      <div class="btn-area">
-        <button>수정</button>
-        <button>삭제</button>
-      </div>
-    </div>
+	  <div class="post-title">[[${r.rTitle}]]</div>
+	
+	  <div class="post-content">
+	    [[${r.rContents}]]
+	  </div>
+
+	</div>
+
+		<div id="edit-mode" style="display:none;">
+		
+		  <form th:action="@{/review/update}" method="post">
+		
+		    <input type="hidden" name="rNumber" th:value="${r.rNumber}">
+		    <input type="hidden" name="page" th:value="${page}">
+		
+		    <input type="text" name="rTitle" th:value="${r.rTitle}">
+		
+		    <textarea name="rContents">[[${r.rContents}]]</textarea>
+		
+		    <button type="submit">저장</button>
+		    <button type="button" id="cancelBtn">취소</button>
+		
+		  </form>
+		
+		</div>
+	
+		
+		
+	      <div class="btn-area">
+	        <button id="editBtn">수정</button>
+	        <button>삭제</button>
+	      </div>
+	    </div>
 
     <div class="comment-box">
       <div class="comment-title">댓글</div>
@@ -208,4 +235,28 @@
 
   </div>
 </body>
+<script>
+	window.onload = function () {
+	
+	  const viewMode = document.getElementById("view-mode");
+	  const editMode = document.getElementById("edit-mode");
+	
+	  const editBtn = document.getElementById("editBtn");
+	  const cancelBtn = document.getElementById("cancelBtn");
+	
+	  // 🔥 수정 버튼 클릭
+	  editBtn.onclick = function () {
+	    viewMode.style.display = "none";
+	    editMode.style.display = "block";
+	  };
+	
+	  // 🔥 취소 버튼 클릭
+	  cancelBtn.onclick = function () {
+	    viewMode.style.display = "block";
+	    editMode.style.display = "none";
+	  };
+	
+	};
+
+</script>
 </html>

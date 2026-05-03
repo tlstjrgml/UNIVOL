@@ -38,8 +38,12 @@
 		where p_number = #{id}
 	</update>
 
-
-
+	<update id="updateReviews">
+	    UPDATE POST
+    	SET P_TITLE = #{rTitle},
+        CONTENTS = #{rContents}
+    	WHERE P_NUMBER = #{rNumber}
+	</update>
 
 
 
