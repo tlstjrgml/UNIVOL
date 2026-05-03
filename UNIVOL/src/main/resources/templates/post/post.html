@@ -118,7 +118,7 @@
         </tr>
       </thead>
       <tbody id="board-list">
-        <tr th:each="p:${plist}">
+        <tr th:each="p:${plist}" th:onclick="|location.href='/post/${pi.currentPage}/${p.pNumber}'|">
           <td class="col-num num" th:text="${p.pNumber}"></td>
           <td class="col-title">
             <div class="title-wrap">
@@ -148,7 +148,7 @@
 		location.href='/post/write';
 	})
 	
-	
+
 </script>
 </body>
 </html>

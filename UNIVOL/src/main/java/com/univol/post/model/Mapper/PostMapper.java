@@ -16,4 +16,6 @@ public interface PostMapper {
 	int insertPost(Post p);
 	
 	int getListCount();
+	
+	Post selectOne(int pNumber);
 }

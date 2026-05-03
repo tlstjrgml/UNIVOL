@@ -27,4 +27,8 @@ public class PostService {
 	public int getListCount() {
 		return mapper.getListCount();
 	}
+	
+	public Post selectOne(int pNumber) {
+		return mapper.selectOne(pNumber);
+	}
 }
