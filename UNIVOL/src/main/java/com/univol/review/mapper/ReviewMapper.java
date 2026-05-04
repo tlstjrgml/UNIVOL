@@ -18,4 +18,6 @@ public interface ReviewMapper {
 
 	int updateReview(int bId);
 
+	int updateReviews(Review r);
+
 }

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.univol.member.model.Mapper.MemberMapper;
+import com.univol.member.model.mapper.MemberMapper;
 import com.univol.member.model.vo.Member;
 
 import lombok.RequiredArgsConstructor;

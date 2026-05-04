@@ -38,4 +38,8 @@ public class ReviewService {
 		}
 		return r;
 	}
+
+	public int updateReviews(Review r) {
+		return mapper.updateReviews(r);
+	}
 }

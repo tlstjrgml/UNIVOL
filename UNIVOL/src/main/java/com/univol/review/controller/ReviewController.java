@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.univol.member.model.vo.Member;
@@ -58,7 +61,30 @@ public class ReviewController {
 		}
 	}
 	
+	@GetMapping("/detail/{rNumber}/{page}")
+	public String detail(@PathVariable("rNumber") int rNumber,
+	                     @PathVariable("page") int page,
+	                     Model model) {
+
+	    Review r = rService.selectReview(rNumber, null);
+
+	    model.addAttribute("r", r);
+	    model.addAttribute("page", page);
+
+	    return "review/detail";
+	}
 	
+	@PostMapping("/update")
+	public String updateReview(@ModelAttribute Review r) {
+
+	    int result = rService.updateReviews(r);
+
+	    if (result > 0) {
+	    	return "redirect:/review/detail/" + r.getRNumber() + "/" + 1;
+	    } else {
+	        throw new ReviewException("수정 실패");
+	    }
+	}
 	
 	
 	
