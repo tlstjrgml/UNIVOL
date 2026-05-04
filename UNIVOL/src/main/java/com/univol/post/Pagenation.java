@@ -24,8 +24,6 @@ public class Pagenation {
 		p.setBoardLimit(boardLimit);
 		
 		
-		
-		
 		return p;
 		
 	}

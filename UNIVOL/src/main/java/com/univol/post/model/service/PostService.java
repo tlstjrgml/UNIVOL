@@ -18,10 +18,8 @@ public class PostService {
 	
 	public ArrayList<Post> selectAll(int startRow, int endRow){
 		return mapper.selectAll(startRow, endRow);
-
-	public ArrayList<Post> selectAll(){
-		return mapper.selectAll();
 	}
+
 
 	public Post selectOne(int pNumber) {
 		return mapper.selectOne(pNumber);
