@@ -1,4 +1,4 @@
-package com.univol.member.model.Mapper;
+package com.univol.member.model.mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;

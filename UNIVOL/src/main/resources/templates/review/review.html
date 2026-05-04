@@ -74,7 +74,7 @@
     .col-likes  { width: 70px; }
 
     .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 1.5rem; }
-    .page-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e0e0d8; background: #fff; font-size: 13px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s; }
+    .page-btn { text-decoration: none; width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e0e0d8; background: #fff; font-size: 13px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s; }
     .page-btn:hover { background: #eaf3de; color: #426B1F; border-color: #426B1F; }
     .page-btn.active { background: #426B1F; color: #fff; border-color: #426B1F; }
     .empty { padding: 3rem; text-align: center; color: #bbb; font-size: 14px; }
@@ -82,7 +82,9 @@
 </head>
 <body>
 
+
 	<div th:replace="~{common/navbar.html}"></div>
+
 	
 	<main class="container">
 	  <h1 class="page-title">후기게시판</h1>
@@ -116,12 +118,19 @@
 	      <tbody id="board-list">
 	        <tr th:each="r : ${list}">
 	          <td class="col-num num" th:text="${r.rNumber}"></td>
+<!-- 	          <td class="title" th:text="${r.rTitle}"> -->
+<!-- 	          <td class="date" th:text="${r.rDate}"> -->
 	          <td class="col-title">
-	            <div class="title-wrap">
-	              <span class="title" th:text="${r.rTitle}"></span>
-	              <span class="date"  th:text="${r.rDate}"></span>
-	            </div>
-	          </td>
+				  <span class="title" th:text="${r.rTitle}"></span>
+				  <span class="date"  th:text="${r.rDate}"></span>
+				  
+			  </td>
+<!-- 	          <td class="col-title"> -->
+<!-- 	            <div class="title-wrap"> -->
+<!-- 	              <span class="title" th:text="${r.rTitle}"></span> -->
+<!-- 	              <span class="date"  th:text="${r.rDate}"></span> -->
+<!-- 	            </div> -->
+<!-- 	          </td> -->
 	          <td class="col-author author" th:text="${r.userName}"></td>
 	          <td class="col-views views"   th:text="${r.rViews}"></td>
 	          <td class="col-likes likes"></td>
@@ -135,7 +144,7 @@
 	    </table>
 	  </div>
 	
-	  <!-- 페이지네이션 -->
+<!-- 	  페이지네이션 -->
 <!-- 	  <div class="pagination"> -->
 <!-- 	    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage - 1}|" th:disabled="${currentPage == 1}">&#8249;</button> -->
 <!-- 	    <th:block th:each="i : ${#numbers.sequence(1, totalPages)}"> -->
@@ -145,29 +154,46 @@
 <!-- 	    </th:block> -->
 <!-- 	    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage + 1}|" th:disabled="${currentPage == totalPages}">&#8250;</button> -->
 <!-- 	  </div> -->
+
+		<nav class="pagination" aria-label="페이지 탐색">
+			<a class="page-btn" 
+				th:if="${pi.currentPage > pi.startPage}"
+				th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+				<span aria-hidden="true">&#8249;</span>
+			</a>
+	    	<a class="page-btn" 
+	    		th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+	    		th:href="@{${loc}(page=${p})}">[[${p}]]</a>
+			<a class="page-btn" 
+				th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
+				<span aria-hidden="true">&#8250;</span>
+			</a>
+<!-- 				th:if="${pi.currentPage < pi.maxPage}" -->
+		</nav>
+	  
+	  
 	
 	</main>
 	
-	<script>
+	<script th:inline="javascript">
 		window.onload = () => {
 			const tbody = document.querySelector('tbody');
-			console.log(tbody);
+// 			console.log(tbody);
 			const tds = tbody.querySelectorAll('td');
-			console.log(tds);
+// 			console.log(tds);
 			for(const td of tds){
 				td.addEventListener('click', e => {
 					const trTds = e.target.parentElement.querySelectorAll('td');
-					console.log(trTds);
-// 					const boardId = trTds[0].innerText;
-// 					console.log(boardId);
+// 					console.log(trTds);
+					const reviewId = trTds[0].innerText;
+// 					console.log(reviewId);
+					location.href = '/review/' + reviewId + "/" + /*[[${pi.currentPage}]]*/2;
 				})
 			}
 		}
 		
 		
 	</script>
-=======
-<div th:replace="~{common/navbar.html}"></div>
 
 <main class="container">
   <h1 class="page-title">후기게시판</h1>
@@ -295,6 +321,7 @@
   // 초기 렌더링
   applyFilter();
 </script>
+
 
 
 </body>
