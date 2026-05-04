@@ -1,6 +1,7 @@
 package com.univol.member.model.vo;
 
 import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

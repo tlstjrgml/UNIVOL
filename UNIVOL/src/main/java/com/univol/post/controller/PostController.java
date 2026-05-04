@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.univol.member.model.vo.Member;
-import com.univol.member.model.vo.PageInfo;
+import com.univol.post.model.vo.PageInfo;
 import com.univol.post.Pagenation;
 import com.univol.post.model.service.PostService;
 import com.univol.post.model.vo.Post;
