@@ -20,13 +20,12 @@
 	
 	<select id="getListCount" resultType="_int">
 		
-
-		select p.*, u.user_name 
-		from post p
-			join users u on p.user_id = u.user_id
-		where p.p_Type='V' 
+		select count(*) from post
+    	where p_Type='V'
 
 	</select>
+	
+	
 	
 	<insert id="insertPost">
 		insert into post
