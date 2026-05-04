@@ -14,4 +14,8 @@ public interface ReviewMapper {
 
 	ArrayList<Review> selectReviewList(char c, RowBounds rowBounds);
 
+	Review selectReview(int bId);
+
+	int updateReview(int bId);
+
 }

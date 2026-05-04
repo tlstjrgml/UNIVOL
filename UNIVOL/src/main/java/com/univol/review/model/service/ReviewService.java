@@ -25,4 +25,17 @@ public class ReviewService {
 		RowBounds rowBounds = new RowBounds(offset, pi.getReviewLimit());
 		return mapper.selectReviewList(c, rowBounds);
 	}
+
+	public Review selectReview(int bId, String id) {
+		Review r = mapper.selectReview(bId);
+		if(r != null) {
+			if(id != null && !r.getUserId().equals(id)) {
+				int result = mapper.updateReview(bId);
+				if(result > 0) {
+					r.setRViews(r.getRViews() + 1);
+				}
+			}
+		}
+		return r;
+	}
 }

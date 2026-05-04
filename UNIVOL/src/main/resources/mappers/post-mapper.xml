@@ -4,6 +4,7 @@
 <mapper namespace="com.univol.post.model.Mapper.PostMapper">
 
 	<select id="selectAll" resultType="com.univol.post.model.vo.Post">
+
 		select * from (
 			select rownum as rn, A.* from(
 				select p.*, u.user_name
@@ -18,7 +19,13 @@
 	</select>
 	
 	<select id="getListCount" resultType="_int">
-		select count(*) from post
+		
+
+		select p.*, u.user_name 
+		from post p
+			join users u on p.user_id = u.user_id
+		where p.p_Type='V' 
+
 	</select>
 	
 	<insert id="insertPost">
