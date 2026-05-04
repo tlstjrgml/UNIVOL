@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.univol.post.model.Mapper.ReplyMapper">
+
+	<!-- ResultMap 명시적 정의 -->
+	<resultMap id="replyResultMap" type="com.univol.post.model.vo.Reply">
+		<id column="C_NUMBER" property="cNumber" javaType="int" />
+		<result column="COMMENTS" property="comments" javaType="java.lang.String" />
+		<result column="C_DATE" property="cDate" javaType="java.lang.String" />
+		<result column="P_NUMBER" property="pNumber" javaType="int" />
+		<result column="USER_ID" property="userId" javaType="java.lang.String" />
+		<result column="USER_NAME" property="userName" javaType="java.lang.String" />
+	</resultMap>
+
+	<insert id="insertReply" parameterType="com.univol.post.model.vo.Reply">
+		INSERT INTO REPLY (C_NUMBER, COMMENTS, C_DATE, P_NUMBER, USER_ID)
+		VALUES (REPLY_SEQ.NEXTVAL, #{comments}, SYSDATE, #{pNumber}, #{userId})
+	</insert>
+
+	<select id="selectReplyList" parameterType="int" resultMap="replyResultMap">
+		SELECT R.C_NUMBER,
+		       R.COMMENTS,
+		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
+		       R.P_NUMBER,
+		       R.USER_ID,
+		       U.USER_NAME
+		FROM REPLY R
+		JOIN USERS U ON R.USER_ID = U.USER_ID
+		WHERE R.P_NUMBER = #{pNumber}
+		ORDER BY R.C_NUMBER DESC
+	</select>
+
+	<select id="selectOne" parameterType="int" resultMap="replyResultMap">
+		SELECT R.C_NUMBER,
+		       R.COMMENTS,
+		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
+		       R.P_NUMBER,
+		       R.USER_ID,
+		       U.USER_NAME
+		FROM REPLY R
+		JOIN USERS U ON R.USER_ID = U.USER_ID
+		WHERE R.C_NUMBER = #{cNumber}
+	</select>
+
+	<update id="updateReply" parameterType="com.univol.post.model.vo.Reply">
+		UPDATE REPLY
+		SET COMMENTS = #{comments}
+		WHERE C_NUMBER = #{cNumber}
+	</update>
+
+	<delete id="deleteReply" parameterType="int">
+		DELETE FROM REPLY
+		WHERE C_NUMBER = #{cNumber}
+	</delete>
+
+</mapper>

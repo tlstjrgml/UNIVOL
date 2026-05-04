@@ -97,8 +97,6 @@
         <option value="latest">최신순</option>
         <option value="views_desc">조회수 높은순</option>
         <option value="views_asc">조회수 낮은순</option>
-        <option value="likes_desc">좋아요 높은순</option>
-        <option value="likes_asc">좋아요 낮은순</option>
       </select>
       <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
       <button class="search-btn" onclick="applyFilter()">검색</button>
@@ -114,25 +112,25 @@
           <th class="col-title">제목</th>
           <th class="col-author">작성자</th>
           <th class="col-views">조회수</th>
-          <th class="col-likes">좋아요</th>
         </tr>
       </thead>
       <tbody id="board-list">
         <tr th:each="p:${plist}" th:onclick="|location.href='/post/${pi.currentPage}/${p.pNumber}'|">
           <td class="col-num num" th:text="${p.pNumber}"></td>
           <td class="col-title">
-            <div class="title-wrap">
-              <span class="badge-notice"></span>
-              <span class="title" th:text="${p.pTitle}"></span>
-              <span class="date" th:text="${p.pDate}"></span>
-            </div>
+            <a th:href="@{|/post/${p.pNumber}|}" style="text-decoration: none; color: inherit; display: block;">
+              <div class="title-wrap">
+                <span class="badge-notice"></span>
+                <span class="title" th:text="${p.pTitle}"></span>
+                <span class="date" th:text="${p.pDate}"></span>
+              </div>
+            </a>
           </td>
           <td class="col-author author" th:text="${p.userName}"></td>
           <td class="col-views views" th:text="${p.views}"></td>
-          <td class="col-likes likes" th:text="${p.likes}"></td>
         </tr>
-        
-        
+
+
       </tbody>
     </table>
   </div>

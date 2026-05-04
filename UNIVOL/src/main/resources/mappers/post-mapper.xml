@@ -40,5 +40,4 @@
 		where p_number = #{pNumber}
 	</select>
 	
-
-</mapper>	
+</mapper>

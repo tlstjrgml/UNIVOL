@@ -13,11 +13,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 
 public class PostService {
-	
+
 	private final PostMapper mapper;
 	
 	public ArrayList<Post> selectAll(int startRow, int endRow){
 		return mapper.selectAll(startRow, endRow);
+
+	public ArrayList<Post> selectAll(){
+		return mapper.selectAll();
+	}
+
+	public Post selectOne(int pNumber) {
+		return mapper.selectOne(pNumber);
 	}
 
 	public int insertPost(Post p) {
@@ -28,7 +35,5 @@ public class PostService {
 		return mapper.getListCount();
 	}
 	
-	public Post selectOne(int pNumber) {
-		return mapper.selectOne(pNumber);
-	}
+	
 }

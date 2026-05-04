@@ -13,9 +13,11 @@ public interface PostMapper {
 
 	ArrayList<Post> selectAll(@Param("startRow") int startRow, @Param("endRow")int endRow);
 
+	Post selectOne(int pNumber);
+
 	int insertPost(Post p);
 	
 	int getListCount();
 	
-	Post selectOne(int pNumber);
+
 }
