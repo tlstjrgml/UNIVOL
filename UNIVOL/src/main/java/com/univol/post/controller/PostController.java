@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @SessionAttributes("loginUser")
 @RequiredArgsConstructor
-
 public class PostController {
 	private final PostService pService;
 	
@@ -54,6 +53,5 @@ public class PostController {
 
 
 
-}
 
 

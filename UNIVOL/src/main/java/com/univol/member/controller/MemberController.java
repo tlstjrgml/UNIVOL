@@ -104,10 +104,10 @@ public class MemberController {
 	        return "users/edit";
 	    }
 	}
-	
-	
-	
+
 	/*개인정보수정 에서 비밀번호 수정*/
+	
+	
 	
 	
 	
