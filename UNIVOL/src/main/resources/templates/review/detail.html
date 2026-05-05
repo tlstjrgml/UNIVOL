@@ -165,27 +165,10 @@
       <div class="post-title">[[${r.rTitle}]]</div>
       <div class="post-info">작성자: [[${r.userName}]] | 작성일: [[${r.rDate}]] | 조회수: [[${r.rViews}]]</div>
 
-      <div class="volunteer-info">
-        <table>
-          <tr>
-            <th>봉사제목</th>
-            <td>2024 겨울방학 청소년 멘토링 봉사</td>
-          </tr>
-          <tr>
-            <th>봉사장소</th>
-            <td>서울시 종로구 대왕빌딩</td>
-          </tr>
-          <tr>
-            <th>봉사날짜</th>
-            <td>2025년 1월 4일 ~ 2월 15일</td>
-          </tr>
-        </table>
-      </div>
-      
 
 	<div id="view-mode">
 
-	  <div class="post-title">[[${r.rTitle}]]</div>
+	  
 	
 	  <div class="post-content">
 	    [[${r.rContents}]]
@@ -201,8 +184,8 @@
 		    <input type="hidden" name="page" th:value="${page}">
 		
 		    <input type="text" name="rTitle" th:value="${r.rTitle}">
-		
 		    <textarea name="rContents">[[${r.rContents}]]</textarea>
+		    
 		
 		    <button type="submit">저장</button>
 		    <button type="button" id="cancelBtn">취소</button>
@@ -213,11 +196,13 @@
 	
 		
 		
-	      <div class="btn-area">
-	        <button id="editBtn">수정</button>
-	        <button>삭제</button>
-	      </div>
-	    </div>
+	     <div class="btn-area">
+
+  			<th:block th:if="${session.loginUser.userId == r.userId}">
+			    <button id="editBtn">수정</button>
+			    <button>삭제</button>
+		  	</th:block>
+		</div>
 
     <div class="comment-box">
       <div class="comment-title">댓글</div>

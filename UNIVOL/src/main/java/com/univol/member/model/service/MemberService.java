@@ -33,7 +33,7 @@ public class MemberService {
 	/*비밀번호암호?*/
 	/* 회원가입 */
 	public void signUp(Member m) {
-		m.setUserPw(passwordEncoder.encode(m.getUserPw()));
+		//m.setUserPw(passwordEncoder.encode(m.getUserPw()));
 		mapper.signUp(m);
 	}
 	

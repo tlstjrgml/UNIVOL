@@ -75,12 +75,37 @@ public class ReviewController {
 	}
 	
 	@PostMapping("/update")
-	public String updateReview(@ModelAttribute Review r) {
+	public String updateReview(@ModelAttribute Review r,
+	                           @RequestParam("page") int page,
+	                           HttpSession session) {
 
+	    // 로그인 회원 꺼내기 (Member)
+	    Member loginMember = (Member) session.getAttribute("loginMember");
+
+	    if (loginMember == null) {
+	        throw new ReviewException("로그인이 필요합니다.");
+	    }
+
+	    // 기존 게시글 조회
+	    Review origin = rService.selectReview(r.getRNumber(), null);
+
+	    if (origin == null) {
+	        throw new ReviewException("게시글이 존재하지 않습니다.");
+	    }
+
+	    // 권한 체크 (내 글인지 확인)
+	    if (!origin.getUserId().equals(loginMember.getUserId())) {
+	        throw new ReviewException("본인 글만 수정 가능합니다.");
+	    }
+
+	    // 서버에서 작성자 강제 세팅 (보안)
+	    r.setUserId(loginMember.getUserId());
+
+	    // 수정 실행
 	    int result = rService.updateReviews(r);
 
 	    if (result > 0) {
-	    	return "redirect:/review/detail/" + r.getRNumber() + "/" + 1;
+	    	return String.format("redirect:/review/detail/%d/%d", r.getRNumber(), page);
 	    } else {
 	        throw new ReviewException("수정 실패");
 	    }

@@ -39,10 +39,9 @@
 	</update>
 
 	<update id="updateReviews">
-	    UPDATE POST
-    	SET P_TITLE = #{rTitle},
-        CONTENTS = #{rContents}
-    	WHERE P_NUMBER = #{rNumber}
+  		update post
+  		set p_title=#{rTitle}, contents=#{rContents}
+  		where p_number=#{rNumber} and user_id=#{userId}
 	</update>
 
 
