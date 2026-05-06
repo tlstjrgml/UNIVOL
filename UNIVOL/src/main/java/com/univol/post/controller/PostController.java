@@ -54,9 +54,18 @@ public class PostController {
 		pService.insertPost(p);
 		return "redirect:/post";
 	}
+<<<<<<< HEAD
 
 	@GetMapping("/post/{currentPage}/{pNumber}")
 	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
+=======
+	
+	@GetMapping("/post/{currentPage}/{pNumber}")
+	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
+
+		@GetMapping("/post/{pNumber}")
+	public String selectOne( @PathVariable("pNumber") int pNumber, Model model) {
+>>>>>>> c2061f78d29fb52c1eff59aef209fde79ffca6ba
 		Post post = pService.selectOne(pNumber);
 		model.addAttribute("post",post);
 		return "post/detail"; 
