@@ -12,7 +12,7 @@ import com.univol.member.model.vo.Member;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor 
 
 public class MemberService {
 	private final MemberMapper mapper;

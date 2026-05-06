@@ -12,7 +12,7 @@
 		from post
 			 join users using(user_id)
 		where p_type = #{c}
-		order by p_number desc
+		order by p_number desc 
 	</select>
 	<resultMap type="com.univol.review.model.vo.Review" id="reviewResultSet">
 		<result column="p_number" property="rNumber"/>
@@ -29,7 +29,8 @@
 		select *
 		from post
 			 join users using(user_id)
-		where p_status = 'Y' and p_number = #{id}
+		where p_number = #{id}
+<!-- 		p_status = 'Y' -->
 	</select>
 
 	<update id="updateReview">
@@ -45,7 +46,13 @@
     	WHERE P_NUMBER = #{rNumber}
 	</update>
 
-
+	<insert id="insertReview">
+		<selectKey order="BEFORE" resultType="_int" keyProperty="rNumber">
+			select seq_post.nextval from dual
+		</selectKey>
+		insert into post
+		values(#{rNumber}, #{rTitle}, #{rContents}, default, sysdate, #{pType}, #{userId})
+	</insert>
 
 
 

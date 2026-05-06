@@ -99,7 +99,8 @@
 	      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
 	      <button class="search-btn">검색</button>
 	    </div>
-	    <button th:if="${session.loginUser}"class="write-btn" onclick="location.href='/review/write'">+ 글쓰기</button>
+	    <button class="write-btn" onclick="location.href='/review/write'">+ 글쓰기</button>
+<!-- 	    th:if="${session.loginUser}" -->
 	  </div>
 	
 	  <div class="card">
@@ -163,10 +164,10 @@
 	    		th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
 	    		th:href="@{${loc}(page=${p})}">[[${p}]]</a>
 			<a class="page-btn" 
+				th:if="${pi.currentPage < pi.maxPage}"
 				th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
 				<span aria-hidden="true">&#8250;</span>
 			</a>
-<!-- 				th:if="${pi.currentPage < pi.maxPage}" -->
 		</nav>
 	  
 	  
