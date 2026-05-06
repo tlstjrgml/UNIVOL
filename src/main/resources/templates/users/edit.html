@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNIVOL : 정보수정</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f5f0;
+    min-height: 100vh;
+    color: #222;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 1px solid #e0e0d8;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: 58px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 800;
+    color: #426B1F;
+    letter-spacing: 2px;
+    cursor: pointer;
+  }
+
+  .nav {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .nav a {
+    font-size: 14px;
+    color: #444;
+    text-decoration: none;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .nav a.active, .nav a:hover {
+    color: #426B1F;
+    border-bottom-color: #426B1F;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .container {
+    max-width: 620px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 1.5rem;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e0e0d8;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .card-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e0e0d8;
+  }
+
+  .card-header h2 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #639922;
+  }
+
+  .card-body {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .grid-name {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .grid-equal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .uv-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .uv-field-full {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .uv-field-full:last-child { margin-bottom: 0; }
+
+  .uv-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #666;
+    letter-spacing: 0.05em;
+  }
+
+  .uv-input {
+    padding: 9px 11px;
+    border: 1px solid #dde4d4;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f7f7f2;
+    color: #222;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    width: 100%;
+  }
+
+  .uv-input:focus {
+    border-color: #639922;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(99, 153, 34, 0.1);
+  }
+
+  .uv-input[readonly] {
+    background: #ececec;
+    color: #888;
+    cursor: not-allowed;
+  }
+
+  .uv-input::placeholder {
+    color: #bbb;
+    font-size: 12px;
+  }
+
+  .uv-gender {
+    display: flex;
+    border: 1px solid #dde4d4;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f7f7f2;
+    height: 36px;
+  }
+
+  .uv-gender label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+    border-right: 1px solid #e0e0d8;
+    transition: background 0.13s, color 0.13s;
+  }
+
+  .uv-gender label:last-child { border-right: none; }
+
+  .uv-gender input[type="radio"] {
+    width: 12px;
+    height: 12px;
+    accent-color: #639922;
+    margin: 0;
+  }
+
+  .uv-gender input[type="radio"]:checked + span {
+    color: #27500A;
+    font-weight: 500;
+  }
+
+  .uv-gender label:has(input:checked) { background: #EAF3DE; }
+
+  .uv-hint {
+    font-size: 11px;
+    margin-top: 3px;
+    min-height: 14px;
+  }
+
+  .uv-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 1.25rem;
+  }
+
+  .uv-btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: #3B6D11;
+    color: #EAF3DE;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .uv-btn-primary:hover { background: #27500A; }
+  .uv-btn-primary:active { transform: scale(0.99); }
+
+  .uv-btn-ghost {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    color: #888;
+    border: 1px solid #dde4d4;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: background 0.13s;
+  }
+
+  .uv-btn-ghost:hover { background: #f5f5f0; }
+</style>
+</head>
+<body>
+
+<div th:replace="~{common/navbar.html}"></div>
+
+<main class="container">
+  <h1 class="page-title">개인정보 수정</h1>
+
+  <!-- form action/method 추가 -->
+  <form th:action="@{/myPage}" method="POST">
+
+    <div class="card">
+      <div class="card-header"><h2>기본 정보</h2></div>
+      <div class="card-body">
+
+        <div class="grid-name">
+          <div class="uv-field">
+            <label class="uv-label" for="userName">이름</label>
+            <input class="uv-input" type="text" id="userName" name="userName"
+                   th:value="${session.loginUser.userName}">
+          </div>
+          <div class="uv-field">
+            <label class="uv-label" for="userId">아이디</label>
+            <input class="uv-input" type="text" id="userId" name="userId" readonly th:value="${session.loginUser.userId}">
+          </div>
+        </div>
+
+        <div class="grid-equal">
+          <div class="uv-field">
+            <label class="uv-label" for="birth">생년월일</label>
+            <input class="uv-input" type="date" id="birth" name="birth"
+                   th:value="${session.loginUser.birth}">
+          </div>
+          <div class="uv-field">
+            <label class="uv-label">성별</label>
+            <div class="uv-gender">
+              <label>
+                <input type="radio" id="man" name="gender" value="M"
+                       th:checked="${session.loginUser.gender == 'M'}">
+                <span>남자</span>
+              </label>
+              <label>
+                <input type="radio" id="woman" name="gender" value="F"
+                       th:checked="${session.loginUser.gender == 'F'}">
+                <span>여자</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="uv-field-full">
+          <label class="uv-label" for="phone">전화번호</label>
+          <input class="uv-input" type="tel" id="phone" name="phone"
+                 th:value="${session.loginUser.phone}">
+        </div>
+
+        <div class="uv-field-full">
+          <label class="uv-label" for="address">주소</label>
+          <input class="uv-input" type="text" id="address" name="address"
+                 th:value="${session.loginUser.address}">
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h2>비밀번호 변경</h2></div>
+      <div class="card-body">
+
+        <div class="grid-equal">
+          <div class="uv-field">
+            <label class="uv-label" for="userPw">새 비밀번호</label>
+            <input class="uv-input" type="password" id="pwd" name="userPw">
+          </div>
+          <div class="uv-field">
+            <label class="uv-label" for="pwdCheck">비밀번호 확인</label>
+            <input class="uv-input" type="password" id="pwdCheck" name="pwdCheck">
+            <div class="uv-hint" id="mHint"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="uv-actions">
+      <button class="uv-btn-primary" type="submit">수정사항 저장하기</button>
+      <button class="uv-btn-ghost" type="button" onclick="history.back()">취소</button>
+    </div>
+
+  </form>
+</main>
+
+<script th:inline="javascript">
+
+  // 세션 미로그인 시 리다이렉트
+  window.onload = () => {
+    const loginUser = /*[[${session.loginUser}]]*/ null;
+    if (loginUser == null) {
+      alert('로그인 후 이용하세요.');
+      location.href = '/logIn';
+    }
+  };
+
+
+</script>
+
+</body>
+</html>
