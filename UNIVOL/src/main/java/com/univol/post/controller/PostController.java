@@ -55,7 +55,7 @@ public class PostController {
 	}
 	
 	@GetMapping("/post/{currentPage}/{pNumber}")
-	public String selectOne(@PathVariable int currentPage, @PathVariable int pNumber, Model model) {
+	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
 		Post post = pService.selectOne(pNumber);
 		model.addAttribute("post",post);
 		return "post/detail";
