@@ -22,11 +22,11 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @SessionAttributes("loginUser")
-@RequiredArgsConstructor
+@RequiredArgsConstructor 
 
 public class PostController {
 	private final PostService pService;
-	
+
 	@GetMapping("/post")
 	public String selectAll(Model model, @RequestParam (value = "page", defaultValue="1") int currentPage) {
 		PageInfo pi = Pagenation.getPageInfo(currentPage, pService.getListCount(),10);
@@ -36,8 +36,8 @@ public class PostController {
 		int endRow = pi.getCurrentPage() * pi.getBoardLimit();
 		ArrayList<Post> plist = pService.selectAll(startRow, endRow);
 		model.addAttribute("plist", plist);
-		
-		
+
+
 		return "post/post";
 	}
 
@@ -45,7 +45,7 @@ public class PostController {
 	public String postWrite() {
 		return "post/write";
 	}
-	
+
 	@PostMapping("/post/write")
 	public String insertPost(@ModelAttribute Post p, HttpSession session) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
@@ -54,20 +54,11 @@ public class PostController {
 		pService.insertPost(p);
 		return "redirect:/post";
 	}
-	
+
 	@GetMapping("/post/{currentPage}/{pNumber}")
 	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
 		Post post = pService.selectOne(pNumber);
 		model.addAttribute("post",post);
-		return "post/detail";
+		return "post/detail"; 
 	}
 }
-	
-	
-	
-
-
-
-
-
- 
