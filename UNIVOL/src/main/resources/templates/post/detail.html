@@ -85,7 +85,7 @@
   <div th:replace="common/navbar"></div>
 
   <main class="container">
-    <button class="back-btn" onclick="history.back()">← 목록으로</button>
+    <a class="back-btn" th:href="@{/post(page=${currentPage})}">← 목록으로</a>
 
     <div class="post-header">
       <h1 class="post-title" th:text="${post.pTitle}"></h1>
@@ -131,6 +131,7 @@
             <button type="button" class="reply-btn-small" th:onclick="'toggleEditForm(' + ${reply.cNumber} + ')'">수정</button>
             <form th:id="'delete-form-' + ${reply.cNumber}" action="/post/reply/{cNumber}/delete" method="POST" th:action="@{/post/reply/{cNumber}/delete(cNumber=${reply.cNumber})}" style="display:inline;">
               <input type="hidden" name="pNumber" th:value="${post.pNumber}">
+              <input type="hidden" name="currentPage" th:value="${currentPage}">
               <button type="button" class="reply-btn-small reply-btn-delete" onclick="if(confirm('댓글을 삭제하시겠습니까?')) this.form.submit();">삭제</button>
             </form>
           </div>
@@ -148,11 +149,13 @@
 
     if(formDiv.innerHTML === '') {
       const originalText = textDiv.textContent;
+      const currentPage = document.querySelector('input[name="currentPage"]').value;
       formDiv.innerHTML = `
         <div class="reply-edit-box">
           <form action="/post/reply/{cNumber}/update" method="POST" onsubmit="return submitEditForm(event, ${cNumber})">
             <textarea class="reply-edit-textarea" name="comments" id="edit-textarea-${cNumber}">${originalText}</textarea>
             <input type="hidden" name="pNumber" value="${pNumber}">
+            <input type="hidden" name="currentPage" value="${currentPage}">
             <div class="reply-edit-actions">
               <button type="submit" class="reply-edit-btn">저장</button>
               <button type="button" class="reply-cancel-btn" onclick="cancelEdit(${cNumber})">취소</button>
