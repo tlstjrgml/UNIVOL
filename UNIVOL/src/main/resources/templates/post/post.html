@@ -118,7 +118,7 @@
         <tr th:each="p:${plist}" th:onclick="|location.href='/post/${pi.currentPage}/${p.pNumber}'|">
           <td class="col-num num" th:text="${p.pNumber}"></td>
           <td class="col-title">
-            <a th:href="@{|/post/${p.pNumber}|}" style="text-decoration: none; color: inherit; display: block;">
+            <a th:href="@{|/post/${pi.currentPage}/${p.pNumber}|}" style="text-decoration: none; color: inherit; display: block;">
               <div class="title-wrap">
                 <span class="badge-notice"></span>
                 <span class="title" th:text="${p.pTitle}"></span>
