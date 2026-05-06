@@ -232,6 +232,21 @@
     cursor: pointer;
     transition: background 0.15s, transform 0.1s;
   }
+  
+  .uv-btn-red {
+      width: 100%;
+      padding: 12px;
+      background: red;
+      color: #EAF3DE;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Noto Sans KR', sans-serif;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
 
   .uv-btn-primary:hover { background: #27500A; }
   .uv-btn-primary:active { transform: scale(0.99); }
@@ -338,6 +353,7 @@
     <div class="uv-actions">
       <button class="uv-btn-primary" type="submit">수정사항 저장하기</button>
       <button class="uv-btn-ghost" type="button" onclick="history.back()">취소</button>
+	  <button class="uv-btn-red" type="button">회원 탈퇴</button>
     </div>
 
   </form>
