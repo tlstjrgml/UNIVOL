@@ -35,7 +35,7 @@
 	<select id="selectOne" resultType="com.univol.post.model.vo.Post">
 		select p.*, u.user_name 
 		from post p
-			join users u using(user_id)
+			join users u on p.user_id = u.user_id
 		where p_number = #{pNumber}
 	</select>
 	
