@@ -58,12 +58,13 @@ public class PostController {
 		return "redirect:/post";
 	}
 	
-	@GetMapping("/post/{pNumber}")
-	public String selectOne( @PathVariable("pNumber") int pNumber, Model model) {
+	@GetMapping("/post/{currentPage}/{pNumber}")
+	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
 		Post post = pService.selectOne(pNumber);
 		ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
 		model.addAttribute("post",post);
 		model.addAttribute("replyList", replyList);
+		model.addAttribute("currentPage", currentPage);
 		return "post/detail";
 	}
 }

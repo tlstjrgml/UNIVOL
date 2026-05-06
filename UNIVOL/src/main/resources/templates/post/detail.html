@@ -111,6 +111,8 @@
       <div class="reply-input-box">
         <form action="/post/{pNumber}/reply" method="POST" th:action="@{/post/{pNumber}/reply(pNumber=${post.pNumber})}">
           <textarea class="reply-textarea" name="comments" placeholder="참여하려면 댓글을 달아주세요"></textarea>
+          <!-- currentPager값 넘기는 히든 코드 쓰기... -->
+          <input type="hidden" name="currentPage" th:value="${currentPage}">
           <button type="submit" class="reply-btn">댓글 등록</button>
         </form>
       </div>
