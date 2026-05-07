@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+
 public class MemberService {
 	private final MemberMapper mapper;
 	private final BCryptPasswordEncoder passwordEncoder;
@@ -21,7 +22,8 @@ public class MemberService {
 		Member findMember = mapper.logIn(m);
 		if(findMember != null) {
 			if(passwordEncoder.matches(m.getUserPw(), findMember.getUserPw())) {
-				return findMember;
+			    return findMember;
+			
 			}else {
 				return null;
 			}

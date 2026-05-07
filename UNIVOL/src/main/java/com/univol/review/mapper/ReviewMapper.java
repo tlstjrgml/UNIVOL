@@ -17,7 +17,11 @@ public interface ReviewMapper {
 	Review selectReview(int bId);
 
 	int updateReview(int bId);
-
+ 
 	int updateReviews(Review r);
+
+	int insertReview(Review r);
+
+	ArrayList<Review> selectTop();
 
 }
