@@ -38,23 +38,23 @@ public class PostController {
         int endRow = pi.getCurrentPage() * pi.getBoardLimit();
         ArrayList<Post> plist = pService.selectAll(startRow, endRow);
         model.addAttribute("plist", plist);
-
+        
         return "post/post";
     }
-
-    @GetMapping("/post/write")
-    public String postWrite() {
-        return "post/write";
-    }
-
-    @PostMapping("/post/write")
-    public String insertPost(@ModelAttribute Post p, HttpSession session) {
-        Member loginUser = (Member) session.getAttribute("loginUser");
-        p.setPType('V');
-        p.setUserId(loginUser.getUserId());
-        pService.insertPost(p);
-        return "redirect:/post";
-    }
+    
+	@GetMapping("/post/write")
+	public String postWrite() {
+		return "post/write";
+	}
+	
+	@PostMapping("/post/write")
+	public String insertPost(@ModelAttribute Post p, HttpSession session) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		p.setPType('V');
+		p.setUserId(loginUser.getUserId());
+		pService.insertPost(p);
+		return "redirect:/post";
+	}
 
     @GetMapping("/post/{pNumber}")
     public String selectOne(@PathVariable("pNumber") int pNumber, Model model) {

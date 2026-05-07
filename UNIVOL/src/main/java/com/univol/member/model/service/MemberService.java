@@ -17,20 +17,17 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
     private final MemberMapper mapper;
     private final BCryptPasswordEncoder passwordEncoder;
-
-    /* 로그인 */
-    public Member logIn(Member m) {
-        Member findMember = mapper.logIn(m);
-        if (findMember != null) {
-            if (passwordEncoder.matches(m.getUserPw(), findMember.getUserPw())) {
-                return findMember;
-            }
-        }
-        
-        return null;
-    }
-
-    
+	/* 로그인 */
+	public Member logIn(Member m) {
+		Member findMember = mapper.logIn(m);
+		if(findMember != null) {
+			if(passwordEncoder.matches(m.getUserPw(), findMember.getUserPw())) {
+			    return findMember;
+			}
+		}
+		return null;
+	}
+	
     
     /* 회원가입 */
     public void signUp(Member m) {
