@@ -82,7 +82,9 @@
 </head>
 <body>
 
-	<div th:replace="common/navbar"></div>
+
+	<div th:replace="~{common/navbar.html}"></div>
+
 	
 	<main class="container">
 	  <h1 class="page-title">후기게시판</h1>
@@ -99,9 +101,9 @@
 	      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
 	      <button class="search-btn">검색</button>
 	    </div>
-	    <button class="write-btn" onclick="location.href='/review/write'">+ 글쓰기</button>
+	    <button class="write-btn" th:if="${session.loginUser}" onclick="location.href='/review/write'">+ 글쓰기</button>
 <!-- 	    로그인 안 됐을 때 글쓰기 안되는 거 -->
-<!-- 	    th:if="${session.loginUser}" -->
+	    
 	  </div>
 	
 	  <div class="card">
@@ -181,19 +183,25 @@
 // 			console.log(tbody);
 			const tds = tbody.querySelectorAll('td');
 // 			console.log(tds);
+			const loginUser = /*[[${session.loginUser}]]*/null;
 			for(const td of tds){
-				td.addEventListener('click', e => {
-					const trTds = e.target.parentElement.querySelectorAll('td');
-// 					console.log(trTds);
-					const reviewId = trTds[0].innerText;
-// 					console.log(reviewId);
-					location.href = '/review/' + reviewId + "/" + /*[[${pi.currentPage}]]*/2;
-				})
+				if(loginUser != null){
+					td.addEventListener('click', e => {
+						const trTds = e.target.parentElement.querySelectorAll('td');
+	// 					console.log(trTds);
+						const reviewId = trTds[0].innerText;
+	// 					console.log(reviewId);
+						location.href = '/review/' + reviewId + "/" + /*[[${pi.currentPage}]]*/2;
+					})
+				}
 			}
 		}
 		
 		
 	</script>
+
+
+
 
 
 </body>

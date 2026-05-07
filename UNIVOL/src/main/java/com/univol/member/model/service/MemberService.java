@@ -9,46 +9,49 @@ import org.springframework.stereotype.Service;
 import com.univol.member.model.mapper.MemberMapper;
 import com.univol.member.model.vo.Member;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 
 public class MemberService {
-	private final MemberMapper mapper;
-	private final BCryptPasswordEncoder passwordEncoder;
+    private final MemberMapper mapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 	/* 로그인 */
 	public Member logIn(Member m) {
 		Member findMember = mapper.logIn(m);
 		if(findMember != null) {
 			if(passwordEncoder.matches(m.getUserPw(), findMember.getUserPw())) {
 			    return findMember;
-			
-			}else {
-				return null;
 			}
 		}
-		//return mapper.logIn(m);
 		return null;
 	}
-	/*비밀번호암호?*/
-	/* 회원가입 */
-	public void signUp(Member m) {
-		m.setUserPw(passwordEncoder.encode(m.getUserPw()));
-		mapper.signUp(m);
-	}
 	
-	public ArrayList<Member> selectAll() {
-		return mapper.selectAll();
-	}
-	
-	public ArrayList<HashMap<String, Object>> getApplyList(String id) {
-		return mapper.getApplyList(id);
-	}
+    
+    /* 회원가입 */
+    public void signUp(Member m) {
+        m.setUserPw(passwordEncoder.encode(m.getUserPw()));
+        mapper.signUp(m);
+    }
 
-	public int updateMember(Member m) {
-		return mapper.updateMember(m);
-	}
-	
+    public ArrayList<Member> selectAll() {
+        return mapper.selectAll();
+    }
+
+    public ArrayList<HashMap<String, Object>> getApplyList(String id) {
+        return mapper.getApplyList(id);
+    }
+
+    public int updateMember(Member m) {
+        return mapper.updateMember(m);
+    }
+    
+    public int deleteMember(Member m) {
+    	return mapper.deleteMember(m);
+    }
+   
+    
 
 }

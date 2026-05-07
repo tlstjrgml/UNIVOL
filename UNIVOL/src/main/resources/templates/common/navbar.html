@@ -80,6 +80,7 @@
     <a th:href="@{/post}" th:classappend="${currentPage == 'volunteer'} ? 'active'">봉사게시판</a>
     <a th:href="@{/review}" th:classappend="${currentPage == 'review'} ? 'active'">후기게시판</a>
   </nav>
+  <!-- [[${session.loginUser}]] -->
   <div class="header-right">
     <!-- 로그인 안 했을 때 -->
     <span th:if="${session.loginUser == null or session.loginUser.memberStatus == 'N'}">

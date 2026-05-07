@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.univol.member.model.vo.Member;
 
+import jakarta.servlet.http.HttpSession;
+
 @Mapper
 
 public interface MemberMapper {
@@ -22,4 +24,8 @@ public interface MemberMapper {
 	ArrayList<HashMap<String, Object>> getApplyList(String id);
 
 	int updateMember(Member m);
+
+	int deleteMember(Member m);
+
+
 }

@@ -8,14 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --bg: #f5f5f5;
-            --surface: #ffffff;
-            --primary: #424B1F;
-            --text: #222222;
-            --muted: #777777;
-            --border: #cccccc;
-        }
+       
 
         * {
             box-sizing: border-box;
@@ -25,8 +18,8 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: #f5f5f5;
+            color: #222222;
             padding: 30px;
         }
 
@@ -38,7 +31,7 @@
         .logo {
             font-family: 'Playfair Display', serif;
             font-size: 40px;
-            color: var(--primary);
+            color:  #424B1F;
             letter-spacing: 2px;
             text-align: center;
             margin-bottom: 10px;
@@ -53,13 +46,13 @@
 
         .divider {
             border: none;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid #cccccc;
             margin: 10px 0 20px 0;
         }
 
         .card {
-            background-color: var(--surface);
-            border: 1px solid var(--border);
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             padding: 20px;
@@ -91,7 +84,7 @@
             padding: 8px 15px;
             cursor: pointer;
             border-radius: 10px;
-            background-color: var(--primary);
+            background-color:  #424B1F;
             color: white;
             border: none;
         }
@@ -100,9 +93,11 @@
             background-color: #2f3616;
         }
 
-        .ban-btn {
+        .btn {
             background-color: #888888;
         }
+        
+        
 
         .ban-btn:hover {
             background-color: #666666;
@@ -128,6 +123,7 @@
                         <th>이름</th>
                         <th>전화번호</th>
                         <th>성별</th>
+                        <th>관리자여부</th>
                         <th>회원 상태 변경</th>
                     </tr>
                 </thead>
@@ -137,10 +133,11 @@
                         <td th:text="${m.userName}"></td>
                         <td th:text="${m.phone}"></td>
                         <td th:text="${m.gender}"></td>
+                        <td th:text="${m.isAdmin}"></td>
                         <td>
                             <div class="button-group">
-                                <button type="button" class="active-btn">활동</button>
-                                <button type="button" class="ban-btn">정지</button>
+                                <button type="button" class="btn">활동</button>
+                                <button type="button" class="btn">정지</button>
                             </div>
                         </td>
                     </tr>
@@ -154,6 +151,7 @@
         document.querySelectorAll(".active-btn").forEach(btn => {
             btn.addEventListener("click", function() {
                 alert("회원 상태를 활동으로 변경했습니다");
+                
             });
         });
 

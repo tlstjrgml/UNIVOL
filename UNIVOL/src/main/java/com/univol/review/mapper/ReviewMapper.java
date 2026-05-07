@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
+import com.univol.post.model.vo.Reply;
 import com.univol.review.model.vo.Review;
 
 @Mapper
@@ -23,5 +24,7 @@ public interface ReviewMapper {
 	int insertReview(Review r);
 
 	ArrayList<Review> selectTop();
+
+	ArrayList<Reply> selectReply(int pNumber);
 
 }
