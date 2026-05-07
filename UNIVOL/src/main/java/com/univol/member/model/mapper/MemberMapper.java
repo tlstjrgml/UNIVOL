@@ -15,11 +15,11 @@ public interface MemberMapper {
 
 	void signUp(Member m);
 	
-	// 주석 테스트ppppp
-
     ArrayList<Member> selectAll();
 
 	ArrayList<HashMap<String, Object>> getApplyList(String id);
 
 	int updateMember(Member m);
+
+	Member getMemberById(String userId);
 }

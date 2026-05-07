@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-
 public class MemberService {
 	private final MemberMapper mapper;
 	private final BCryptPasswordEncoder passwordEncoder;
@@ -30,7 +29,8 @@ public class MemberService {
 		//return mapper.logIn(m);
 		return null;
 	}
-	/*비밀번호암호?*/
+
+	
 	/* 회원가입 */
 	public void signUp(Member m) {
 		m.setUserPw(passwordEncoder.encode(m.getUserPw()));
@@ -47,6 +47,9 @@ public class MemberService {
 
 	public int updateMember(Member m) {
 		return mapper.updateMember(m);
+	}
+	public Member getMemberById(String userId) {
+		return mapper.getMemberById(userId);
 	}
 	
 

@@ -2,37 +2,65 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.univol.member.model.mapper.MemberMapper">
-	
-	<select id="logIn" resultType="Member">
-		select * from users where user_id=#{userId}
+
+    <select id="logIn" resultType="Member">
+        SELECT user_id, user_pw, user_name,
+               TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
+               gender, phone, address, is_admin, member_status
+        FROM users
+        WHERE user_id = #{userId}
+         AND member_status = 'Y'
+    </select>
+
+    <insert id="signUp">
+        INSERT INTO users (user_id, user_pw, user_name, birth, gender, phone, address)
+        VALUES (
+            #{userId}, #{userPw}, #{userName},
+            TO_DATE(#{birth}, 'YYYY-MM-DD'),
+            #{gender}, #{phone}, #{address}
+        )
+    </insert>
+
+    <select id="selectAll" resultType="com.univol.member.model.vo.Member">
+        SELECT user_id, user_pw, user_name,
+               TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
+               gender, phone, address, is_admin, member_status
+        FROM users
+    </select>
+
+    <select id="getApplyList" parameterType="String" resultType="map">
+	    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
+	           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE,
+	           CEIL(
+	               (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'V')
+	               / 10.0
+	           ) AS PAGE_NUM
+	    FROM REPLY R
+	        JOIN POST P ON R.P_NUMBER = P.P_NUMBER
+	        JOIN USERS U ON P.USER_ID = U.USER_ID
+	    WHERE R.USER_ID = #{userId}
+	    ORDER BY R.C_NUMBER DESC
 	</select>
-	
-	
-	<insert id="signUp">
-	    INSERT INTO users (user_id, user_pw, user_name, birth, gender, phone, address)
-    	VALUES (
-        	#{userId}, #{userPw}, #{userName}, TO_DATE(#{birth}, 'YYYY-MM-DD'), #{gender}, #{phone}, #{address}
-        	)
-	</insert>
-	
-	<select id="selectAll" resultType="com.univol.member.model.vo.Member">
-		select * from users
-	</select>
-	
-	<select id="getApplyList" parameterType="String" resultType="map">
-    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
-           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE
-    FROM REPLY R
-    	JOIN POST P ON R.P_NUMBER = P.P_NUMBER
-    	JOIN USERS U ON P.USER_ID = U.USER_ID
-    	WHERE R.USER_ID = #{userId}
-    ORDER BY R.C_NUMBER DESC
-	</select>
-	
-	<update id="updateMember">
-		update users
-		set USER_NAME=#{userName}, BIRTH=#{birth}, GENDER=#{gender}, PHONE=#{phone}, ADDRESS=#{address}
-		where USER_ID=#{userId}
-	</update>
-	
+
+    <update id="updateMember">
+        UPDATE users
+        SET user_name = #{userName},
+            birth     = TO_DATE(#{birth}, 'YYYY-MM-DD'),
+            gender    = #{gender},
+            phone     = #{phone},
+            address   = #{address}
+            <if test="userPw != null and userPw != ''">
+                , user_pw = #{userPw}
+            </if>
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="getMemberById" parameterType="String" resultType="Member">
+        SELECT user_id, user_pw, user_name,
+               TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
+               gender, phone, address, is_admin, member_status
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
 </mapper>
