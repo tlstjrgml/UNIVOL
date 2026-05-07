@@ -105,6 +105,13 @@ public class ReviewController {
 	    }
 	}
 	
+	@GetMapping("top")
+	@ResponseBody
+	public ArrayList<Review> selectTop(){
+		ArrayList<Review> list = rService.selectTop();
+		return list;
+	}
+	
 	
 	
 	

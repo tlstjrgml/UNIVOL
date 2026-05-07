@@ -22,4 +22,6 @@ public interface ReviewMapper {
 
 	int insertReview(Review r);
 
+	ArrayList<Review> selectTop();
+
 }

@@ -53,6 +53,16 @@
 		insert into post
 		values(#{rNumber}, #{rTitle}, #{rContents}, default, sysdate, #{pType}, #{userId})
 	</insert>
+	
+	<select id="selectTop" resultMap="reviewResultSet">
+		select *
+		from(select *
+		    from post
+		        join users using(user_id)
+		        where p_type = 'R'
+		        order by views desc)
+		where rownum <![CDATA[<]]> = 5
+	</select>
 
 
 
