@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.univol.member.model.vo.Member;
@@ -39,6 +40,25 @@ public class ReviewController {
 		mv.addObject("loc", request.getRequestURI());
 		mv.addObject("list", list).addObject("pi", pi).setViewName("review/review");
 		return mv;
+	}
+	
+	@GetMapping("write")
+	public String writeReview() {
+		return "review/write";
+	}
+	
+	@PostMapping("insert")
+	public String insertReview(@ModelAttribute Review r, HttpSession session) {
+		String ReviewWriter = ((Member)session.getAttribute("loginUser")).getUserId();
+		r.setUserId(ReviewWriter);
+		r.setPType("R");
+		
+		int result = rService.insertReview(r); 
+		if(result > 0) {
+			return "redirect:/review";
+		} else {
+			throw new ReviewException("게시글 작성을 실패했습니다.");
+		}
 	}
 	
 	@GetMapping("/{id}/{page}")
@@ -83,6 +103,13 @@ public class ReviewController {
 	    } else {
 	        throw new ReviewException("수정 실패");
 	    }
+	}
+	
+	@GetMapping("top")
+	@ResponseBody
+	public ArrayList<Review> selectTop(){
+		ArrayList<Review> list = rService.selectTop();
+		return list;
 	}
 	
 	

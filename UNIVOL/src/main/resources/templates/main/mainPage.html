@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <title>UNIVOL</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
@@ -38,7 +39,7 @@
       text-decoration: underline;
     }
 
-    .board-table {
+    .board-table, .review-table {
       width: 100%;
       border-collapse: collapse;
       background: #fff;
@@ -48,57 +49,57 @@
       margin-bottom: 3rem;
     }
 
-    .board-table thead tr {
-      background: #426B1F;
-      color: white;
-    }
+    .board-table thead tr, .review-table thead tr {
+  background: #426B1F;
+  color: white;
+}
 
-    .board-table thead th {
-      padding: 12px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      text-align: center;
-    }
+.board-table thead th, .review-table thead th {
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
 
-    .board-table thead th:nth-child(2) {
-      text-align: left;
-    }
+.board-table thead th:nth-child(2), .review-table thead th:nth-child(2) {
+  text-align: left;
+}
 
-    .board-table tbody tr {
-      border-bottom: 1px solid #f0f0ea;
-      transition: background 0.12s;
-      cursor: pointer;
-    }
+.board-table tbody tr, .review-table tbody tr {
+  border-bottom: 1px solid #f0f0ea;
+  transition: background 0.12s;
+  cursor: pointer;
+}
 
-    .board-table tbody tr:last-child {
-      border-bottom: none;
-    }
+.board-table tbody tr:last-child, .review-table tbody tr:last-child {
+  border-bottom: none;
+}
 
-    .board-table tbody tr:hover {
-      background: #f7faf5;
-    }
+.board-table tbody tr:hover, .review-table tbody tr:hover {
+  background: #f7faf5;
+}
 
-    .board-table tbody td {
-      padding: 12px 16px;
-      font-size: 14px;
-      color: #444;
-      text-align: center;
-    }
+.board-table tbody td, .review-table tbody td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #444;
+  text-align: center;
+}
 
-    .board-table tbody td:nth-child(2) {
-      text-align: left;
-      color: #222;
-    }
+.board-table tbody td:nth-child(2), .review-table tbody td:nth-child(2) {
+  text-align: left;
+  color: #222;
+}
 
-    .board-table tbody td.views {
-      color: #888;
-      font-size: 13px;
-    }
+.board-table tbody td.views, .review-table tbody td.views {
+  color: #888;
+  font-size: 13px;
+}
 
-    .board-table tbody td.likes {
-      color: #c0392b;
-      font-size: 13px;
-    }
+.board-table tbody td.likes, .review-table tbody td.likes {
+  color: #c0392b;
+  font-size: 13px;
+}
 
     .empty {
       text-align: center;
@@ -146,7 +147,7 @@
       후기게시판
       <a th:href="@{/review}">더보기 &rsaquo;</a>
     </div>
-    <table class="board-table">
+    <table class="review-table">
       <thead>
         <tr>
           <th style="width:70px;">글번호</th>
@@ -157,19 +158,60 @@
         </tr>
       </thead>
       <tbody>
-          <td>1</td>
-          <td>멘토링 봉사 다녀왔어요!</td>
-          <td>홍길동</td>   <!-- 테스트 -->
-          <td class="views">320</td>
-          <td class="likes">♥ 12</td>
       </tbody>
     </table>
 
   </div>
-<!-- 	<script> -->
-<!-- 		window.onload=()=>{ -->
-<!-- 			document.querySelectorAll('tr').addEventListener('click',/* 어느페이지로 이동할지 */) -->
-<!-- 		} -->
-<!-- 	</script> -->
+	<script>
+		window.onload=()=>{
+			topList();
+// 			setInterval(() => {
+// 				topList();
+// 			}, 2000);
+			
+		} 
+		
+		const topList = () => {
+			$.ajax({
+				url: '/review/top',
+				success: data => {
+// 					console.log(data);
+					const tbody = document.querySelector('.review-table tbody')
+					tbody.innerHTML = '';
+					
+					for(const r of data){
+						const tr = document.createElement('tr');
+						
+						const rNumber = document.createElement('td');
+						rNumber.innerText = r.rNumber;
+						
+						const rTitle = document.createElement('td');
+						rTitle.innerText = r.rTitle;
+						
+						const rWriter = document.createElement('td');
+						rWriter.innerText = r.userName;
+						
+						const rViews = document.createElement('td');
+						rViews.innerText = r.rViews
+						
+						const rLike = document.createElement('td');
+						
+						tr.append(rNumber);
+						tr.append(rTitle);
+						tr.append(rWriter);
+						tr.append(rViews);
+						tr.append(rLike);
+						
+						tbody.append(tr);
+					}
+				},
+				error: data => console.log(data)
+			});
+			
+		}
+		
+		
+// 		document.querySelectorAll('tr').addEventListener('click',/* 어느페이지로 이동할지 */)
+ 	</script> 
 </body>
 </html>

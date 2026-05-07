@@ -42,4 +42,12 @@ public class ReviewService {
 	public int updateReviews(Review r) {
 		return mapper.updateReviews(r);
 	}
+
+	public int insertReview(Review r) {
+		return mapper.insertReview(r);
+	}
+
+	public ArrayList<Review> selectTop() {
+		return mapper.selectTop();
+	}
 }

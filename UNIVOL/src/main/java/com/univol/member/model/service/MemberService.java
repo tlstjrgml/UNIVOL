@@ -21,7 +21,8 @@ public class MemberService {
 		Member findMember = mapper.logIn(m);
 		if(findMember != null) {
 			if(passwordEncoder.matches(m.getUserPw(), findMember.getUserPw())) {
-				return findMember;
+			    return findMember;
+			
 			}else {
 				return null;
 			}

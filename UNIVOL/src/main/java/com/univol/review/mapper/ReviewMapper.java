@@ -20,4 +20,8 @@ public interface ReviewMapper {
 
 	int updateReviews(Review r);
 
+	int insertReview(Review r);
+
+	ArrayList<Review> selectTop();
+
 }
