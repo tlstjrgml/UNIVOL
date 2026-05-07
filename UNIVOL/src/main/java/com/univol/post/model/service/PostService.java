@@ -32,6 +32,6 @@ public class PostService {
 	public int getListCount() {
 		return mapper.getListCount();
 	}
-	
-	
+
+
 }
