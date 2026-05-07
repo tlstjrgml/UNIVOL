@@ -27,5 +27,13 @@ public interface MemberMapper {
 
 	int deleteMember(Member m);
 
+	int activeMember(Member m);
+
+	int banMember(Member m);
+
+	int toAdminMember(Member m);
+
+	int toNormalMember(Member m);	
+
 
 }

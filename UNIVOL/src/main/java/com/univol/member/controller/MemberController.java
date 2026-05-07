@@ -126,7 +126,7 @@ public class MemberController {
 		}
 	}
 	
-	/* 회원 탈퇴 */
+	/* 회원 탈퇴*/
 	@PostMapping("/deleteMember")
 	@ResponseBody
 	public int deleteMember(@ModelAttribute Member m, SessionStatus status) {
@@ -138,13 +138,35 @@ public class MemberController {
 		return result;
 	}
 	
+	/* 회원 상태 변경(정지) */ 
+	@PostMapping("/banMember")
+	@ResponseBody
+	public int banMember(@ModelAttribute Member m) {
+		return mService.banMember(m);
+	}
 	
+	/* 회원 상태 변경(활동) */
+	@PostMapping("/activeMember")
+	@ResponseBody
+	public int activeMember(@ModelAttribute Member m) {
+		return  mService.activeMember(m);
+	}
+	
+	/* 회원 관리자료 변경 */
+	@PostMapping("/toAdminMember")
+	@ResponseBody
+	public int toAdminMember(@ModelAttribute Member m) {
+		return mService.toAdminMember(m);
+	}
+	
+	/* 일반 회원으로 변경 */
+	@PostMapping("/toNormalMember")
+	@ResponseBody
+	public int toNormalMember(@ModelAttribute Member m) {
+		return mService.toNormalMember(m);
+	}
 	
 	
 
-	/* 후기게시판 */
-//	@GetMapping("/review")
-//	public String review() {
-//		return "review/review";
-//	}
+
 }

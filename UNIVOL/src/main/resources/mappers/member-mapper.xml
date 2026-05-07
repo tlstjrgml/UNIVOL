@@ -41,7 +41,28 @@
 		where user_id = #{userId}
 	</update>
 	
+	<update id="banMember">
+		update users
+		set member_status = 'N'
+		where user_id = #{userId}
+	</update>
 	
-
+	<update id="activeMember">
+		update users
+		set member_status = 'Y'
+		where user_id = #{userId}
+	</update>
+	
+	<update id="toAdminMember">
+		update users
+		set is_admin = 'Y'
+		where user_id=#{userId}
+	</update>
+	
+	<update id="toNormalMember">
+		update users
+		set is_admin = 'N'
+		where user_id = #{userId}
+	</update>
 	
 </mapper>

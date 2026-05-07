@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>UNIVOL 관리자 페이지</title>
-
+	
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <style>
@@ -116,7 +117,9 @@
         <hr class="divider">
 
         <div class="card">
-            <table>
+        	<button type="button" id="toggleBtn">회원 목록 펼치기 ▼</button>
+        	
+            <table id="memberTable">
                 <thead>
                     <tr>
                         <th>아이디</th>
@@ -128,16 +131,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="m : ${mlist}">
+                    <tr th:each="m : ${mlist}" data-userid = "${m.userId}">
                         <td th:text="${m.userId}"></td>
                         <td th:text="${m.userName}"></td>
                         <td th:text="${m.phone}"></td>
                         <td th:text="${m.gender}"></td>
-                        <td th:text="${m.isAdmin}"></td>
                         <td>
-                            <div class="button-group">
-                                <button type="button" class="btn">활동</button>
-                                <button type="button" class="btn">정지</button>
+                        	<div th:if="${m.isAdmin == 'Y'}" class="button-goup">
+                        		<button  type="button" class="btn admin-btn" style="background-color:#424B1F;">관리</button>
+       							<button type="button" class="btn normal-btn" style="background-color:#888888;">일반</button>
+                        	</div>
+                        	<div th:if="${m.isAdmin == 'N'}" class="button-goup">
+                        		<button  type="button" class="btn admin-btn" style="background-color:#888888;">관리</button>
+       							<button type="button" class="btn normal-btn" style="background-color:#424B1F;">일반</button>
+                        	</div>
+                        </td>	
+                        <td>
+                            <div th:if="${m.memberStatus == 'Y'}" class="button-group">
+                                <button type="button" class="btn active-btn" style="background-color:blue;">활동</button>
+                                <button type="button" class="btn ban-btn" style="background-color:#888888;">정지</button>
+                            </div>
+                            <div th:if="${m.memberStatus == 'N'}"class="button-group">
+                                <button type="button" class="btn active-btn" style="background-color:#888888;">활동</button>
+                                <button type="button" class="btn ban-btn" style="background-color:red;">정지</button>
                             </div>
                         </td>
                     </tr>
@@ -145,21 +161,58 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        
+        <!-- 전체 게시글 조회 -->
+         <div class="card">
+        	<button type="button" id="toggleBtn">게시글 목록 펼치기 ▼</button>
+        	
+            <table id="memberTable">
+                <thead>
+                    <tr>
+                    	<th>글번호</th>
+                        <th>아이디</th>
+                        <th>내용</th>
+                        <th>조회수</th>
+                        <th>좋아요 수 </th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p: ${plist}">
+                        <td th:text="${p.pNumber}"></td>
+                        <td th:text="${m.userName}"></td>
+                        <td th:text="${p.contents}"></td>
+                        <td th:text="${p.views}"></td>
+                        <td th:text="${p.likes}"></td>	
+                        <td>
+                        	<button type="button" class="btn delete-btn" style="background-color:red; color:white;">Y</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
     <script>
-        document.querySelectorAll(".active-btn").forEach(btn => {
-            btn.addEventListener("click", function() {
-                alert("회원 상태를 활동으로 변경했습니다");
-                
-            });
-        });
-
-        document.querySelectorAll(".ban-btn").forEach(btn => {
-            btn.addEventListener("click", function() {
-                alert("회원 상태를 정지로 변경했습니다");
-            });
-        });
+    
+    	/* 글 삭제 */
+    	document.querySelectorAll(".delete-btn").forEach(function(btn){
+			btn.addEventListener('click', function(){
+				const tr = this.parentElement.parentElement.parentElement;
+				const pNumber = tr.querySelector('td').innerText;
+				
+				$.ajax({
+					url:'/deletePost',
+					type:'post',
+					data:{pNumber:pNumber},
+					success: function(result){
+					}
+				});
+			});
+    	});
+    	
+    	$('#toggleBtn').on('click', function(){
+    	    $('#memberTable').slideToggle();
+    	});
     </script>
 </body>
 </html>

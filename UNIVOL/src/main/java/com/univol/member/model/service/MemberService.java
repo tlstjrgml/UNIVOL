@@ -50,6 +50,27 @@ public class MemberService {
     public int deleteMember(Member m) {
     	return mapper.deleteMember(m);
     }
+
+
+	public int activeMember(Member m) {
+		return mapper.activeMember(m);
+	}
+
+
+	public int banMember(Member m) {
+		// TODO Auto-generated method stub
+		return mapper.banMember(m);
+	}
+
+
+	public int toAdminMember(Member m) {
+		return mapper.toAdminMember(m);
+	}
+
+
+	public int toNormalMember(Member m) {
+		return mapper.toNormalMember(m);
+	}
    
     
 
