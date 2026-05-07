@@ -232,21 +232,21 @@
     cursor: pointer;
     transition: background 0.15s, transform 0.1s;
   }
-  
+
   .uv-btn-red {
-      width: 100%;
-      padding: 12px;
-      background: red;
-      color: #EAF3DE;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: 'Noto Sans KR', sans-serif;
-      letter-spacing: 0.1em;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-    }
+    width: 100%;
+    padding: 12px;
+    background: red;
+    color: #EAF3DE;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
 
   .uv-btn-primary:hover { background: #27500A; }
   .uv-btn-primary:active { transform: scale(0.99); }
@@ -266,6 +266,7 @@
 
   .uv-btn-ghost:hover { background: #f5f5f0; }
 </style>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
@@ -274,7 +275,6 @@
 <main class="container">
   <h1 class="page-title">개인정보 수정</h1>
 
-  <!-- form action/method 추가 -->
   <form th:action="@{/edit}" method="POST">
 
     <div class="card">
@@ -289,7 +289,8 @@
           </div>
           <div class="uv-field">
             <label class="uv-label" for="userId">아이디</label>
-            <input class="uv-input" type="text" id="userId" name="userId" readonly th:value="${session.loginUser.userId}">
+            <input class="uv-input" type="text" id="userId" name="userId" readonly
+                   th:value="${session.loginUser.userId}">
           </div>
         </div>
 
@@ -353,24 +354,40 @@
     <div class="uv-actions">
       <button class="uv-btn-primary" type="submit">수정사항 저장하기</button>
       <button class="uv-btn-ghost" type="button" onclick="history.back()">취소</button>
-	  <button class="uv-btn-red" type="button">회원 탈퇴</button>
+      <button class="uv-btn-red" type="button">회원 탈퇴</button>
     </div>
 
   </form>
 </main>
 
 <script th:inline="javascript">
-
-  // 세션 미로그인 시 리다이렉트
   window.onload = () => {
     const loginUser = /*[[${session.loginUser}]]*/ null;
     if (loginUser == null) {
       alert('로그인 후 이용하세요.');
       location.href = '/logIn';
+      return ;
     }
+  
+
+  const out = document.getElementsByClassName('uv-btn-red')[0];
+  out.addEventListener('click', () => {
+    if (confirm('정말로 탈퇴할까요?')) {
+      $.ajax({
+        url: '/deleteMember',
+        type: 'POST',
+        data: {userId: loginUser.userId},
+        success: data => {
+          alert('탈퇴가 완료되었습니다');
+          location.href = '/';
+        },
+        error: data => {
+          alert('탈퇴 처리 중 오류가 발생하였습니다');
+        }
+      });
+    }
+  });
   };
-
-
 </script>
 
 </body>

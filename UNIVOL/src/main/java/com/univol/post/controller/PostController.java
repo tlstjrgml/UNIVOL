@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.univol.member.model.vo.Member;
 import com.univol.post.Pagenation;
 import com.univol.post.model.service.PostService;
+import com.univol.post.model.service.ReplyService;
 import com.univol.post.model.vo.PageInfo;
 import com.univol.post.model.vo.Post;
+import com.univol.post.model.vo.Reply;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostController {
 	private final PostService pService;
+	private final ReplyService rService;
 
 	@GetMapping("/post")
 	public String selectAll(Model model, @RequestParam (value = "page", defaultValue="1") int currentPage) {
@@ -40,6 +43,7 @@ public class PostController {
 		return "post/post";
 	}
 
+    
 	@GetMapping("/post/write")
 	public String postWrite() {
 		return "post/write";
@@ -57,13 +61,13 @@ public class PostController {
 	@GetMapping("/post/{currentPage}/{pNumber}")
 	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
 		Post post = pService.selectOne(pNumber);
+		ArrayList<Reply> replylist = rService.selectReplyList(pNumber); 
 		model.addAttribute("post",post);
+		model.addAttribute("replyList", replylist);
 		return "post/detail";
 	}
+}
 
-	
 
  
-
-}
 

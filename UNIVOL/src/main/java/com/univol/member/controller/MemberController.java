@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -52,6 +53,7 @@ public class MemberController {
 	        model.addAttribute("error", "아이디 또는 비밀번호가 틀렸습니다.");
 	        return "users/logIn";
 	    }
+
 	}
 	
 	/*로그아웃*/
@@ -122,8 +124,18 @@ public class MemberController {
 		}
 	}
 	
+	/* 회원 탈퇴 */
+	@PostMapping("/deleteMember")
+	@ResponseBody
+	public int deleteMember(@ModelAttribute Member m, SessionStatus status) {
+		int result = mService.deleteMember(m);
+		if(result > 0) {
+			status.setComplete();
+			return result;
+		}
+		return result;
+	}
 	
-	/* 게시글 상세조회 */
 	
 
 	/* 후기게시판 */

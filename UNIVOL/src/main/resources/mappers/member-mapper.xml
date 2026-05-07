@@ -62,5 +62,43 @@
         FROM users
         WHERE user_id = #{userId}
     </select>
-
+	
+	<select id="logIn" resultType="Member">
+		select * from users where user_id=#{userId} and member_status != 'N'
+	</select>
+	
+	
+	<insert id="signUp">
+	    INSERT INTO users (user_id, user_pw, user_name, birth, gender, phone, address)
+    	VALUES (
+        	#{userId}, #{userPw}, #{userName}, TO_DATE(#{birth}, 'YYYY-MM-DD'), #{gender}, #{phone}, #{address}
+        	)
+	</insert>
+	
+	<select id="selectAll" resultType="com.univol.member.model.vo.Member">
+		select * from users
+	</select>
+	
+	<select id="getApplyList" parameterType="String" resultType="map">
+    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
+           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE
+    FROM REPLY R
+    	JOIN POST P ON R.P_NUMBER = P.P_NUMBER
+    	JOIN USERS U ON P.USER_ID = U.USER_ID
+    	WHERE R.USER_ID = #{userId}
+    ORDER BY R.C_NUMBER DESC
+	</select>
+	
+	<update id="updateMember">
+		update users
+		set USER_NAME=#{userName}, BIRTH=#{birth}, GENDER=#{gender}, PHONE=#{phone}, ADDRESS=#{address}
+		where USER_ID=#{userId}
+	</update>
+	
+	<update id="deleteMember">
+		update users
+		set member_status = 'N'
+		where user_id = #{userId}
+	</update>
+	
 </mapper>

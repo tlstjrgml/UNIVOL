@@ -21,30 +21,32 @@ public class ReplyController {
     @PostMapping("/post/{pNumber}/reply")
     public String insertReply(
             @PathVariable(name = "pNumber") int pNumber,
-            Reply reply,
+            @ModelAttribute Reply reply,
+            @RequestParam(name="currentPage", defaultValue="1") int currentPage,
             @SessionAttribute(name = "loginUser", required = false) Object loginUser) {
 
         // 로그인 확인
         if(loginUser == null) {
-            return "redirect:/login";
+            return "redirect:/logIn";
         }
 
         Member member = (Member) loginUser;
         reply.setPNumber(pNumber);
         reply.setUserId(member.getUserId());
         replyService.insertReply(reply);
-        return "redirect:/post/" + pNumber;
+        return "redirect:/post/" +currentPage+ "/"+ pNumber;
     }
 
     @PostMapping("/post/reply/{cNumber}/update")
     public String updateReply(
             @PathVariable(name = "cNumber") int cNumber,
             Reply reply,
+            @RequestParam(name="currentPage", defaultValue="1") int currentPage,
             @SessionAttribute(name = "loginUser", required = false) Object loginUser) {
 
         // 로그인 확인
         if(loginUser == null) {
-            return "redirect:/login";
+            return "redirect:/logIn";
         }
 
         // 기존 댓글 조회
@@ -53,24 +55,25 @@ public class ReplyController {
         // 댓글 작성자 확인
         Member member = (Member) loginUser;
         if(!existingReply.getUserId().equals(member.getUserId())) {
-            return "redirect:/post/" + existingReply.getPNumber();
+            return "redirect:/post/" +currentPage+ "/" + existingReply.getPNumber();
         }
 
         reply.setCNumber(cNumber);
         replyService.updateReply(reply);
 
-        return "redirect:/post/" + reply.getPNumber();
+        return "redirect:/post/" +currentPage+ "/" + reply.getPNumber();
     }
 
     @PostMapping("/post/reply/{cNumber}/delete")
     public String deleteReply(
             @PathVariable(name = "cNumber") int cNumber,
             @RequestParam(name = "pNumber") int pNumber,
+            @RequestParam(name="currentPage", defaultValue="1") int currentPage,
             @SessionAttribute(name = "loginUser", required = false) Object loginUser) {
 
         // 로그인 확인
         if(loginUser == null) {
-            return "redirect:/login";
+            return "redirect:/logIn";
         }
 
         // 기존 댓글 조회
@@ -79,11 +82,11 @@ public class ReplyController {
         // 댓글 작성자 확인
         Member member = (Member) loginUser;
         if(!existingReply.getUserId().equals(member.getUserId())) {
-            return "redirect:/post/" + pNumber;
+            return "redirect:/post/" + currentPage + "/" + pNumber;
         }
 
         replyService.deleteReply(cNumber);
 
-        return "redirect:/post/" + pNumber;
+        return "redirect:/post/"+ currentPage + "/" + pNumber;
     }
 }
