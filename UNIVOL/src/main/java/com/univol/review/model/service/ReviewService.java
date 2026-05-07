@@ -6,6 +6,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import com.univol.member.model.vo.PageInfo;
+import com.univol.post.model.vo.Reply;
 import com.univol.review.mapper.ReviewMapper;
 import com.univol.review.model.vo.Review;
 
@@ -41,5 +42,17 @@ public class ReviewService {
 
 	public int updateReviews(Review r) {
 		return mapper.updateReviews(r);
+	}
+
+	public int insertReview(Review r) {
+		return mapper.insertReview(r);
+	}
+
+	public ArrayList<Review> selectTop() {
+		return mapper.selectTop();
+	}
+
+	public ArrayList<Reply> selectReplyList(int pNumber) {
+		return mapper.selectReply(pNumber);
 	}
 }

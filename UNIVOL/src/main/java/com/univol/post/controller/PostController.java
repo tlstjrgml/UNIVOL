@@ -18,35 +18,39 @@ import com.univol.post.model.service.PostService;
 import com.univol.post.model.service.ReplyService;
 import com.univol.post.model.vo.Post;
 import com.univol.post.model.vo.Reply;
+import com.univol.review.model.service.ReviewService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @SessionAttributes("loginUser")
-@RequiredArgsConstructor
+@RequiredArgsConstructor 
+
 public class PostController {
-    private final PostService pService;
-    private final ReplyService rService;
+	private final PostService pService;
+	private final ReviewService rService;
 
-    @GetMapping("/post")
-    public String selectAll(Model model, @RequestParam(value = "page", defaultValue = "1") int currentPage) {
-        PageInfo pi = Pagenation.getPageInfo(currentPage, pService.getListCount(), 10);
-        model.addAttribute("pi", pi);
+	@GetMapping("/post")
+	public String selectAll(Model model, @RequestParam (value = "page", defaultValue="1") int currentPage) {
+		PageInfo pi = Pagenation.getPageInfo(currentPage, pService.getListCount(),10);
+		model.addAttribute("pi",pi);
 
-        int startRow = (pi.getCurrentPage() - 1) * pi.getBoardLimit() + 1;
-        int endRow = pi.getCurrentPage() * pi.getBoardLimit();
-        ArrayList<Post> plist = pService.selectAll(startRow, endRow);
-        model.addAttribute("plist", plist);
-        
-        return "post/post";
-    }
+		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
+		int endRow = pi.getCurrentPage() * pi.getBoardLimit();
+		ArrayList<Post> plist = pService.selectAll(startRow, endRow);
+		model.addAttribute("plist", plist);
+
+
+		return "post/post";
+	}
+
     
 	@GetMapping("/post/write")
 	public String postWrite() {
 		return "post/write";
 	}
-	
+
 	@PostMapping("/post/write")
 	public String insertPost(@ModelAttribute Post p, HttpSession session) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
@@ -65,7 +69,4 @@ public class PostController {
         return "post/detail";
     }
 }
-	
-	
-
  

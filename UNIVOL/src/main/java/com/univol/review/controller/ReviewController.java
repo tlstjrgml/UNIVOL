@@ -41,6 +41,25 @@ public class ReviewController {
 		return mv;
 	}
 	
+	@GetMapping("write")
+	public String writeReview() {
+		return "review/write";
+	}
+	
+	@PostMapping("insert")
+	public String insertReview(@ModelAttribute Review r, HttpSession session) {
+		String ReviewWriter = ((Member)session.getAttribute("loginUser")).getUserId();
+		r.setUserId(ReviewWriter);
+		r.setPType("R");
+		
+		int result = rService.insertReview(r); 
+		if(result > 0) {
+			return "redirect:/review";
+		} else {
+			throw new ReviewException("게시글 작성을 실패했습니다.");
+		}
+	}
+	
 	@GetMapping("/{id}/{page}")
 	public String selectReview(@PathVariable("id") int bId, @PathVariable("page") int page,
 							HttpSession session, Model model) {
@@ -83,6 +102,13 @@ public class ReviewController {
 	    } else {
 	        throw new ReviewException("수정 실패");
 	    }
+	}
+	
+	@GetMapping("top")
+	@ResponseBody
+	public ArrayList<Review> selectTop(){
+		ArrayList<Review> list = rService.selectTop();
+		return list;
 	}
 	
 	
