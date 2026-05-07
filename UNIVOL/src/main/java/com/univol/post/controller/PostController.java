@@ -25,57 +25,43 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @SessionAttributes("loginUser")
 @RequiredArgsConstructor
-
 public class PostController {
-	private final PostService pService;
-	private final ReplyService rService;
-	
-	@GetMapping("/post")
-	public String selectAll(Model model, @RequestParam (value = "page", defaultValue="1") int currentPage) {
-		PageInfo pi = Pagenation.getPageInfo(currentPage, pService.getListCount(),10);
-		model.addAttribute("pi",pi);
+    private final PostService pService;
+    private final ReplyService rService;
 
-		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
-		int endRow = pi.getCurrentPage() * pi.getBoardLimit();
-		ArrayList<Post> plist = pService.selectAll(startRow, endRow);
-		model.addAttribute("plist", plist);
-		
-		
-		return "post/post";
-	}
+    @GetMapping("/post")
+    public String selectAll(Model model, @RequestParam(value = "page", defaultValue = "1") int currentPage) {
+        PageInfo pi = Pagenation.getPageInfo(currentPage, pService.getListCount(), 10);
+        model.addAttribute("pi", pi);
 
-	@GetMapping("/post/write")
-	public String postWrite() {
-		return "post/write";
-	}
-	
-	@PostMapping("/post/write")
-	public String insertPost(@ModelAttribute Post p, HttpSession session) {
-		Member loginUser = (Member)session.getAttribute("loginUser");
-		p.setPType('V');
-		p.setUserId(loginUser.getUserId());
-		pService.insertPost(p);
-		return "redirect:/post";
-	}
-	
-	@GetMapping("/post/{currentPage}/{pNumber}")
-	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
+        int startRow = (pi.getCurrentPage() - 1) * pi.getBoardLimit() + 1;
+        int endRow = pi.getCurrentPage() * pi.getBoardLimit();
+        ArrayList<Post> plist = pService.selectAll(startRow, endRow);
+        model.addAttribute("plist", plist);
 
-		@GetMapping("/post/{pNumber}")
-	public String selectOne( @PathVariable("pNumber") int pNumber, Model model) {
-		Post post = pService.selectOne(pNumber);
-		ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
-		model.addAttribute("post",post);
-		model.addAttribute("replyList", replyList);
-		return "post/detail";
-	}
+        return "post/post";
+    }
+
+    @GetMapping("/post/write")
+    public String postWrite() {
+        return "post/write";
+    }
+
+    @PostMapping("/post/write")
+    public String insertPost(@ModelAttribute Post p, HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("loginUser");
+        p.setPType('V');
+        p.setUserId(loginUser.getUserId());
+        pService.insertPost(p);
+        return "redirect:/post";
+    }
+
+    @GetMapping("/post/{pNumber}")
+    public String selectOne(@PathVariable("pNumber") int pNumber, Model model) {
+        Post post = pService.selectOne(pNumber);
+        ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
+        model.addAttribute("post", post);
+        model.addAttribute("replyList", replyList);
+        return "post/detail";
+    }
 }
-	
-	
-	
-
-
-
-
-
- 
