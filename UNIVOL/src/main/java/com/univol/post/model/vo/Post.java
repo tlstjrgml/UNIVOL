@@ -19,9 +19,9 @@ public class Post {
 	private String contents;
 	private int views;
 	private Date pDate;
-	private String userName;
-	private String userId;
-	//private char pStatus;
-	//private int likes;
 	private char pType;
+	private String userId;
+	private String userName;
+	private char pStatus;
+	private int likes;
 }

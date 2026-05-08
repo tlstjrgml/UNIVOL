@@ -19,5 +19,9 @@ public interface PostMapper {
 	
 	int getListCount();
 	
-
+	ArrayList<Post> selectAllPost();
+	
+	int rollbackPost(Post p);
+	
+	int deletePost(Post p);
 }

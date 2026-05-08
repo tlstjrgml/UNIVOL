@@ -117,7 +117,7 @@
         <hr class="divider">
 
         <div class="card">
-        	<button type="button" id="toggleBtn">회원 목록 펼치기 ▼</button>
+        	<button type="button" id="MemberToggleBtn">회원 목록 펼치기 ▼</button>
         	
             <table id="memberTable">
                 <thead>
@@ -164,9 +164,9 @@
         
         <!-- 전체 게시글 조회 -->
          <div class="card">
-        	<button type="button" id="toggleBtn">게시글 목록 펼치기 ▼</button>
+        	<button type="button" id="PostToggleBtn">게시글 목록 펼치기 ▼</button>
         	
-            <table id="memberTable">
+            <table id="postTable">
                 <thead>
                     <tr>
                     	<th>글번호</th>
@@ -180,20 +180,127 @@
                 <tbody>
                     <tr th:each="p: ${plist}">
                         <td th:text="${p.pNumber}"></td>
-                        <td th:text="${m.userName}"></td>
+                        <td th:text="${p.userId}"></td>
                         <td th:text="${p.contents}"></td>
                         <td th:text="${p.views}"></td>
-                        <td th:text="${p.likes}"></td>	
+                        <td th:text="${p.likes}"></td>
                         <td>
-                        	<button type="button" class="btn delete-btn" style="background-color:red; color:white;">Y</button>
+                        	<div th:if="${p.pStatus.toString() == 'Y'}">
+	                        	<button type="button" class="btn rollback-btn" style="background-color:blue; color:white;">Y</button>
+	                        	<button type="button" class="btn delete-btn" style="background-color:#888888; color:white;">N</button>
+                        	</div>
+                        	<div th:if = "${p.pStatus.toString() == 'N'}">
+                        		<button type="button" class = "btn rollback-btn" style="background-color:#888888; color:white">Y</button>
+                        		<button type="button" class="btn delete-btn" style="background-color:red; color:white;">N</button>
+                        	</div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        
+        <!-- 전체 댓글 조회 -->
+        <div class="card">
+        	<button type="button" id="ReplyToggleBtn">댓글 목록 펼치기 ▼</button>
+        	
+        	<table id="replyTable">
+        		<thead>
+        			<tr>
+        				<th>댓글 번호</th>
+        				<th>아이디</th>
+        				<th>내용</th>
+        				<th>상태</th>
+        			</tr>
+        		</thead>
+        		<tbody>
+        			<tr th:each="r:${rlist}">
+        				<td th:text="${수정하기}"></td>
+        				<td th:text="${수정하기}"></td>
+        				<td th:text="${수정하기}"></td>
+        				<td>
+        					<div th:if="${}">
+        						<button type="button" class="btn replyrollback-btn" style="background-color:blue; color: white;">Y</button>
+        						<button type="button" class="btn replydelete-btn" style="background-color:#888888; color: white">N</button>
+        					</div>
+        					<div th:if="${}">
+        						<button type="button" class="btn replyrollback-btn" style="background-color:#888888; color:white;">Y</button>
+        						<button type="button" class="btn replydelete-btn" style="background-color:red; color:white">N</button>
+        					</div>
+        				</td>
+        			</tr>
+        		</tbody>
+        	</table>
+        </div>
 
     <script>
     
+	    /* 관리자여부 변경 */
+	    document.querySelectorAll(".admin-btn").forEach(function(btn){
+	        btn.addEventListener('click', function(){
+	            const tr = this.parentElement.parentElement.parentElement;
+	            const userId = tr.querySelector('td').innerText;
+	            $.ajax({
+	                url:'/toAdminMember',
+	                type:'post',
+	                data:{userId:userId},
+	                success: function(result){
+	                    btn.style.backgroundColor = "#424B1F";
+	                    btn.nextElementSibling.style.backgroundColor = "#888888";
+	                }
+	            });
+	        });
+	    });
+	
+	    document.querySelectorAll(".normal-btn").forEach(function(btn){
+	        btn.addEventListener('click', function(){
+	            const tr = this.parentElement.parentElement.parentElement;
+	            const userId = tr.querySelector('td').innerText;
+	            $.ajax({
+	                url:'/toNormalMember',
+	                type:'post',
+	                data:{userId:userId},
+	                success: function(result){
+	                    btn.style.backgroundColor = "#424B1F";
+	                    btn.previousElementSibling.style.backgroundColor = "#888888";
+	                }
+	            });
+	        });
+	    });
+	
+	    /* 활동상태변경 */
+	    document.querySelectorAll(".ban-btn").forEach(function(btn){
+	        btn.addEventListener('click', function(){
+	            const tr = this.parentElement.parentElement.parentElement;
+	            const userId = tr.querySelector('td').innerText;
+	            $.ajax({
+	                url:'/banMember',
+	                type:'post',
+	                data:{userId:userId},
+	                success: function(result){
+	                    btn.style.backgroundColor = "red";
+	                    btn.previousElementSibling.style.backgroundColor = "#888888";
+	                }
+	            });
+	        });
+	    });
+	
+	    document.querySelectorAll(".active-btn").forEach(function(btn){
+	        btn.addEventListener('click', function(){
+	            const tr = this.parentElement.parentElement.parentElement;
+	            const userId = tr.querySelector('td').innerText;
+	            $.ajax({
+	                url:'/activeMember',
+	                type:'post',
+	                data:{userId:userId},
+	                success: function(result){
+	                    btn.style.backgroundColor = "blue";
+	                    btn.nextElementSibling.style.backgroundColor = "#888888";
+	                }
+	            });
+	        });
+	    });
+    
+	    
     	/* 글 삭제 */
     	document.querySelectorAll(".delete-btn").forEach(function(btn){
 			btn.addEventListener('click', function(){
@@ -205,13 +312,75 @@
 					type:'post',
 					data:{pNumber:pNumber},
 					success: function(result){
+						btn.style.backgroundColor = "red";
+						btn.previousElementSibling.style.backgroundColor = "#888888";
 					}
 				});
 			});
     	});
     	
-    	$('#toggleBtn').on('click', function(){
+    	/* 글 복구 */
+ 	    document.querySelectorAll(".rollback-btn").forEach(function(btn){
+			btn.addEventListener('click', function(){
+				const tr = this.parentElement.parentElement.parentElement;
+				const pNumber = tr.querySelector('td').innerText;
+				
+				$.ajax({
+					url:'/rollbackPost',
+					type:'post',
+					data:{pNumber:pNumber},
+					success: function(result){
+						btn.style.backgroundColor = "blue";
+						btn.nextElementSibling.style.backgroundColor = "#888888";
+					}
+				});
+			});
+	   	});
+    	
+    	/* 댓글 삭제 */
+    	document.querySelectorAll(".replydelete-btn").forEach(function(btn){
+			btn.addEventListener('click',function(){
+				const tr = this.parentElement.parentElement.parentElement;
+				const rNumber = tr.querySelector('td').innerText;
+				
+				$.ajax({
+					url: '/deleteReply',
+					type:'post',
+					data:{rNumber:rNumber},
+					success:function(result){
+						btn.style.backgroundColor = "red";
+						btn.nextElementSibling.style.backgroundColor = "#888888";
+					}
+				});
+			});
+	    });
+    	/* 댓글 복구 */
+    	document.querySelectorAll(".replyrollback-btn").forEach(function(btn){
+			btn.addEventListener('click', function(){
+				const tr = this.parentElement.parentElement.parentElement;
+				const rNumber = tr.querySelector('td').innerText;
+				
+				$.ajax({
+					url: '/rollbackReply',
+					type:'post',
+					data:{rNumber:rNumber},
+					success:function(result){
+						btn.style.backgroundColor = "blue";
+						btn.previousElementSibling.style.backgroundColor = "#888888"
+					}
+				});
+			});
+    	});
+    	$('#MemberToggleBtn').on('click', function(){
     	    $('#memberTable').slideToggle();
+    	});
+    	
+    	$('#PostToggleBtn').on('click', function(){
+			$('#postTable').slideToggle();
+    	});
+    	
+    	$('#ReplyToggleBtn').on('click',function(){
+			$('#replyTable').slideToggle();
     	});
     </script>
 </body>

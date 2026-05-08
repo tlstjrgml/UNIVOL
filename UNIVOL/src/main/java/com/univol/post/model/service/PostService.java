@@ -33,5 +33,15 @@ public class PostService {
 		return mapper.getListCount();
 	}
 	
+	public ArrayList<Post> selectAllPost(){
+		return mapper.selectAllPost();
+	}
 	
+	public int deletePost(Post p) {
+		return mapper.deletePost(p);
+	}
+	
+	public int rollbackPost(Post p) {
+		return mapper.rollbackPost(p);
+	}
 }

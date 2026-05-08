@@ -15,21 +15,17 @@
 			where rownum &lt;= #{endRow}
 		)
 		where rn >= #{startRow}
-		
 	</select>
 	
 	<select id="getListCount" resultType="_int">
 		
 		select count(*) from post
     	where p_Type='V'
-
 	</select>
-	
-	
 	
 	<insert id="insertPost">
 		insert into post
-		values(ISEQ$$_73096.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId})
+		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default)
 	</insert>
 	
 	<select id="selectOne" resultType="com.univol.post.model.vo.Post">
@@ -38,5 +34,20 @@
 			join users u on p.user_id = u.user_id
 		where p_number = #{pNumber}
 	</select>
+
+	<select id="selectAllPost" resultType = "com.univol.post.model.vo.Post">
+		select * from post
+	</select>	
 	
+	<update id="rollbackPost">
+		update post
+		set p_status ='Y'
+		where p_number = #{pNumber}
+	</update>
+	
+	<update id="deletePost">
+		update post
+		set p_status = 'N'
+		where p_number = #{pNumber}
+	</update>
 </mapper>

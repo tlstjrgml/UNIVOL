@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.univol.member.model.service.MemberService;
 import com.univol.member.model.vo.Member;
+import com.univol.post.model.service.PostService;
+import com.univol.post.model.vo.Post;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService mService;
+	private final PostService pService;
 	
 
 	
@@ -76,16 +79,19 @@ public class MemberController {
 	@GetMapping("/myPage")
 	public ModelAndView myPage(HttpSession session, ModelAndView mv) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
-		if(loginUser != null) {
+		if(loginUser == null) {
+			mv.setViewName("redirect:/logIn");
+			return mv;
+			
+		}
 			String id = loginUser.getUserId();
 			ArrayList<HashMap<String, Object>> applyList = mService.getApplyList(id);
 			
 			mv.addObject("applyList", applyList);
 			mv.setViewName("users/myPage");
-		}
-		return mv;
-
+			return mv;
 	}
+
 	
 	/*개인정보수정 페이지 이동*/
 	@GetMapping("/edit")
@@ -118,11 +124,14 @@ public class MemberController {
 	public String adminPage(@ModelAttribute Member m, Model model, HttpSession session) {
 		ArrayList<Member> mlist = mService.selectAll();
 		model.addAttribute("mlist", mlist);
+		ArrayList<Post> plist = pService.selectAllPost();
+		model.addAttribute("plist",plist);
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		if(loginUser != null &&  loginUser.getIsAdmin().equals("Y")) {     
 			return "users/adminPage";
 		}else {
-			return "redirect:/common/errorPage";
+			model.addAttribute("message", "올바른 접근이 아닙니다.");
+			return "error/404";
 		}
 	}
 	
@@ -165,8 +174,5 @@ public class MemberController {
 	public int toNormalMember(@ModelAttribute Member m) {
 		return mService.toNormalMember(m);
 	}
-	
-	
-
 
 }
