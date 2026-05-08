@@ -195,12 +195,11 @@
 		</div>
 	
 		
-		
 	     <div class="btn-area">
 
-  			<th:block th:if="${session.loginUser.userId == r.userId}">
+  			<th:block th:if="${session.loginUser != null and session.loginUser.userId == r.userId}">
 			    <button id="editBtn">수정</button>
-			    <button>삭제</button>
+			    <button id="btn">삭제</button>
 		  	</th:block>
 		</div>
 
@@ -229,17 +228,31 @@
 	  const editBtn = document.getElementById("editBtn");
 	  const cancelBtn = document.getElementById("cancelBtn");
 	
-	  // 🔥 수정 버튼 클릭
+	  // 수정 버튼 클릭
 	  editBtn.onclick = function () {
 	    viewMode.style.display = "none";
 	    editMode.style.display = "block";
 	  };
 	
-	  // 🔥 취소 버튼 클릭
+	  // 취소 버튼 클릭
 	  cancelBtn.onclick = function () {
 	    viewMode.style.display = "block";
 	    editMode.style.display = "none";
 	  };
+	  
+	  // 삭제 버튼 클릭
+	  const deleteMode = document.getElementById("btn");
+
+		if (deleteMode != null) {
+		    deleteMode.addEventListener('click', () => {
+		        if (confirm("삭제하겠습니까?")) {
+		            const form = document.querySelector("#edit-mode form");
+		            form.action = "/review/delete";
+		            form.method = "post";
+		            form.submit();
+		        }
+		    });
+		}
 	
 	};
 

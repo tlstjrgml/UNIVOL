@@ -27,4 +27,6 @@ public interface ReviewMapper {
 
 	ArrayList<Reply> selectReply(int pNumber);
 
+	int deleteReview(int rNumber);
+
 }

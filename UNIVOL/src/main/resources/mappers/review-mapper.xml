@@ -4,7 +4,7 @@
 	<select id="getListCount">
 		select count(*)
 		from post
-		where p_type = #{c}
+		where p_type = #{c}  and p_status = 'Y'
 	</select>
 	
 	<select id="selectReviewList" resultMap="reviewResultSet">
@@ -12,8 +12,9 @@
 		from post
 			 join users using(user_id)
 		where p_type = #{c}
-		order by p_number desc 
+		 and p_status = 'Y' order by p_number desc 
 	</select>
+	
 	<resultMap type="com.univol.review.model.vo.Review" id="reviewResultSet">
 		<result column="p_number" property="rNumber"/>
 		<result column="P_TITLE" property="rTitle"/>
@@ -63,6 +64,11 @@
 		where rownum <![CDATA[<]]> = 5
 	</select>
 
+	<update id="deleteReview">
+	    UPDATE POST
+	    SET P_STATUS = 'N'
+	    WHERE P_NUMBER = #{rNumber}
+	</update>
 
 
 </mapper>

@@ -99,7 +99,7 @@ public class ReviewController {
 	                           HttpSession session) {
 
 	    // 로그인 회원 꺼내기 (Member)
-	    Member loginMember = (Member) session.getAttribute("loginMember");
+	    Member loginMember = (Member) session.getAttribute("loginUser");
 
 	    if (loginMember == null) {
 	        throw new ReviewException("로그인이 필요합니다.");
@@ -136,7 +136,18 @@ public class ReviewController {
 		ArrayList<Review> list = rService.selectTop();
 		return list;
 	}
-	
+	@PostMapping("delete")
+	public String deleteReview(@RequestParam("rNumber") int rNumber,
+	                           @RequestParam("page") int page, HttpSession session) {
+		
+	    int result = rService.deleteReview(rNumber);
+	    if (result > 0) {
+	        return "redirect:/review";
+	    } else {
+	        throw new ReviewException("삭제 실패");
+	    }
+	    
+	}
 	
 	
 	

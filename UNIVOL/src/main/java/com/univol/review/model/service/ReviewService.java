@@ -55,4 +55,8 @@ public class ReviewService {
 	public ArrayList<Reply> selectReplyList(int pNumber) {
 		return mapper.selectReply(pNumber);
 	}
+
+	public int deleteReview(int rNumber) {
+		return mapper.deleteReview(rNumber);
+	}
 }
