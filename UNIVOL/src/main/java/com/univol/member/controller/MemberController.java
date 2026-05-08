@@ -3,6 +3,7 @@ package com.univol.member.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,12 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService mService;
+<<<<<<< HEAD
 	private final PostService pService;
 	
+=======
+	private final BCryptPasswordEncoder passwordEncoder;
+>>>>>>> origin/정현종
 
 	
 	/* 메인 페이지 */
@@ -46,17 +51,17 @@ public class MemberController {
 	/* 로그인 처리 */
 	@PostMapping("/logIn")
 	public String logInSuccess(@ModelAttribute Member m, HttpSession session, Model model) {
-		Member loginUser = mService.logIn(m);
-		System.out.println(loginUser);
-		if (loginUser != null) {
-			session.setAttribute("loginUser", loginUser);
-			return "redirect:/";
-		} else {
-			model.addAttribute("error", "아이디 또는 비밀번호가 틀렸습니다.");
-			return "users/logIn";
-		}
-	}
+	    Member loginUser = mService.logIn(m);
+	    if (loginUser != null) {
+	        model.addAttribute("loginUser", loginUser);
+	        session.setAttribute("loginUser", loginUser);
+	        return "redirect:/";
+	    } else {
+	        model.addAttribute("error", "아이디 또는 비밀번호가 틀렸습니다.");
+	        return "users/logIn";
+	    }
 
+	}
 	
 	/*로그아웃*/
 	  
@@ -99,26 +104,23 @@ public class MemberController {
 		return "users/edit";
 	}
 	
-	/*개인정보수정 (이메일 미포함 , else문쪽 throw 미포함상태)*/
 	@PostMapping("/edit")
-	public String updateMember(@ModelAttribute Member m, Model model) {
-
-	    int result = mService.updateMember(m);
-
-	    if(result > 0) {
-	    	model.addAttribute("loginUser", mService.logIn(m));
-	        return "redirect:/myPage";
-	    } else {
-	        return "users/edit";
+	public String updateMember(@ModelAttribute Member m, HttpSession session, Model model) {
+	    // 비밀번호 입력했으면 암호화, 안했으면 null 유지
+	    if(m.getUserPw() != null && !m.getUserPw().isBlank()) {
+	        m.setUserPw(passwordEncoder.encode(m.getUserPw()));
 	    }
+	    
+	    int result = mService.updateMember(m);
+	    if(result > 0) {
+	        Member updated = mService.getMemberById(m.getUserId());
+	        model.addAttribute("loginUser", updated);
+	        session.setAttribute("loginUser", updated);
+	        return "redirect:/myPage";
+	    }
+	    return "users/edit";
 	}
 
-	/*개인정보수정 에서 비밀번호 수정*/
-	
-	
-	
-	
-	
 	/* 관리자페이지 */
 	@GetMapping("/adminPage")
 	public String adminPage(@ModelAttribute Member m, Model model, HttpSession session) {

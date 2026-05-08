@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.univol.member.model.mapper.MemberMapper;
 import com.univol.member.model.vo.Member;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,13 +26,22 @@ public class MemberService {
 		}
 		return null;
 	}
+
 	
-    
-    /* 회원가입 */
-    public void signUp(Member m) {
-        m.setUserPw(passwordEncoder.encode(m.getUserPw()));
-        mapper.signUp(m);
-    }
+	/* 회원가입 */
+	public void signUp(Member m) {
+		m.setUserPw(passwordEncoder.encode(m.getUserPw()));
+		mapper.signUp(m);
+	}
+
+
+	public int updateMember(Member m) {
+		return mapper.updateMember(m);
+	}
+	public Member getMemberById(String userId) {
+		return mapper.getMemberById(userId);
+	}
+	
 
     public ArrayList<Member> selectAll() {
         return mapper.selectAll();
@@ -43,10 +51,6 @@ public class MemberService {
         return mapper.getApplyList(id);
     }
 
-    public int updateMember(Member m) {
-        return mapper.updateMember(m);
-    }
-    
     public int deleteMember(Member m) {
     	return mapper.deleteMember(m);
     }

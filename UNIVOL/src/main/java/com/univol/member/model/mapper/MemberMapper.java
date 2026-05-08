@@ -17,16 +17,17 @@ public interface MemberMapper {
 
 	void signUp(Member m);
 	
-	// 주석 테스트ppppp
-
     ArrayList<Member> selectAll();
 
 	ArrayList<HashMap<String, Object>> getApplyList(String id);
 
 	int updateMember(Member m);
 
+	Member getMemberById(String userId);
+
 	int deleteMember(Member m);
 
+<<<<<<< HEAD
 	int activeMember(Member m);
 
 	int banMember(Member m);
@@ -36,4 +37,6 @@ public interface MemberMapper {
 	int toNormalMember(Member m);	
 
 
+=======
+>>>>>>> origin/정현종
 }
