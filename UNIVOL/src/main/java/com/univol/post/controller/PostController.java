@@ -59,13 +59,24 @@ public class PostController {
 	}
 
 	@GetMapping("/post/{currentPage}/{pNumber}")
-	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
-		Post post = pService.selectOne(pNumber);
-		ArrayList<Reply> replylist = rService.selectReplyList(pNumber); 
-		model.addAttribute("post",post);
-		model.addAttribute("replyList", replylist);
-		return "post/detail";
-	}
+	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model,
+												HttpSession session) {
+		
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		String id = null;
+		if(loginUser != null) {
+			id = loginUser.getUserId();
+			}
+		Post post = pService.selectOne(pNumber,id);
+	    if (post != null) {
+	    	ArrayList<Reply> replylist = rService.selectReplyList(pNumber); 
+	    	model.addAttribute("post",post);
+	    	model.addAttribute("replyList", replylist);
+	    	return "post/detail";
+	    }else {
+	    	throw new RuntimeException("게시글 상세보기를 실패하였습니다.");
+	    }
+      }
 }
 
 

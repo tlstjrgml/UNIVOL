@@ -165,6 +165,7 @@
 			</a>
 	    	<a class="page-btn" 
 	    		th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+	    		th:classappend="${p == pi.currentPage} ? 'active'"
 	    		th:href="@{${loc}(page=${p})}">[[${p}]]</a>
 			<a class="page-btn" 
 				th:if="${pi.currentPage < pi.maxPage}"

@@ -18,6 +18,8 @@ public interface PostMapper {
 	int insertPost(Post p);
 	
 	int getListCount();
+
+	int updateReview(int pNumber);
 	
 
 }
