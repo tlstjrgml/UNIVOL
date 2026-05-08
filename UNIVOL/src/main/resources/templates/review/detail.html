@@ -146,6 +146,9 @@
       padding: 10px;
       text-align: left;
     }
+    .container { max-width: 1000px; margin: 2.5rem auto; padding: 0 2rem; }
+    .back-btn { display: inline-block; margin-bottom: 1rem; padding: 8px 16px; background: #eaf3de; color: #426B1F; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; text-decoration: none; transition: background 0.15s; }
+    .back-btn:hover { background: #d5e8c6; }
   </style>
 </head>
 <body>
@@ -157,6 +160,9 @@
   <div class="page-title">게시글 조회</div>
 
   <div class="container">
+  	<div>
+  		<a class="back-btn" th:href="@{/review(page=${currentPage})}">← 목록으로</a>
+  	</div>
 
     <!-- 🔥 위치 이동된 hr -->
     <hr class="divider">

@@ -148,7 +148,13 @@ public class ReviewController {
 	    }
 	    
 	}
-	
-	
+	// 검색 기능
+	@GetMapping("")
+	public ModelAndView searchReview(int id) {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject(null, mv);
+		mv.setViewName("/rivew");
+		return mv;
+	}
 	
 }
