@@ -207,16 +207,16 @@
 		</div>
 
     <div class="comment-box">
-      <div class="comment-title">댓글</div>
-      <textarea placeholder="댓글을 입력하세요" id="comments"></textarea>
-      <div class="btn-area">
-        <button id="replyBtn" th:disabled="${session.loginUser == null}">등록</button>
-	</div>
-		<div id="rList">
+    	<div class="comment-title">댓글</div>
+    		<textarea placeholder="댓글을 입력하세요" id="comments"></textarea>
+     	<div class="btn-area">
+        	<button id="replyBtn" th:disabled="${session.loginUser == null}">등록</button>
+		</div>
+		<div id='rList'>
 			<div class="comment-item" th:each="r : ${list}">
-	    	    <div class="comment-writer">[[${r.userName}]]</div>
-	   	    	<div class="comment-date" th:text="${r.cDate}"></div>
-	       		<div>[[${r.comments}]]</div>
+	   	    	<div class="comment-writer">[[${r.userName}]]</div>
+  	    		<div class="comment-date" th:text="${r.cDate}"></div>
+      			<div>[[${r.comments}]]</div>
 			</div>
 		</div>
     </div>
@@ -253,7 +253,7 @@
 				userId: /*[[${session.loginUser.userId}]]*/'user'
 			},
 			success: data => {
-// 				console.log(data)
+				console.log(data)
 				const divPar = document.querySelector('#rList');
 				divPar.innerHTML = '';
 				
@@ -262,10 +262,12 @@
 					commentItem.classList.add('comment-item');
 					
 					const writerDiv = document.createElement('div');
+					writerDiv.classList.add('comment-writer');
 					writerDiv.innerText = c.userName;
 					
 					const cDateDiv = document.createElement('div');
-					cDateDiv.innerText = c.cDate;
+					cDateDiv.classList.add('comment-date');
+					cDateDiv.innerText = c.cdate;
 					
 					const commentsDiv = document.createElement('div');
 					commentsDiv.innerText = c.comments
