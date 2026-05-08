@@ -63,9 +63,9 @@ public class PostController {
     @GetMapping("/post/{pNumber}")
     public String selectOne(@PathVariable("pNumber") int pNumber, Model model) {
         Post post = pService.selectOne(pNumber);
-        ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
+//        ArrayList<Reply> replyList = Service.selectReplyList(pNumber); 
         model.addAttribute("post", post);
-        model.addAttribute("replyList", replyList);
+//        model.addAttribute("replyList", replyList);
         return "post/detail";
     }
 }
