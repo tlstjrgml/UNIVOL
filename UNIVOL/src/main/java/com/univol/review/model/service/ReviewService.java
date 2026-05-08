@@ -31,7 +31,7 @@ public class ReviewService {
 		Review r = mapper.selectReview(bId);
 		if(r != null) {
 			if(id != null && !r.getUserId().equals(id)) {
-				int result = mapper.updateReview(bId);
+				int result = mapper.updateView(bId);
 				if(result > 0) {
 					r.setRViews(r.getRViews() + 1);
 				}
@@ -52,7 +52,13 @@ public class ReviewService {
 		return mapper.selectTop();
 	}
 
-	public ArrayList<Reply> selectReplyList(int pNumber) {
-		return mapper.selectReply(pNumber);
+	public ArrayList<com.univol.review.model.vo.Reply> selectReplyList(int bId) {
+		return mapper.selectReplyList(bId);
 	}
+
+	public int insertReply(com.univol.review.model.vo.Reply r) {
+		return mapper.insertReply(r);
+	}
+
+	
 }

@@ -17,6 +17,7 @@ import com.univol.member.model.vo.Member;
 import com.univol.member.model.vo.PageInfo;
 import com.univol.review.model.exception.ReviewException;
 import com.univol.review.model.service.ReviewService;
+import com.univol.review.model.vo.Reply;
 import com.univol.review.model.vo.Review;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -71,9 +72,11 @@ public class ReviewController {
 		}
 		
 		Review r = rService.selectReview(bId, id);
+		ArrayList<Reply> list = rService.selectReplyList(bId);
 		if(r != null) {
 			model.addAttribute("r", r);
 			model.addAttribute("page", page);
+			model.addAttribute("list", list);
 			return "review/detail";
 		} else {
 			throw new ReviewException("게시글 상세보기를 실패하였습니다.");
@@ -134,6 +137,15 @@ public class ReviewController {
 	@ResponseBody
 	public ArrayList<Review> selectTop(){
 		ArrayList<Review> list = rService.selectTop();
+		return list;
+	}
+	
+	@GetMapping("rinsert")
+	@ResponseBody
+	public ArrayList<Reply> insertReply(@ModelAttribute Reply r){
+		int result = rService.insertReply(r);
+		ArrayList<Reply> list = rService.selectReplyList(r.getPNumber());
+		System.out.println(r.getUserId());
 		return list;
 	}
 	

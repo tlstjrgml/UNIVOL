@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <title>봉사 게시글 상세</title>
+  
 
   <!-- 폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -151,7 +153,7 @@
 <body>
 
   <!-- 로고 -->
-  <div class="logo">UNIVOL</div>
+  <div class="logo" onclick="location.href='/'" style="cursor: pointer;">UNIVOL</div>
 
   <!-- 페이지 제목 -->
   <div class="page-title">게시글 조회</div>
@@ -205,22 +207,23 @@
 		</div>
 
     <div class="comment-box">
-      <div class="comment-title">댓글</div>
-      <textarea placeholder="댓글을 입력하세요"></textarea>
-      <div class="btn-area">
-        <button>등록</button>
-      </div>
-
-      <div class="comment-item">
-        <div class="comment-writer">이수연</div>
-        <div class="comment-date">2024.12.11</div>
-        <div>정말 좋은 활동이네요!</div>
-      </div>
+    	<div class="comment-title">댓글</div>
+    		<textarea placeholder="댓글을 입력하세요" id="comments"></textarea>
+     	<div class="btn-area">
+        	<button id="replyBtn" th:disabled="${session.loginUser == null}">등록</button>
+		</div>
+		<div id='rList'>
+			<div class="comment-item" th:each="r : ${list}">
+	   	    	<div class="comment-writer">[[${r.userName}]]</div>
+  	    		<div class="comment-date" th:text="${r.cDate}"></div>
+      			<div>[[${r.comments}]]</div>
+			</div>
+		</div>
     </div>
 
   </div>
 </body>
-<script>
+<script th:inline='javascript'>
 	window.onload = function () {
 	
 	  const viewMode = document.getElementById("view-mode");
@@ -240,6 +243,47 @@
 	    viewMode.style.display = "block";
 	    editMode.style.display = "none";
 	  };
+	  
+	  document.getElementById('replyBtn').addEventListener('click', () => {
+		$.ajax({
+			url: '/review/rinsert',
+			data: {
+				comments: document.getElementById('comments').value,
+				pNumber: /*[[${r.rNumber}]]*/5,
+				userId: /*[[${session.loginUser.userId}]]*/'user'
+			},
+			success: data => {
+				console.log(data)
+				const divPar = document.querySelector('#rList');
+				divPar.innerHTML = '';
+				
+				for(const c of data){
+					const commentItem = document.createElement('div');
+					commentItem.classList.add('comment-item');
+					
+					const writerDiv = document.createElement('div');
+					writerDiv.classList.add('comment-writer');
+					writerDiv.innerText = c.userName;
+					
+					const cDateDiv = document.createElement('div');
+					cDateDiv.classList.add('comment-date');
+					cDateDiv.innerText = c.cdate;
+					
+					const commentsDiv = document.createElement('div');
+					commentsDiv.innerText = c.comments
+					
+					commentItem.append(writerDiv);
+					commentItem.append(cDateDiv);
+					commentItem.append(commentsDiv);
+					
+					divPar.append(commentItem);
+				}
+				document.getElementById('comments').value = '';
+			},
+			error: data => console.log(data)
+		}); 
+	  });
+	  
 	
 	};
 

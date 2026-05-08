@@ -29,11 +29,11 @@
 		select *
 		from post
 			 join users using(user_id)
-		where p_number = #{id}
-<!-- 		p_status = 'Y' -->
+		where p_number = #{id} and p_status = 'Y'
+		
 	</select>
 
-	<update id="updateReview">
+	<update id="updateView">
 		update post
 		set views = views + 1
 		where p_number = #{id}
@@ -58,11 +58,25 @@
 		from(select *
 		    from post
 		        join users using(user_id)
-		        where p_type = 'R'
+		        where p_type = 'R' and p_status = 'Y' 
 		        order by views desc)
 		where rownum <![CDATA[<]]> = 5
 	</select>
-
+	
+<!-- 	댓글 갖고오기 -->
+	<select id="selectReplyList">
+		select *
+		from reply
+			join users using(user_id)
+		where p_number = #{pNumber} and c_status = 'Y'
+		order by c_number desc
+	</select>
+	
+<!-- 	댓글 작성 -->
+	<insert id="insertReply">
+		insert into reply
+		values(seq_reply.nextval, #{comments}, default, #{pNumber}, #{userId}, default)
+	</insert>
 
 
 </mapper>

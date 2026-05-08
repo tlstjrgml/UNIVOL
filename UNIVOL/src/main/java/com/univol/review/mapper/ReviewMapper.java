@@ -17,7 +17,7 @@ public interface ReviewMapper {
 
 	Review selectReview(int bId);
 
-	int updateReview(int bId);
+	int updateView(int bId);
 
 	int updateReviews(Review r);
 
@@ -25,6 +25,8 @@ public interface ReviewMapper {
 
 	ArrayList<Review> selectTop();
 
-	ArrayList<Reply> selectReply(int pNumber);
+	ArrayList<com.univol.review.model.vo.Reply> selectReplyList(int bId);
+
+	int insertReply(com.univol.review.model.vo.Reply r);
 
 }
