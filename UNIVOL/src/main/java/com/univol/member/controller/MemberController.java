@@ -1,7 +1,6 @@
 package com.univol.member.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -9,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.univol.member.model.service.MemberService;
 import com.univol.member.model.vo.Member;
+import com.univol.member.model.vo.PageInfo;
+import com.univol.post.Pagenation;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -74,18 +76,39 @@ public class MemberController {
 	}
 	 
 	/* 마이페이지 */
+	/* 마이페이지 */
 	@GetMapping("/myPage")
-	public ModelAndView myPage(HttpSession session, ModelAndView mv) {
-		Member loginUser = (Member)session.getAttribute("loginUser");
-		if(loginUser != null) {
-			String id = loginUser.getUserId();
-			ArrayList<HashMap<String, Object>> applyList = mService.getApplyList(id);
-			
-			mv.addObject("applyList", applyList);
-			mv.setViewName("users/myPage");
-		}
-		return mv;
+	public ModelAndView myPage(
+	        HttpSession session, ModelAndView mv,
+	        @RequestParam(value = "applyPage", defaultValue = "1") int applyPage,
+	        @RequestParam(value = "myPostPage", defaultValue = "1") int myPostPage) {
 
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    if (loginUser != null) {
+	        String id = loginUser.getUserId();
+	        setApplyList(mv, id, applyPage);
+	        setMyPostList(mv, id, myPostPage);
+	        mv.setViewName("users/myPage");
+	    }
+	    return mv;
+	}
+
+	public void setApplyList(ModelAndView mv, String id, int page) {
+	    int totalCount = mService.getApplyCount(id);
+	    com.univol.post.model.vo.PageInfo pi = Pagenation.getPageInfo(page, totalCount, 5);
+	    if (page < 1) page = 1;                      // 이전 없으면 1페이지 고정
+	    if (page > pi.getMaxPage()) page = pi.getMaxPage(); // 다음 없으면 마지막 페이지 고정
+	    mv.addObject("applyList", mService.getApplyList(pi, id));
+	    mv.addObject("applyPi", pi);
+	}
+
+	public void setMyPostList(ModelAndView mv, String id, int page) {
+	    int totalCount = mService.getMyPostCount(id);
+	   com.univol.post.model.vo. PageInfo pi = Pagenation.getPageInfo(page, totalCount, 5);
+	    if (page < 1) page = 1;
+	    if (page > pi.getMaxPage()) page = pi.getMaxPage();
+	    mv.addObject("myPostList", mService.getMyPostList(pi, id));
+	    mv.addObject("myPostPi", pi);
 	}
 	
 	/*개인정보수정 페이지 이동*/
@@ -136,11 +159,4 @@ public class MemberController {
 		return result;
 	}
 	
-	
-
-	/* 후기게시판 */
-//	@GetMapping("/review")
-//	public String review() {
-//		return "review/review";
-//	}
 }

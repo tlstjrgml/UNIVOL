@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 
 import com.univol.member.model.vo.Member;
-
-import jakarta.servlet.http.HttpSession;
 
 @Mapper
 
@@ -19,12 +18,17 @@ public interface MemberMapper {
 	
     ArrayList<Member> selectAll();
 
-	ArrayList<HashMap<String, Object>> getApplyList(String id);
-
 	int updateMember(Member m);
 
 	Member getMemberById(String userId);
 
 	int deleteMember(Member m);
-
+	
+	int getApplyCount(String userId);
+	
+	int getMyPostCount(String userId);
+	
+	ArrayList<HashMap<String, Object>> getApplyList(String userId, RowBounds rowBounds);
+	
+	ArrayList<HashMap<String, Object>> getMyPostList(String userId, RowBounds rowBounds);
 }

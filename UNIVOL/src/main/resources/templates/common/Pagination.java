@@ -7,7 +7,7 @@ public class Pagination {
 		int pageLimit = 5;
 		int maxPage = (int)Math.ceil((double)listCount / ReviewLimit);
 		int startPage = (currentPage - 1)/pageLimit * pageLimit + 1;
-		int endPage = startPage + pageLimit + 1;
+		int endPage = startPage + pageLimit - 1;
 		if(maxPage < endPage) {
 			endPage = maxPage;
 		}

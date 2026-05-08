@@ -28,7 +28,15 @@
         FROM users
     </select>
 
-    <select id="getApplyList" parameterType="String" resultType="map">
+	  <select id="getApplyCount" parameterType="String" resultType="int">
+	    SELECT COUNT(*) FROM REPLY WHERE USER_ID = #{userId}
+	</select>
+
+	<select id="getMyPostCount" parameterType="String" resultType="int">
+	    SELECT COUNT(*) FROM POST WHERE USER_ID = #{userId}
+	</select>
+
+	<select id="getApplyList" parameterType="String" resultType="map">
 	    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
 	           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE,
 	           CEIL(
@@ -42,7 +50,27 @@
 	    ORDER BY R.C_NUMBER DESC
 	</select>
 
-    <update id="updateMember">
+	<select id="getMyPostList" parameterType="String" resultType="map">
+	    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
+	           TO_CHAR(P.P_DATE, 'YYYY.MM.DD') C_DATE,
+	           P.P_TYPE,
+	           CASE P.P_TYPE
+	               WHEN 'V' THEN CEIL(
+	                   (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'V')
+	                   / 10.0
+	               )
+	               WHEN 'R' THEN CEIL(
+	                   (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'R')
+	                   / 10.0
+	               )
+	           END AS PAGE_NUM
+	    FROM POST P
+	        JOIN USERS U ON P.USER_ID = U.USER_ID
+	    WHERE P.USER_ID = #{userId}
+	    ORDER BY P.P_NUMBER DESC
+	</select>
+	
+	<update id="updateMember">
         UPDATE users
         SET user_name = #{userName},
             birth     = TO_DATE(#{birth}, 'YYYY-MM-DD'),
@@ -64,7 +92,6 @@
     </select>
 	
 
-	
 	<update id="deleteMember">
 		update users
 		set member_status = 'N'
