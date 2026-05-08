@@ -11,13 +11,21 @@ import com.univol.post.model.vo.Post;
 
 public interface PostMapper {
 
-	ArrayList<Post> selectAll(@Param("startRow") int startRow, @Param("endRow")int endRow);
+	ArrayList<Post> selectAll(@Param("startRow") int startRow, @Param("endRow")int endRow, @Param("sort")String sort);
 
 	Post selectOne(int pNumber);
 
 	int insertPost(Post p);
 	
 	int getListCount();
-	
 
+	int getSearchCount(@Param("keyword")String keyword);
+
+	ArrayList<Post> searchPosts(@Param("keyword")String keyword, @Param("sort")String sort, @Param("startRow") int startRow, @Param("endRow")int endRow);
+	
+	ArrayList<Post> selectAllPost();
+	
+	int rollbackPost(Post p);
+	
+	int deletePost(Post p);
 }

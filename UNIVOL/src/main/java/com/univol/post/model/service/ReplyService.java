@@ -18,7 +18,7 @@ public class ReplyService {
 	public int insertReply(Reply reply) {
 		return replyMapper.insertReply(reply);
 	}
-
+	
 	public ArrayList<Reply> selectReplyList(int pNumber) {
 		return replyMapper.selectReplyList(pNumber);
 	}

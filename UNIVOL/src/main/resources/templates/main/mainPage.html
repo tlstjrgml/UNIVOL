@@ -195,12 +195,13 @@
 						rViews.innerText = r.rviews
 						
 						const rLike = document.createElement('td');
+						/*  rLike.innerText = '♥ ' + (r.) */
 						
-						tr.append(rNumber);
-						tr.append(rTitle);
+						tr.append(rNumber, rTitle, rWriter, rViews, rLike);
+						/* tr.append(rTitle);
 						tr.append(rWriter);
 						tr.append(rViews);
-						tr.append(rLike);
+						tr.append(rLike); */
 						
 						tbody.append(tr);
 					}
