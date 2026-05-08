@@ -11,10 +11,16 @@
 				from post p
 				join users u on p.user_id = u.user_id
 				where p.p_type = 'V'
+				order by
+					<choose>
+						<when test="sort == 'views_desc'">p.views DESC</when>
+						<when test="sort == 'asc'">p.views ASC</when>
+						<otherwise>p.p_date DESC</otherwise>
+					</choose>
 			) A
 			where rownum &lt;= #{endRow}
 		)
-		where rn >= #{startRow}
+		where rn &gt;= #{startRow}
 		
 	</select>
 	
@@ -25,11 +31,9 @@
 
 	</select>
 	
-	
-	
 	<insert id="insertPost">
 		insert into post
-		values(ISEQ$$_73096.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId})
+		values(seq_post.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId})
 	</insert>
 	
 	<select id="selectOne" resultType="com.univol.post.model.vo.Post">
@@ -37,6 +41,46 @@
 		from post p
 			join users u on p.user_id = u.user_id
 		where p_number = #{pNumber}
+	</select>
+	
+	
+	<select id="searchPosts" resultType="com.univol.post.model.vo.Post">
+		select * from(
+			select rownum as rn, A.* from(
+				select p.*, u.user_name
+				from post p
+				join users u on p.user_id = u.user_id
+				where p.p_type = 'V'
+				and (p.p_title like '%' || #{keyword} || '%'
+					 or p.contents like '%' || #{keyword} || '%'
+					 or u.user_name like '%' || #{keyword} || '%'
+				     )
+				order by
+					<choose>
+						<when test="sort == 'views_desc'">p.views DESC</when>
+						<when test="sort == 'views_asc'">p.views ASC</when>
+						<otherwise>p.p_date DESC</otherwise>
+					</choose>
+			)A
+			where rownum &lt;= #{endRow}
+		
+		)
+		where rn &gt;= #{startRow}
+	
+	
+	</select>
+	
+	
+	
+	<select id="getSearchCount" resultType="_int">
+		select count(*) from post p
+		join users u on p.user_id = u.user_id
+		where p.p_type = 'V'
+		and (
+			p.p_title like '%' || #{keyword} || '%'
+			or p.contents like '%' || #{keyword} || '%'
+			or u.user_name like '%' || #{keyword} || '%'
+		)
 	</select>
 	
 </mapper>

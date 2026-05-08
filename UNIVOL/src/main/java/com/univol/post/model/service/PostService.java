@@ -16,8 +16,8 @@ public class PostService {
 
 	private final PostMapper mapper;
 	
-	public ArrayList<Post> selectAll(int startRow, int endRow){
-		return mapper.selectAll(startRow, endRow);
+	public ArrayList<Post> selectAll(int startRow, int endRow, String sort){
+		return mapper.selectAll(startRow, endRow, sort);
 	}
 
 
@@ -31,6 +31,16 @@ public class PostService {
 	
 	public int getListCount() {
 		return mapper.getListCount();
+	}
+
+
+	public int getSearchCount(String keyword) {
+		return mapper.getSearchCount(keyword);
+	}
+
+
+	public ArrayList<Post> searchPosts(String keyword, String sort, int startRow, int endRow) {
+		return mapper.searchPosts(keyword, sort, startRow, endRow);
 	}
 	
 	
