@@ -87,12 +87,12 @@
       </thead>
       <tbody>
         <tr th:each="apply : ${applyList}"
-            th:onclick="|location.href='/posts/' + ${apply['P_NUMBER']}|">
-          <td th:text="'#' + ${apply['P_NUMBER']}"></td>
-          <td th:text="${apply['P_TITLE']}"></td>
-          <td th:text="${apply['USER_NAME']}"></td>
-          <td th:text="${apply['C_DATE']}"></td>
-        </tr>
+		    th:onclick="|location.href='/post/' + ${apply['PAGE_NUM']} + '/' + ${apply['P_NUMBER']}|">
+		    <td th:text="'#' + ${apply['P_NUMBER']}"></td>
+		    <td th:text="${apply['P_TITLE']}"></td>
+		    <td th:text="${apply['USER_NAME']}"></td>
+		    <td th:text="${apply['C_DATE']}"></td>
+		</tr>
       </tbody>
     </table>
   </div>

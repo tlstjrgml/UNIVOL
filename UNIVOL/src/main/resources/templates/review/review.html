@@ -137,25 +137,10 @@
 	          <td class="col-views views"   th:text="${r.rViews}"></td>
 	          <td class="col-likes likes"></td>
 	        </tr>
-	
-	<!--         게시글이 없을 때 -->
-	<!--         <tr th:if="${#list.isEmpty(list)}"> -->
-	<!--           <td colspan="5" class="empty">게시글이 없습니다.</td> -->
-	<!--         </tr> -->
 	      </tbody>
 	    </table>
 	  </div>
 	
-<!-- 	  페이지네이션 -->
-<!-- 	  <div class="pagination"> -->
-<!-- 	    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage - 1}|" th:disabled="${currentPage == 1}">&#8249;</button> -->
-<!-- 	    <th:block th:each="i : ${#numbers.sequence(1, totalPages)}"> -->
-<!-- 	      <button class="page-btn" th:classappend="${i == currentPage} ? 'active'" -->
-<!-- 	              th:text="${i}" -->
-<!-- 	              th:onclick="|location.href='?page=' + ${i}|"></button> -->
-<!-- 	    </th:block> -->
-<!-- 	    <button class="page-btn" th:onclick="|location.href='?page=' + ${currentPage + 1}|" th:disabled="${currentPage == totalPages}">&#8250;</button> -->
-<!-- 	  </div> -->
 
 		<nav class="pagination" aria-label="페이지 탐색">
 			<a class="page-btn" 
@@ -172,25 +157,19 @@
 				<span aria-hidden="true">&#8250;</span>
 			</a>
 		</nav>
-	  
-	  
 	
 	</main>
 	
 	<script th:inline="javascript">
 		window.onload = () => {
 			const tbody = document.querySelector('tbody');
-// 			console.log(tbody);
 			const tds = tbody.querySelectorAll('td');
-// 			console.log(tds);
 			const loginUser = /*[[${session.loginUser}]]*/null;
 			for(const td of tds){
 				if(loginUser != null){
 					td.addEventListener('click', e => {
 						const trTds = e.target.parentElement.querySelectorAll('td');
-	// 					console.log(trTds);
 						const reviewId = trTds[0].innerText;
-	// 					console.log(reviewId);
 						location.href = '/review/' + reviewId + "/" + /*[[${pi.currentPage}]]*/2;
 					})
 				}
@@ -199,10 +178,13 @@
 		
 		
 	</script>
+<<<<<<< HEAD
 
 
 
 
 
+=======
+>>>>>>> ab58ab8bafa35c7b6fe7e5107fa530bbf0ddedf5
 </body>
 </html>

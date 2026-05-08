@@ -92,15 +92,15 @@
   <h1 class="page-title">봉사게시판</h1>
 
   <div class="toolbar">
-    <div class="filter-group">
-      <select id="sort-field" onchange="applyFilter()">
-        <option value="latest">최신순</option>
-        <option value="views_desc">조회수 높은순</option>
-        <option value="views_asc">조회수 낮은순</option>
+    <form class="filter-group" method="get" action="/post">
+      <select id="sort-field" name="sort" onchange="applyFilter()">
+        <option value="latest" th:selected="${sort == 'latest'}">최신순</option>
+        <option value="views_desc" th:selected="${sort == 'views_desc'}">조회수 높은순</option>
+        <option value="views_asc" th:selected="${sort == 'views_asc'}">조회수 낮은순</option>
       </select>
-      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
-      <button class="search-btn" onclick="applyFilter()">검색</button>
-    </div>
+      <input th:value="${keyword}" type="text" name="keyword" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
+      <button type="submit" class="search-btn" onclick="applyFilter()">검색</button>
+    </form>
     <button class="write-btn">+ 글쓰기</button>
   </div>
 
@@ -115,7 +115,9 @@
         </tr>
       </thead>
       <tbody id="board-list">
-        <tr th:each="p:${plist}" th:onclick="|location.href='/post/${pi.currentPage}/${p.pNumber}'|">
+
+       <tr th:each="p:${plist}" th:onclick="|location.href='/post/${pi.currentPage}/${p.pNumber}'|">
+
           <td class="col-num num" th:text="${p.pNumber}"></td>
           <td class="col-title">
             <a th:href="@{|/post/${pi.currentPage}/${p.pNumber}|}" style="text-decoration: none; color: inherit; display: block;">
@@ -135,16 +137,42 @@
     </table>
   </div>
   <div class="pagination">
-      <button th:each="n:${#numbers.sequence(pi.startPage, pi.endPage)}" 
+  	<!-- 각 페이지 버튼마다의 form -->
+  	<th:block th:each="n:${#numbers.sequence(pi.startPage, pi.endPage)}">
+  		<form th:id="'pageForm-' + ${n}" action="/post" method="Get" style="display:none;">
+  			<input type="hidden" name="page" th:value="${n}">
+  			<input type="hidden" name="keyword" th:value="${keyword}">
+  			<input type="hidden" name="sort" th:value="${sort}">
+  		</form>
+  		<!-- 페이지 버튼, 자기 form 제출 -->
+      	<button type="button" class="page-btn"
   		  	  th:text="${n}"
-			  th:onClick="|location.href='/post?page=${n}'|">
-	  </button>		
+  		  	  th:classappend="${n == pi.currentPage} ? 'active' : ''"
+			  th:onClick="'goToPage(' +${n}+')'">
+	  	</button>		
   </div>
 </main>
 <script>
 	document.getElementsByClassName('write-btn')[0].addEventListener('click', ()=>{
 		location.href='/post/write';
 	})
+	
+	// 검색 form 제출 
+	const applyFilter = () => {
+		document.querySelector('form').submit();
+		
+	}
+	
+	// 페이지 form 제출
+	function goToPage(pageNum){
+		const form = document.getElementById('pageForm-' + pageNum);
+		form.submit();
+	}
+	
+	
+	
+	
+	
 	
 
 </script>
