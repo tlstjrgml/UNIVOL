@@ -37,7 +37,7 @@ public class PostController {
 			@RequestParam(value = "sort", defaultValue="latest") String sort,
 			@RequestParam(value="keyword", defaultValue="") String keyword) {
 		
-		
+		//정렬 & 검색의 경우 추가.
 		int listCount;
 		if(keyword.isEmpty()) {
 			listCount = pService.getListCount();
@@ -87,9 +87,18 @@ public class PostController {
 	}
 
 	/* 글 상세조회 */
+	// 상세조회 하려고 클릭하면 조회수 오르게 장치.
 	@GetMapping("/post/{currentPage}/{pNumber}")
-	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
-	    Post post = pService.selectOne(pNumber);
+	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model, HttpSession session) {
+	    //로그인한 사용자의 정보 가져오기.
+		System.out.println("selectOne 몇 번 호출되는 지 검사 ");// ???왜 2번씩 찍히지?????
+
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		String userId = (loginUser != null ) ? loginUser.getUserId() : null;
+
+
+
+		Post post = pService.selectOne(pNumber, userId); // selectOne에 userId 넘기기.
 	    if(post == null) {
 	        return "error/404";
 	    }

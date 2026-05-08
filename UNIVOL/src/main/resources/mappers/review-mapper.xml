@@ -22,6 +22,7 @@
 		<result column="P_DATE" property="rDate"/>
 		<result column="P_TYPE" property="pType"/>
 		<result column="USER_ID" property="userId"/>
+		<result column="USER_NAME" property="userName"/>
 		<result column="P_STATUS" property="rStatus"/>
 	</resultMap>
 	

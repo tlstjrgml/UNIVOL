@@ -3,7 +3,7 @@
 
 <mapper namespace="com.univol.post.model.Mapper.PostMapper">
 
-	<select id="selectAll" resultType="com.univol.post.model.vo.Post">
+	<select id="selectAll" resultMap="postResultSet">
 
 		select * from (
 			select rownum as rn, A.* from(
@@ -34,8 +34,21 @@
 		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default)
 	</insert>
 	
-	<select id="selectOne" resultType="com.univol.post.model.vo.Post">
-		select p.*, u.user_name 
+	<resultMap type="com.univol.post.model.vo.Post" id="postResultSet">
+		<result column="p_number" property="pNumber"/>
+		<result column="p_title" property="pTitle"/>
+		<result column="contents" property="contents"/>
+		<result column="views" property="views"/>
+		<result column="p_date" property="pDate"/>
+		<result column="p_type" property="pType"/>
+		<result column="user_id" property="userId"/>
+		<result column="p_status" property="pStatus"/>
+		<result column="likes" property="likes"/>
+		<result column="user_name" property="userName"/>
+	</resultMap>
+
+	<select id="selectOne" resultMap="postResultSet">
+		select p.*, u.user_name
 		from post p
 			join users u on p.user_id = u.user_id
 		where p_number = #{pNumber}
@@ -57,7 +70,7 @@
 		where p_number = #{pNumber}
 	</update>
 	
-	<select id="searchPosts" resultType="com.univol.post.model.vo.Post">
+	<select id="searchPosts" resultMap="postResultSet">
 		select * from(
 			select rownum as rn, A.* from(
 				select p.*, u.user_name
@@ -76,11 +89,11 @@
 					</choose>
 			)A
 			where rownum &lt;= #{endRow}
-		
+
 		)
 		where rn &gt;= #{startRow}
-	
-	
+
+
 	</select>
 	
 	
@@ -96,6 +109,13 @@
 		)
 	</select>
 	
+	
+	<update id="updateViews" parameterType="_int">
+		update post
+		set views = views + 1
+		where p_number = #{pNumber}
+
+	</update>
 	
 	
 </mapper>

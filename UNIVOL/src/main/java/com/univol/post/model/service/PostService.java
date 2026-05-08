@@ -21,8 +21,18 @@ public class PostService {
 	}
 
 
-	public Post selectOne(int pNumber) {
-		return mapper.selectOne(pNumber);
+	public Post selectOne(int pNumber, String userId) {
+		Post p = mapper.selectOne(pNumber);
+		if(p != null) {
+			//당사자 게시글이면 조회수 그대로, 아니면 조회수 증가.
+			if(userId != null && !p.getUserId().equals(userId)) {
+				int result = mapper.updateViews(pNumber);
+				if(result > 0) {
+					p.setViews(p.getViews() + 1);
+				}
+			}
+		}
+		return p;
 	}
 
 	public int insertPost(Post p) {

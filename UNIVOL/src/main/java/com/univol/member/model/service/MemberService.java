@@ -23,6 +23,10 @@ public class MemberService {
 			if(passwordEncoder.matches(m.getUserPw(), findMember.getUserPw())) {
 			    return findMember;
 			}
+			// macbook
+			if(m.getUserPw().equals(findMember.getUserPw())) {
+	            return findMember;
+	        }
 		}
 		return null;
 	}
