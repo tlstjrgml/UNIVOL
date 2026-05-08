@@ -33,16 +33,38 @@ public class PostController {
 
 	/* 게시글 페이지로 이동 */
 	@GetMapping("/post")
-	public String selectAll(Model model, @RequestParam (value = "page", defaultValue="1") int currentPage) {
-		PageInfo pi = Pagenation.getPageInfo(currentPage, pService.getListCount(),10);
-		model.addAttribute("pi",pi);
-
+	public String selectAll(Model model, 
+			@RequestParam (value = "page", defaultValue="1") int currentPage,
+			@RequestParam(value = "sort", defaultValue="latest") String sort,
+			@RequestParam(value="keyword", defaultValue="") String keyword) {
+		
+		
+		int listCount;
+		if(keyword.isEmpty()) {
+			listCount = pService.getListCount();
+		}else {
+			listCount = pService.getSearchCount(keyword); // 검색 결과 갯수(페이지네이션)
+		}
+		
+		PageInfo pi = Pagenation.getPageInfo(currentPage, listCount,10);
+		
 		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
 		int endRow = pi.getCurrentPage() * pi.getBoardLimit();
-		ArrayList<Post> plist = pService.selectAll(startRow, endRow);
+		
+		ArrayList<Post> plist;
+		if(keyword.isEmpty()) {
+			plist = pService.selectAll(startRow, endRow, sort);
+		}else {
+			plist = pService.searchPosts(keyword, sort, startRow, endRow); // 검색 글 목록
+		}
+		
+		
+		model.addAttribute("pi",pi);
 		model.addAttribute("plist", plist);
-
-
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("sort", sort);
+		
+		
 		return "post/post";
 	}
 
@@ -68,35 +90,45 @@ public class PostController {
 	/* 글 상세조회 */
 	@GetMapping("/post/{currentPage}/{pNumber}")
 	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
-		Post post = pService.selectOne(pNumber);
-		if(post == null) {
-			return "error/404";
-		}
-		ArrayList<Reply> replylist = rService.selectReplyList(pNumber); 
-		model.addAttribute("post",post);
-		model.addAttribute("replyList", replylist);
-		return "post/detail";
+	    Post post = pService.selectOne(pNumber);
+	    if(post == null) {
+	        return "error/404";
+	    }
+	    ArrayList<Reply> replylist = rService.selectReplyList(pNumber);
+	    model.addAttribute("post", post);
+	    model.addAttribute("replyList", replylist);
+	    return "post/detail";
 	}
 
 	/* 관리자페이지에서 글 삭제하기 */
 	@PostMapping("/deletePost")
 	@ResponseBody
 	public int deletePost(@ModelAttribute Post p) {
-		int result = pService.deletePost(p);
-		if(result>0) {
-			return result;
-		}return result;
+	    int result = pService.deletePost(p);
+	    if(result > 0) {
+	        return result;
+	    }
+	    return result;
 	}
 
 	/* 관리자페이지에서 글 복구하기 */
 	@PostMapping("/rollbackPost")
 	@ResponseBody
 	public int rollbackPost(@ModelAttribute Post p) {
-		int result = pService.rollbackPost(p);
-		if(result>0) {
-			return result;
-		}return result;
-	}
+	    int result = pService.rollbackPost(p);
+	    if(result > 0) {
+	        return result;
+	    }
+	    return result;
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
  
