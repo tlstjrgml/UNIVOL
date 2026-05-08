@@ -28,13 +28,9 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService mService;
-<<<<<<< HEAD
 	private final PostService pService;
 	
-=======
 	private final BCryptPasswordEncoder passwordEncoder;
->>>>>>> origin/정현종
-
 	
 	/* 메인 페이지 */
 	@GetMapping("/")

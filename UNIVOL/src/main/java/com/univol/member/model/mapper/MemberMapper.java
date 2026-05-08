@@ -27,7 +27,6 @@ public interface MemberMapper {
 
 	int deleteMember(Member m);
 
-<<<<<<< HEAD
 	int activeMember(Member m);
 
 	int banMember(Member m);
@@ -37,6 +36,4 @@ public interface MemberMapper {
 	int toNormalMember(Member m);	
 
 
-=======
->>>>>>> origin/정현종
 }
