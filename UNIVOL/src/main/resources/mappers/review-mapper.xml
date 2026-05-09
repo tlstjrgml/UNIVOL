@@ -12,7 +12,7 @@
 		from post
 			 join users using(user_id)
 		where p_type = #{c}
-		order by p_number desc
+		order by p_number desc 
 	</select>
 	<resultMap type="com.univol.review.model.vo.Review" id="reviewResultSet">
 		<result column="p_number" property="rNumber"/>
@@ -29,10 +29,11 @@
 		select *
 		from post
 			 join users using(user_id)
-		where p_status = 'Y' and p_number = #{id}
+		where p_number = #{id} and p_status = 'Y'
+		
 	</select>
 
-	<update id="updateReview">
+	<update id="updateView">
 		update post
 		set views = views + 1
 		where p_number = #{id}
@@ -44,8 +45,38 @@
   		where p_number=#{rNumber} and user_id=#{userId}
 	</update>
 
-
-
+	<insert id="insertReview">
+		<selectKey order="BEFORE" resultType="_int" keyProperty="rNumber">
+			select seq_post.nextval from dual
+		</selectKey>
+		insert into post
+		values(#{rNumber}, #{rTitle}, #{rContents}, default, sysdate, #{pType}, #{userId})
+	</insert>
+	
+	<select id="selectTop" resultMap="reviewResultSet">
+		select *
+		from(select *
+		    from post
+		        join users using(user_id)
+		        where p_type = 'R' and p_status = 'Y' 
+		        order by views desc)
+		where rownum <![CDATA[<]]> = 5
+	</select>
+	
+<!-- 	댓글 갖고오기 -->
+	<select id="selectReplyList">
+		select *
+		from reply
+			join users using(user_id)
+		where p_number = #{pNumber} and c_status = 'Y'
+		order by c_number desc
+	</select>
+	
+<!-- 	댓글 작성 -->
+	<insert id="insertReply">
+		insert into reply
+		values(seq_reply.nextval, #{comments}, default, #{pNumber}, #{userId}, default)
+	</insert>
 
 
 </mapper>

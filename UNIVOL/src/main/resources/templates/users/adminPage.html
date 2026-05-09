@@ -1,21 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>UNIVOL 관리자 페이지</title>
-
+	
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --bg: #f5f5f5;
-            --surface: #ffffff;
-            --primary: #424B1F;
-            --text: #222222;
-            --muted: #777777;
-            --border: #cccccc;
-        }
+       
 
         * {
             box-sizing: border-box;
@@ -25,8 +19,8 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: #f5f5f5;
+            color: #222222;
             padding: 30px;
         }
 
@@ -38,7 +32,7 @@
         .logo {
             font-family: 'Playfair Display', serif;
             font-size: 40px;
-            color: var(--primary);
+            color:  #424B1F;
             letter-spacing: 2px;
             text-align: center;
             margin-bottom: 10px;
@@ -53,13 +47,13 @@
 
         .divider {
             border: none;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid #cccccc;
             margin: 10px 0 20px 0;
         }
 
         .card {
-            background-color: var(--surface);
-            border: 1px solid var(--border);
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             padding: 20px;
@@ -91,7 +85,7 @@
             padding: 8px 15px;
             cursor: pointer;
             border-radius: 10px;
-            background-color: var(--primary);
+            background-color:  #424B1F;
             color: white;
             border: none;
         }
@@ -100,9 +94,11 @@
             background-color: #2f3616;
         }
 
-        .ban-btn {
+        .btn {
             background-color: #888888;
         }
+        
+        
 
         .ban-btn:hover {
             background-color: #666666;
@@ -121,26 +117,43 @@
         <hr class="divider">
 
         <div class="card">
-            <table>
+        	<button type="button" id="MemberToggleBtn">회원 목록 펼치기 ▼</button>
+        	
+            <table id="memberTable">
                 <thead>
                     <tr>
                         <th>아이디</th>
                         <th>이름</th>
                         <th>전화번호</th>
                         <th>성별</th>
+                        <th>관리자여부</th>
                         <th>회원 상태 변경</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="m : ${mlist}">
+                    <tr th:each="m : ${mlist}" data-userid = "${m.userId}">
                         <td th:text="${m.userId}"></td>
                         <td th:text="${m.userName}"></td>
                         <td th:text="${m.phone}"></td>
                         <td th:text="${m.gender}"></td>
                         <td>
-                            <div class="button-group">
-                                <button type="button" class="active-btn">활동</button>
-                                <button type="button" class="ban-btn">정지</button>
+                        	<div th:if="${m.isAdmin == 'Y'}" class="button-goup">
+                        		<button  type="button" class="btn admin-btn" style="background-color:#424B1F;">관리</button>
+       							<button type="button" class="btn normal-btn" style="background-color:#888888;">일반</button>
+                        	</div>
+                        	<div th:if="${m.isAdmin == 'N'}" class="button-goup">
+                        		<button  type="button" class="btn admin-btn" style="background-color:#888888;">관리</button>
+       							<button type="button" class="btn normal-btn" style="background-color:#424B1F;">일반</button>
+                        	</div>
+                        </td>	
+                        <td>
+                            <div th:if="${m.memberStatus == 'Y'}" class="button-group">
+                                <button type="button" class="btn active-btn" style="background-color:blue;">활동</button>
+                                <button type="button" class="btn ban-btn" style="background-color:#888888;">정지</button>
+                            </div>
+                            <div th:if="${m.memberStatus == 'N'}"class="button-group">
+                                <button type="button" class="btn active-btn" style="background-color:#888888;">활동</button>
+                                <button type="button" class="btn ban-btn" style="background-color:red;">정지</button>
                             </div>
                         </td>
                     </tr>
@@ -148,20 +161,227 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        
+        <!-- 전체 게시글 조회 -->
+         <div class="card">
+        	<button type="button" id="PostToggleBtn">게시글 목록 펼치기 ▼</button>
+        	
+            <table id="postTable">
+                <thead>
+                    <tr>
+                    	<th>글번호</th>
+                        <th>아이디</th>
+                        <th>내용</th>
+                        <th>조회수</th>
+                        <th>좋아요 수 </th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p: ${plist}">
+                        <td th:text="${p.pNumber}"></td>
+                        <td th:text="${p.userId}"></td>
+                        <td th:text="${p.contents}"></td>
+                        <td th:text="${p.views}"></td>
+                        <td th:text="${p.likes}"></td>
+                        <td>
+                        	<div th:if="${p.pStatus.toString() == 'Y'}">
+	                        	<button type="button" class="btn rollback-btn" style="background-color:blue; color:white;">Y</button>
+	                        	<button type="button" class="btn delete-btn" style="background-color:#888888; color:white;">N</button>
+                        	</div>
+                        	<div th:if = "${p.pStatus.toString() == 'N'}">
+                        		<button type="button" class = "btn rollback-btn" style="background-color:#888888; color:white">Y</button>
+                        		<button type="button" class="btn delete-btn" style="background-color:red; color:white;">N</button>
+                        	</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 전체 댓글 조회 -->
+        <div class="card">
+        	<button type="button" id="ReplyToggleBtn">댓글 목록 펼치기 ▼</button>
+        	
+        	<table id="replyTable">
+        		<thead>
+        			<tr>
+        				<th>댓글 번호</th>
+        				<th>아이디</th>
+        				<th>내용</th>
+        				<th>상태</th>
+        			</tr>
+        		</thead>
+        		<tbody>
+        			<tr th:each="r:${rlist}">
+        				<td th:text="${수정하기}"></td>
+        				<td th:text="${수정하기}"></td>
+        				<td th:text="${수정하기}"></td>
+        				<td>
+        					<div th:if="${}">
+        						<button type="button" class="btn replyrollback-btn" style="background-color:blue; color: white;">Y</button>
+        						<button type="button" class="btn replydelete-btn" style="background-color:#888888; color: white">N</button>
+        					</div>
+        					<div th:if="${}">
+        						<button type="button" class="btn replyrollback-btn" style="background-color:#888888; color:white;">Y</button>
+        						<button type="button" class="btn replydelete-btn" style="background-color:red; color:white">N</button>
+        					</div>
+        				</td>
+        			</tr>
+        		</tbody>
+        	</table>
+        </div>
 
     <script>
-        document.querySelectorAll(".active-btn").forEach(btn => {
-            btn.addEventListener("click", function() {
-                alert("회원 상태를 활동으로 변경했습니다");
-            });
-        });
-
-        document.querySelectorAll(".ban-btn").forEach(btn => {
-            btn.addEventListener("click", function() {
-                alert("회원 상태를 정지로 변경했습니다");
-            });
-        });
+    
+	    /* 관리자여부 변경 */
+	    document.querySelectorAll(".admin-btn").forEach(function(btn){
+	        btn.addEventListener('click', function(){
+	            const tr = this.parentElement.parentElement.parentElement;
+	            const userId = tr.querySelector('td').innerText;
+	            $.ajax({
+	                url:'/toAdminMember',
+	                type:'post',
+	                data:{userId:userId},
+	                success: function(result){
+	                    btn.style.backgroundColor = "#424B1F";
+	                    btn.nextElementSibling.style.backgroundColor = "#888888";
+	                }
+	            });
+	        });
+	    });
+	
+	    document.querySelectorAll(".normal-btn").forEach(function(btn){
+	        btn.addEventListener('click', function(){
+	            const tr = this.parentElement.parentElement.parentElement;
+	            const userId = tr.querySelector('td').innerText;
+	            $.ajax({
+	                url:'/toNormalMember',
+	                type:'post',
+	                data:{userId:userId},
+	                success: function(result){
+	                    btn.style.backgroundColor = "#424B1F";
+	                    btn.previousElementSibling.style.backgroundColor = "#888888";
+	                }
+	            });
+	        });
+	    });
+	
+	    /* 활동상태변경 */
+	    document.querySelectorAll(".ban-btn").forEach(function(btn){
+	        btn.addEventListener('click', function(){
+	            const tr = this.parentElement.parentElement.parentElement;
+	            const userId = tr.querySelector('td').innerText;
+	            $.ajax({
+	                url:'/banMember',
+	                type:'post',
+	                data:{userId:userId},
+	                success: function(result){
+	                    btn.style.backgroundColor = "red";
+	                    btn.previousElementSibling.style.backgroundColor = "#888888";
+	                }
+	            });
+	        });
+	    });
+	
+	    document.querySelectorAll(".active-btn").forEach(function(btn){
+	        btn.addEventListener('click', function(){
+	            const tr = this.parentElement.parentElement.parentElement;
+	            const userId = tr.querySelector('td').innerText;
+	            $.ajax({
+	                url:'/activeMember',
+	                type:'post',
+	                data:{userId:userId},
+	                success: function(result){
+	                    btn.style.backgroundColor = "blue";
+	                    btn.nextElementSibling.style.backgroundColor = "#888888";
+	                }
+	            });
+	        });
+	    });
+    
+	    
+    	/* 글 삭제 */
+    	document.querySelectorAll(".delete-btn").forEach(function(btn){
+			btn.addEventListener('click', function(){
+				const tr = this.parentElement.parentElement.parentElement;
+				const pNumber = tr.querySelector('td').innerText;
+				
+				$.ajax({
+					url:'/deletePost',
+					type:'post',
+					data:{pNumber:pNumber},
+					success: function(result){
+						btn.style.backgroundColor = "red";
+						btn.previousElementSibling.style.backgroundColor = "#888888";
+					}
+				});
+			});
+    	});
+    	
+    	/* 글 복구 */
+ 	    document.querySelectorAll(".rollback-btn").forEach(function(btn){
+			btn.addEventListener('click', function(){
+				const tr = this.parentElement.parentElement.parentElement;
+				const pNumber = tr.querySelector('td').innerText;
+				
+				$.ajax({
+					url:'/rollbackPost',
+					type:'post',
+					data:{pNumber:pNumber},
+					success: function(result){
+						btn.style.backgroundColor = "blue";
+						btn.nextElementSibling.style.backgroundColor = "#888888";
+					}
+				});
+			});
+	   	});
+    	
+    	/* 댓글 삭제 */
+    	document.querySelectorAll(".replydelete-btn").forEach(function(btn){
+			btn.addEventListener('click',function(){
+				const tr = this.parentElement.parentElement.parentElement;
+				const rNumber = tr.querySelector('td').innerText;
+				
+				$.ajax({
+					url: '/deleteReply',
+					type:'post',
+					data:{rNumber:rNumber},
+					success:function(result){
+						btn.style.backgroundColor = "red";
+						btn.nextElementSibling.style.backgroundColor = "#888888";
+					}
+				});
+			});
+	    });
+    	/* 댓글 복구 */
+    	document.querySelectorAll(".replyrollback-btn").forEach(function(btn){
+			btn.addEventListener('click', function(){
+				const tr = this.parentElement.parentElement.parentElement;
+				const rNumber = tr.querySelector('td').innerText;
+				
+				$.ajax({
+					url: '/rollbackReply',
+					type:'post',
+					data:{rNumber:rNumber},
+					success:function(result){
+						btn.style.backgroundColor = "blue";
+						btn.previousElementSibling.style.backgroundColor = "#888888"
+					}
+				});
+			});
+    	});
+    	$('#MemberToggleBtn').on('click', function(){
+    	    $('#memberTable').slideToggle();
+    	});
+    	
+    	$('#PostToggleBtn').on('click', function(){
+			$('#postTable').slideToggle();
+    	});
+    	
+    	$('#ReplyToggleBtn').on('click',function(){
+			$('#replyTable').slideToggle();
+    	});
     </script>
 </body>
 </html>

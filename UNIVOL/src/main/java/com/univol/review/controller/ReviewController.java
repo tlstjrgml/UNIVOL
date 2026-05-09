@@ -17,6 +17,7 @@ import com.univol.member.model.vo.Member;
 import com.univol.member.model.vo.PageInfo;
 import com.univol.review.model.exception.ReviewException;
 import com.univol.review.model.service.ReviewService;
+import com.univol.review.model.vo.Reply;
 import com.univol.review.model.vo.Review;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +43,25 @@ public class ReviewController {
 		return mv;
 	}
 	
+	@GetMapping("write")
+	public String writeReview() {
+		return "review/write";
+	}
+	
+	@PostMapping("insert")
+	public String insertReview(@ModelAttribute Review r, HttpSession session) {
+		String ReviewWriter = ((Member)session.getAttribute("loginUser")).getUserId();
+		r.setUserId(ReviewWriter);
+		r.setPType("R");
+		
+		int result = rService.insertReview(r); 
+		if(result > 0) {
+			return "redirect:/review";
+		} else {
+			throw new ReviewException("게시글 작성을 실패했습니다.");
+		}
+	}
+	
 	@GetMapping("/{id}/{page}")
 	public String selectReview(@PathVariable("id") int bId, @PathVariable("page") int page,
 							HttpSession session, Model model) {
@@ -52,9 +72,11 @@ public class ReviewController {
 		}
 		
 		Review r = rService.selectReview(bId, id);
+		ArrayList<Reply> list = rService.selectReplyList(bId);
 		if(r != null) {
 			model.addAttribute("r", r);
 			model.addAttribute("page", page);
+			model.addAttribute("list", list);
 			return "review/detail";
 		} else {
 			throw new ReviewException("게시글 상세보기를 실패하였습니다.");
@@ -109,6 +131,22 @@ public class ReviewController {
 	    } else {
 	        throw new ReviewException("수정 실패");
 	    }
+	}
+	
+	@GetMapping("top")
+	@ResponseBody
+	public ArrayList<Review> selectTop(){
+		ArrayList<Review> list = rService.selectTop();
+		return list;
+	}
+	
+	@GetMapping("rinsert")
+	@ResponseBody
+	public ArrayList<Reply> insertReply(@ModelAttribute Reply r){
+		int result = rService.insertReply(r);
+		ArrayList<Reply> list = rService.selectReplyList(r.getPNumber());
+		System.out.println(r.getUserId());
+		return list;
 	}
 	
 	

@@ -15,7 +15,7 @@
 
 	<insert id="insertReply" parameterType="com.univol.post.model.vo.Reply">
 		INSERT INTO REPLY (C_NUMBER, COMMENTS, C_DATE, P_NUMBER, USER_ID)
-		VALUES (REPLY_SEQ.NEXTVAL, #{comments}, SYSDATE, #{pNumber}, #{userId})
+		VALUES (SEQ_REPLY.NEXTVAL, #{comments}, SYSDATE, #{pNumber}, #{userId})
 	</insert>
 
 	<select id="selectReplyList" parameterType="int" resultMap="replyResultMap">
