@@ -4,17 +4,18 @@
 <mapper namespace="com.univol.post.mapper.ReplyMapper">
 
 	<resultMap id="replyResultMap" type="com.univol.post.vo.Reply">
-		<id column="C_NUMBER" property="cNumber" javaType="int" />
-		<result column="COMMENTS" property="comments" javaType="java.lang.String" />
-		<result column="C_DATE" property="cDate" javaType="java.lang.String" />
-		<result column="P_NUMBER" property="pNumber" javaType="int" />
-		<result column="USER_ID" property="userId" javaType="java.lang.String" />
-		<result column="USER_NAME" property="userName" javaType="java.lang.String" />
+		<id column="C_NUMBER" property="cNumber" />
+		<result column="COMMENTS" property="comments"  />
+		<result column="C_DATE" property="cDate"  />
+		<result column="P_NUMBER" property="pNumber" />
+		<result column="USER_ID" property="userId"  />
+		<result column="USER_NAME" property="userName" />
+		<result column="C_STATUS" property="cStatus" />
 	</resultMap>
 
 	<insert id="insertReply" parameterType="com.univol.post.vo.Reply">
-		INSERT INTO REPLY (C_NUMBER, COMMENTS, C_DATE, P_NUMBER, USER_ID)
-		VALUES (SEQ_REPLY.NEXTVAL, #{comments}, SYSDATE, #{pNumber}, #{userId})
+		INSERT INTO REPLY (C_NUMBER, COMMENTS, C_DATE, P_NUMBER, USER_ID, C_STATUS)
+		VALUES (SEQ_REPLY.NEXTVAL, #{comments}, SYSDATE, #{pNumber}, #{userId}, default)
 	</insert>
 
 	<select id="selectReplyList" parameterType="int" resultMap="replyResultMap">
@@ -23,7 +24,8 @@
 		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
 		       R.P_NUMBER,
 		       R.USER_ID,
-		       U.USER_NAME
+		       U.USER_NAME,
+		       R.C_STATUS
 		FROM REPLY R
 		JOIN USERS U ON R.USER_ID = U.USER_ID
 		WHERE R.P_NUMBER = #{pNumber}
@@ -36,7 +38,8 @@
 		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
 		       R.P_NUMBER,
 		       R.USER_ID,
-		       U.USER_NAME
+		       U.USER_NAME,
+		       R.C_STATUS
 		FROM REPLY R
 		JOIN USERS U ON R.USER_ID = U.USER_ID
 		WHERE R.C_NUMBER = #{cNumber}
@@ -59,7 +62,8 @@
 		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
 		       R.P_NUMBER,
 		       R.USER_ID,
-		       U.USER_NAME
+		       U.USER_NAME,
+		       R.C_STATUS
 		FROM REPLY R
 		JOIN USERS U ON R.USER_ID = U.USER_ID
 		ORDER BY R.C_NUMBER DESC

@@ -88,7 +88,9 @@ public class PostController {
 
 	/* 글 상세조회 */
 	@GetMapping("/post/{currentPage}/{pNumber}")
-	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model, HttpSession session) {
+	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model, HttpSession session,
+							@RequestParam(value="sort", defaultValue="latest") String sort,
+							@RequestParam(value="keyword", defaultValue="") String keyword) {
 	    Member loginUser = (Member)session.getAttribute("loginUser");
 	    String userId = null;
 	    if(loginUser != null) {
@@ -102,6 +104,8 @@ public class PostController {
 	    model.addAttribute("post", post);
 	    model.addAttribute("replyList",replyList );
 	    model.addAttribute("currentPage", currentPage);
+	    model.addAttribute("sort", sort);
+	    model.addAttribute("keyword", keyword);
 	    return "post/detail";
 	}
 
