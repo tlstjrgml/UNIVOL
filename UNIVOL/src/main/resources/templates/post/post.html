@@ -77,21 +77,24 @@
         </tr>
       </thead>
       <tbody id="board-list">
-        <tr th:each="p:${plist}"
-            th:onclick="|location.href='/post/${pi.currentPage}/${p.pNumber}?sort=${sort}&keyword=${keyword}'|">
-          <td class="col-num num" th:text="${p.pNumber}"></td>
-          <td class="col-title">
-            <div class="title-wrap">
-              <th:block th:if="${p.isNotice == 'Y'}">
-                <span class="badge-notice">공지</span>
-              </th:block>
-              <span class="title" th:text="${p.pTitle}"></span>
-              <span class="date" th:text="${p.pDate}"></span>
-            </div>
-          </td>
-          <td class="col-author author" th:text="${p.userName}"></td>
-          <td class="col-views views" th:text="${p.views}"></td>
-        </tr>
+    <tr th:each="p:${plist}">
+        <td class="col-num num" th:text="${p.pNumber}"></td>
+        <td class="col-title">
+            <a th:href="@{/post/{page}/{pNumber}(page=${pi.currentPage}, pNumber=${p.pNumber}, sort=${sort}, keyword=${keyword})}"
+               style="text-decoration:none; color:inherit; display:block;">
+                <div class="title-wrap">
+                    <th:block th:if="${p.isNotice == 'Y'}">
+                        <span class="badge-notice">공지</span>
+                    </th:block>
+                    <span class="title" th:text="${p.pTitle}"></span>
+                    <span class="date" th:text="${p.pDate}"></span>
+                </div>
+            </a>
+        </td>
+        <td class="col-author author" th:text="${p.userName}"></td>
+        <td class="col-views views" th:text="${p.views}"></td>
+    </tr>
+</tbody>
       </tbody>
     </table>
   </div>

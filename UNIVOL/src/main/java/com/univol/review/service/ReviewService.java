@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.univol.common.PageInfo;
 import com.univol.review.mapper.ReviewMapper;
 import com.univol.review.vo.Review;
+import com.univol.review.vo.ReviewReply;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,11 +53,15 @@ public class ReviewService {
 		return mapper.selectTop();
 	}
 
-	public ArrayList<com.univol.review.vo.ReviewReply> selectReplyList(int bId) {
+	public ArrayList<ReviewReply> selectReplyList(int bId) {
 		return mapper.selectReplyList(bId);
 	}
 
-	public int insertReply(com.univol.review.vo.ReviewReply r) {
+	public int deleteReview(int rNumber) {
+		return mapper.deleteReview(rNumber);
+	}
+
+	public int insertReply(ReviewReply r) {
 		return mapper.insertReply(r);
 	}
 
@@ -93,6 +98,10 @@ public class ReviewService {
 
 	public int likeCount(int pNumber) {
 		return mapper.likeCount(pNumber);
+	}
+
+	public int reviewUpdate(ReviewReply reply) {
+		return mapper.reviewUpdate(reply);
 	}
 
 }

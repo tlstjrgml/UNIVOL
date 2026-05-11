@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import com.univol.review.vo.Review;
+import com.univol.review.vo.ReviewReply;
 
 @Mapper
 public interface ReviewMapper {
@@ -28,9 +29,9 @@ public interface ReviewMapper {
 
 	ArrayList<Review> selectTop();
 
-	ArrayList<com.univol.review.vo.ReviewReply> selectReplyList(int bId);
+	ArrayList<ReviewReply> selectReplyList(int bId);
 
-	int insertReply(com.univol.review.vo.ReviewReply r);
+	int insertReply(ReviewReply r);
 
 	int getSearchCount(@Param("keyword") String keyword);
 
@@ -43,5 +44,9 @@ public interface ReviewMapper {
 	int insertLike(HashMap<String, Object> map);
 
 	int likeCount(int pNumber);
+
+	int deleteReview(int rNumber);
+
+	int reviewUpdate(ReviewReply reply);
 
 }

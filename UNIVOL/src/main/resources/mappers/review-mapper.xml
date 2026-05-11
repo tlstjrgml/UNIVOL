@@ -4,20 +4,20 @@
 	<select id="getListCount">
 		select count(*)
 		from post
-		where p_type = #{c}
+		where p_type = #{c} and p_status = 'Y'
 	</select>
 
 	<select id="selectReviewList" resultMap="reviewResultSet">
-    select p.*, u.user_name
-    from post p
-    join users u on p.user_id = u.user_id
-    where p.p_type = #{pType}
-    order by
-    <choose>
-        <when test="sort == 'views_desc'">p.views DESC</when>
-        <when test="sort == 'views_asc'">p.views ASC</when>
-        <otherwise>p.p_date DESC</otherwise>
-    </choose>
+		select p.*, u.user_name
+		from post p
+		join users u on p.user_id = u.user_id
+		where p.p_type = #{pType} and p.p_status = 'Y'
+		order by
+		<choose>
+		    <when test="sort == 'views_desc'">p.views DESC</when>
+		    <when test="sort == 'views_asc'">p.views ASC</when>
+		    <otherwise>p.p_date DESC</otherwise>
+		</choose>
 	</select>
 
 	<resultMap type="com.univol.review.vo.Review" id="reviewResultSet">
@@ -69,6 +69,12 @@
 		where rownum <![CDATA[<]]> = 5
 	</select>
 
+	<update id="deleteReview">
+	    UPDATE POST
+	    SET P_STATUS = 'N'
+	    WHERE P_NUMBER = #{rNumber}
+	</update>
+
 	<select id="selectReplyList">
 		select *
 		from reply
@@ -81,6 +87,13 @@
 		insert into reply
 		values(seq_reply.nextval, #{comments}, default, #{pNumber}, #{userId}, default)
 	</insert>
+
+	<!-- 댓글 수정 -->
+	<update id="reviewUpdate">
+		update reply
+		set comments=#{comments}
+		where c_number=#{cNumber} and user_id=#{userId} and c_status='Y'
+	</update>
 
 	<select id="getSearchCount" resultType="_int">
 		select count(*) from post p
