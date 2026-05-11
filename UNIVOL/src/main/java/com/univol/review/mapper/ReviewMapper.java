@@ -17,8 +17,13 @@ public interface ReviewMapper {
 
 	Review selectReview(int bId);
 
+<<<<<<< HEAD
+	int updateReview(int bId);
+ 
+=======
 	int updateView(int bId);
 
+>>>>>>> b365c3c56fc67378f98c1bd4481f3c37d75f8d86
 	int updateReviews(Review r);
 
 	int insertReview(Review r);
