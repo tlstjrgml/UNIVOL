@@ -237,9 +237,17 @@
         <div class="unv-row">
 
           <div class="unv-field full">
-            <label for="pTitle">제목</label>
-            <input type="text" id="pTitle" name="pTitle" placeholder="제목을 입력하세요" required>
-          </div>
+   			 <label for="pTitle">제목</label>
+  			  <input type="text" id="pTitle" name="pTitle" placeholder="제목을 입력하세요" required>
+		 </div>
+
+		<!-- 관리자만 보이는 공지 체크박스 -->
+		<div class="unv-field full" th:if="${session.loginUser != null && session.loginUser.isAdmin == 'Y'}">
+		    <label>
+		        <input type="checkbox" name="isNotice" value="Y">
+		        공지사항으로 등록
+		    </label>
+		</div>
 
           <div class="unv-field">
             <label for="pPlace">봉사 장소</label>

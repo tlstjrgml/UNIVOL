@@ -89,23 +89,33 @@
     <a class="back-btn" th:href="@{/post(page=${currentPage})}">← 목록으로</a>
 
     <div class="post-header">
-      <h1 class="post-title" th:text="${post.pTitle}"></h1>
+       <div style="display:flex; align-items:baseline; gap:12px;">
+   		  <h1 class="post-title" th:text="${post.pTitle}"></h1>
+	  </div>
       <div class="post-meta">
         <div class="meta-item">
           <span th:text="${post.userName}"></span>
         </div>
         <div class="meta-item">
-          <span th:text="${#dates.format(post.pDate, 'yyyy-MM-dd')}"></span>
+          <span th:text="${#dates.format(post.createDate, 'yyyy-MM-dd')}"></span>
         </div>
         <div class="meta-item">
           <span>조회수</span>
           <span th:text="${post.views}"></span>
         </div>
       </div>
+      
     </div>
-
-    <div class="post-content" th:utext="${post.contents}"></div>
-
+    <div class="post-content">
+	    <p style="font-size:28px;">
+	    	<strong>봉사 날짜: </strong>	
+	    	<span th:text="${post.pDate}"></span>
+	    </p>
+	    <br/>
+	    <hr>
+	    <br/>
+	    <p th:text="${post.contents}" style="font-size:20px;"></p>
+	</div>
     <div class="reply-section">
       <h2 class="reply-title">댓글 (<span th:text="${replyList.size()}">0</span>)</h2>
 

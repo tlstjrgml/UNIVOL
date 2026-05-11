@@ -29,7 +29,7 @@
 
 	<insert id="insertPost">
 		insert into post
-		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default)
+		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default, #{isNotice}, default)
 	</insert>
 
 	<select id="selectOne" resultType="com.univol.post.vo.Post">
