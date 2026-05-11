@@ -3,9 +3,11 @@ package com.univol.member.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.univol.common.PageInfo;
 import com.univol.member.mapper.MemberMapper;
 import com.univol.member.vo.Member;
 
@@ -47,13 +49,11 @@ public class MemberService {
         return mapper.selectAll(startRow, endRow);
     }
 
-    public ArrayList<HashMap<String, Object>> getApplyList(String id) {
-        return mapper.getApplyList(id);
-    }
 
     public int deleteMember(Member m) {
     	return mapper.deleteMember(m);
     }
+
 
 
 	public int activeMember(Member m) {
@@ -80,5 +80,25 @@ public class MemberService {
 	public int getMemberCount() {
 		return mapper.getMemberCount();
 	}
+    
+    
+    public int getApplyCount(String userId) {
+        return mapper.getApplyCount(userId);
+    }
+    
+    public int getMyPostCount(String userId) {
+        return mapper.getMyPostCount(userId);
+    }
 
+    public ArrayList<HashMap<String, Object>> getApplyList(PageInfo pi, String userId) {
+        int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+        return mapper.getApplyList(userId, rowBounds);
+    }
+
+    public ArrayList<HashMap<String, Object>> getMyPostList(PageInfo pi, String userId) {
+        int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+        return mapper.getMyPostList(userId, rowBounds);
+    }
 }

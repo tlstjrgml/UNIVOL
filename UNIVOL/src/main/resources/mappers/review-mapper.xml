@@ -47,11 +47,11 @@
 	</update>
 
 	<insert id="insertReview">
-		<selectKey order="BEFORE" resultType="_int" keyProperty="rNumber">
-			select seq_post.nextval from dual
-		</selectKey>
-		insert into post
-		values(#{rNumber}, #{rTitle}, #{rContents}, default, sysdate, #{pType}, #{userId})
+	    <selectKey order="BEFORE" resultType="_int" keyProperty="rNumber">
+	        select seq_post.nextval from dual
+	    </selectKey>
+	    insert into post
+	    values(#{rNumber}, #{rTitle}, #{rContents}, default, sysdate, #{pType}, #{userId}, 'Y')
 	</insert>
 
 	<select id="selectTop" resultMap="reviewResultSet">

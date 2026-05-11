@@ -88,29 +88,37 @@ public class PostController {
 
 	/* 글 상세조회 */
 	@GetMapping("/post/{currentPage}/{pNumber}")
-	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
-	    Post post = pService.selectOne(pNumber);
-	    if(post == null) {
-	        return "error/404";
-	    }
-	    ArrayList<Reply> replylist = rService.selectReplyList(pNumber);
-	    model.addAttribute("post", post);
-	    model.addAttribute("replyList", replylist);
-	    return "post/detail";
+	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model,
+												HttpSession session) {
+		
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		String id = null;
+		if(loginUser != null) {
+			id = loginUser.getUserId();
+			}	
+		Post post = pService.selectOne(pNumber, id);
+		if (post != null) {
+		    // updateReview 관련 코드 전부 제거
+		    ArrayList<Reply> replylist = rService.selectReplyList(pNumber);
+		    model.addAttribute("post", post);
+		    model.addAttribute("replyList", replylist);
+		    model.addAttribute("currentPage", currentPage);
+		    return "post/detail";
+		} else {
+		    throw new RuntimeException("게시글 상세보기를 실패하였습니다.");
+		}
+      }
+
+	
+	/* 메인페이지 봉사게시판 5개 보여주기 */
+	@GetMapping("/post/top")
+	@ResponseBody
+	public ArrayList<Post> selectTopPost(){
+		ArrayList<Post> list = pService.selectTopPost();
+		return list;
 	}
+	
 
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
 
 

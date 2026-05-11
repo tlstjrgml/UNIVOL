@@ -114,7 +114,6 @@
   <div th:replace="~{common/navbar.html}"></div>
   <div class="container">
 
-    
     <div class="section-title">
       봉사게시판
       <a th:href="@{/post}">더보기 &rsaquo;</a>
@@ -130,15 +129,6 @@
         </tr>
       </thead>
       <tbody>
-       	<tr>
-          <td>1</td>
-          <td>겨울방학 청소년 멘토링 봉사 모집</td>
-          <td>홍길동</td>
-          <td class="views">1,085</td>
-          <td class="likes">♥ 34</td>
-        </tr>
-	    <!-- test -->
-         
       </tbody>
     </table>
 
@@ -165,6 +155,7 @@
 	<script>
 		window.onload=()=>{
 			topList();
+			topPostList();		
 // 			setInterval(() => {
 // 				topList();
 // 			}, 2000);
@@ -175,7 +166,6 @@
 			$.ajax({
 				url: '/review/top',
 				success: data => {
-//  					console.log(data);
 					const tbody = document.querySelector('.review-table tbody')
 					tbody.innerHTML = '';
 					
@@ -209,6 +199,38 @@
 				error: data => console.log(data)
 			});
 			
+		}
+		
+		const topPostList = () => {
+		    $.ajax({
+		        url: '/post/top',
+		        success: data => {
+		            const tbody = document.querySelector('.board-table tbody');
+		            tbody.innerHTML = '';
+		            
+		            for(const p of data) {
+		                const tr = document.createElement('tr');
+		                
+		                const pNumber = document.createElement('td');
+		                pNumber.innerText = p.pNumber;
+		                
+		                const pTitle = document.createElement('td');
+		                pTitle.innerText = p.pTitle;
+		                
+		                const pWriter = document.createElement('td');
+		                pWriter.innerText = p.userName;
+		                
+		                const pViews = document.createElement('td');
+		                pViews.innerText = p.views;
+		                
+		                const pLike = document.createElement('td');
+		                
+		                tr.append(pNumber, pTitle, pWriter, pViews, pLike);
+		                tbody.append(tr);
+		            }
+		        },
+		        error: data => console.log(data)
+		    });
 		}
 		
 		

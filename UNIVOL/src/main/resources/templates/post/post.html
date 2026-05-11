@@ -120,13 +120,11 @@
 
           <td class="col-num num" th:text="${p.pNumber}"></td>
           <td class="col-title">
-            <a th:href="@{|/post/${pi.currentPage}/${p.pNumber}|}" style="text-decoration: none; color: inherit; display: block;">
               <div class="title-wrap">
                 <span class="badge-notice"></span>
                 <span class="title" th:text="${p.pTitle}"></span>
                 <span class="date" th:text="${p.pDate}"></span>
               </div>
-            </a>
           </td>
           <td class="col-author author" th:text="${p.userName}"></td>
           <td class="col-views views" th:text="${p.views}"></td>
@@ -137,20 +135,42 @@
     </table>
   </div>
   <div class="pagination">
-  	<!-- 각 페이지 버튼마다의 form -->
-  	<th:block th:each="n:${#numbers.sequence(pi.startPage, pi.endPage)}">
-  		<form th:id="'pageForm-' + ${n}" action="/post" method="Get" style="display:none;">
-  			<input type="hidden" name="page" th:value="${n}">
-  			<input type="hidden" name="keyword" th:value="${keyword}">
-  			<input type="hidden" name="sort" th:value="${sort}">
-  		</form>
-  		<!-- 페이지 버튼, 자기 form 제출 -->
-      	<button type="button" class="page-btn"
-  		  	  th:text="${n}"
-  		  	  th:classappend="${n == pi.currentPage} ? 'active' : ''"
-			  th:onClick="'goToPage(' +${n}+')'">
-	  	</button>		
-  </div>
+
+    <!-- 이전 -->
+    <button type="button"
+            class="page-btn"
+            th:if="${pi.currentPage > 1}"
+            th:onclick="'goToPage(' + ${pi.currentPage - 1} + ')'">
+        &#8249;
+    </button>
+
+    <!-- 페이지 번호 -->
+    <th:block th:each="n:${#numbers.sequence(pi.startPage, pi.endPage)}">
+
+        <form th:id="'pageForm-' + ${n}" action="/post" method="get" style="display:none;">
+            <input type="hidden" name="page" th:value="${n}">
+            <input type="hidden" name="keyword" th:value="${keyword}">
+            <input type="hidden" name="sort" th:value="${sort}">
+        </form>
+
+        <button type="button"
+                class="page-btn"
+                th:text="${n}"
+                th:classappend="${n == pi.currentPage} ? 'active' : ''"
+                th:onclick="'goToPage(' + ${n} + ')'">
+        </button>
+
+    </th:block>
+
+    <!-- 다음 -->
+    <button type="button"
+            class="page-btn"
+            th:if="${pi.currentPage < pi.maxPage}"
+            th:onclick="'goToPage(' + ${pi.currentPage + 1} + ')'">
+        &#8250;
+    </button>
+
+</div>
 </main>
 <script>
 	document.getElementsByClassName('write-btn')[0].addEventListener('click', ()=>{
@@ -168,13 +188,8 @@
 		const form = document.getElementById('pageForm-' + pageNum);
 		form.submit();
 	}
-	
-	
-	
-	
-	
-	
 
 </script>
 </body>
 </html>
+

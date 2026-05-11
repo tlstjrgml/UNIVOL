@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${r.rTitle} + ' - UNIVOL'"></title>
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <title>봉사 게시글 상세</title>
-  
-
-  <!-- 폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
   <style>
@@ -15,25 +13,31 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Noto Sans KR', sans-serif;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      padding: 30px;
+      background: #f5f5f0;
+      min-height: 100vh;
     }
 
-    /* 로고 */
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 40px;
-      color: #424B1F;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
-      text-align: center;
+    /* 수정된 container */
+    .container {
+      max-width: 1000px;
+      margin: 2.5rem auto;
+      padding: 0 2rem;
     }
 
-    /* 페이지 제목 */
+    /* 수정된 카드 스타일 */
+    .post-box,
+    .comment-box {
+      background: #fff;
+      border: 1px solid #e0e0d8;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
     .page-title {
       font-size: 20px;
       font-weight: bold;
@@ -41,37 +45,21 @@
       text-align: center;
     }
 
-    /* 구분선 */
-    .divider {
-      border: none;
-      border-top: 1px solid #ccc;
-      margin: 10px 0 20px 0;
-    }
-
-    .container {
-      width: 800px;
-      margin: 0 auto;
-    }
-
-    .post-box, .comment-box {
-      background-color: white;
-      border: 1px solid #ccc;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
     .post-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 15px;
+      font-size: 28px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 1rem;
     }
 
     .post-info {
-      font-size: 14px;
-      color: gray;
-      margin-bottom: 20px;
+      display: flex;
+      gap: 1.5rem;
+      font-size: 13px;
+      color: #888;
+      border-bottom: 1px solid #f0f0ea;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
     }
 
     .volunteer-info {
@@ -81,8 +69,11 @@
     }
 
     .post-content {
+      line-height: 1.8;
+      color: #333;
+      font-size: 14px;
+      min-height: 300px;
       margin-bottom: 20px;
-      line-height: 1.6;
     }
 
     .btn-area {
@@ -93,14 +84,15 @@
       padding: 8px 15px;
       margin-left: 5px;
       cursor: pointer;
-      border-radius: 10px;
-      background-color: #424B1F;
+      border-radius: 8px;
+      background-color: #426B1F;
       color: white;
       border: none;
+      transition: background 0.15s;
     }
 
     button:hover {
-      background-color: #2f3616;
+      background-color: #305215;
     }
 
     .comment-title {
@@ -115,11 +107,18 @@
       padding: 10px;
       margin-bottom: 10px;
       resize: none;
+      border: 1px solid #d0d0c8;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #426B1F;
     }
 
     .comment-item {
-      border-top: 1px solid #ddd;
-      padding: 10px 0;
+      border-top: 1px solid #f0f0ea;
+      padding: 15px 0;
     }
 
     .comment-writer {
@@ -143,70 +142,84 @@
       width: 120px;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #ddd;
       padding: 10px;
       text-align: left;
     }
   </style>
 </head>
+
 <body>
 
-  <!-- 로고 -->
-  <div class="logo" onclick="location.href='/'" style="cursor: pointer;">UNIVOL</div>
+  <div th:replace="common/navbar"></div>
 
-  <!-- 페이지 제목 -->
-  <div class="page-title">게시글 조회</div>
 
   <div class="container">
 
-    <!-- 🔥 위치 이동된 hr -->
-    <hr class="divider">
-
     <div class="post-box">
-      <div class="post-title">[[${r.rTitle}]]</div>
-      <div class="post-info">작성자: [[${r.userName}]] | 작성일: [[${r.rDate}]] | 조회수: [[${r.rViews}]]</div>
 
+    <div class="post-title">
+        [[${r.rTitle}]]
+    </div>
 
-	<div id="view-mode">
+    <div class="post-info">
+        <span>작성자: [[${r.userName}]]</span>
+        <span>작성일: [[${r.rDate}]]</span>
+        <span>조회수: [[${r.rViews}]]</span>
+    </div>
 
-	  
-	
-	  <div class="post-content">
-	    [[${r.rContents}]]
-	  </div>
+    <!-- 조회 모드 -->
+    <div id="view-mode">
+        <div class="post-content">
+            [[${r.rContents}]]
+        </div>
+    </div>
 
-	</div>
+    <!-- 수정 모드 -->
+    <div id="edit-mode" style="display:none;">
+        <form th:action="@{/review/update}" method="post">
+            <input type="hidden" name="rNumber" th:value="${r.rNumber}">
+            <input type="hidden" name="page" th:value="${page}">
+            <input type="text" name="rTitle" th:value="${r.rTitle}" style="width:100%; padding:10px; margin-bottom:10px;">
+            <textarea name="rContents">[[${r.rContents}]]</textarea>
+            <div class="btn-area">
+                <button type="submit">저장</button>
+                <button type="button" id="cancelBtn">취소</button>
+            </div>
+        </form>
+    </div>
 
-		<div id="edit-mode" style="display:none;">
-		
-		  <form th:action="@{/review/update}" method="post">
-		
-		    <input type="hidden" name="rNumber" th:value="${r.rNumber}">
-		    <input type="hidden" name="page" th:value="${page}">
-		
-		    <input type="text" name="rTitle" th:value="${r.rTitle}">
-		    <textarea name="rContents">[[${r.rContents}]]</textarea>
-		    
-		
-		    <button type="submit">저장</button>
-		    <button type="button" id="cancelBtn">취소</button>
-		
-		  </form>
-		
-		</div>
-	
-		
-		
-	     <div class="btn-area">
+    <!-- 수정/삭제 버튼 -->
+    <div class="btn-area" id="view-btn">
+        <th:block th:if="${session.loginUser.userId == r.userId}">
+            <button id="editBtn">수정</button>
+            <button>삭제</button>
+        </th:block>
+    </div>
 
-  			<th:block th:if="${session.loginUser.userId == r.userId}">
-			    <button id="editBtn">수정</button>
-			    <button>삭제</button>
-		  	</th:block>
-		</div>
+</div>
 
     <div class="comment-box">
+      <div class="comment-title">댓글</div>
+
+      <textarea placeholder="댓글을 입력하세요"></textarea>
+
+      <div class="btn-area">
+        <button>등록</button>
+      </div>
+
+      <div class="comment-item">
+        <div class="comment-writer">이수연</div>
+        <div class="comment-date">2024.12.11</div>
+        <div>정말 좋은 활동이네요!</div>
+      </div>
+
+    </div>
+
+  </div>
+	<div>	
     	<div class="comment-title">댓글</div>
     		<textarea placeholder="댓글을 입력하세요" id="comments"></textarea>
      	<div class="btn-area">
@@ -221,7 +234,7 @@
 		</div>
     </div>
 
-  </div>
+
 </body>
 <script th:inline='javascript'>
 	window.onload = function () {
@@ -236,12 +249,14 @@
 	  editBtn.onclick = function () {
 	    viewMode.style.display = "none";
 	    editMode.style.display = "block";
+	    document.getElementById("view-btn").style.display = "none"; // 추가
 	  };
 	
 	  //  취소 버튼 클릭
 	  cancelBtn.onclick = function () {
 	    viewMode.style.display = "block";
 	    editMode.style.display = "none";
+	    document.getElementById("view-btn").style.display = "block"; // 추가
 	  };
 	  
 	  document.getElementById('replyBtn').addEventListener('click', () => {
@@ -285,6 +300,8 @@
 	  
 	
 	};
+	</script>
+</body>
 
-</script>
+
 </html>

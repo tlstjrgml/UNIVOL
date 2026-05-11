@@ -8,8 +8,10 @@ import org.apache.ibatis.annotations.Param;
 
 import com.univol.member.vo.Member;
 
-@Mapper
 
+import org.apache.ibatis.session.RowBounds;
+
+@Mapper	
 public interface MemberMapper {
 
     Member logIn(Member m);
@@ -18,13 +20,19 @@ public interface MemberMapper {
 	
     ArrayList<Member> selectAll(@Param("startRow")int startRow, @Param("endRow")int endRow);
 
-	ArrayList<HashMap<String, Object>> getApplyList(String id);
-
 	int updateMember(Member m);
 
 	Member getMemberById(String userId);
 
 	int deleteMember(Member m);
+	
+	int getApplyCount(String userId);
+	
+	int getMyPostCount(String userId);
+	
+	ArrayList<HashMap<String, Object>> getApplyList(String userId, RowBounds rowBounds);
+	
+	ArrayList<HashMap<String, Object>> getMyPostList(String userId, RowBounds rowBounds);
 
 	int activeMember(Member m);
 
@@ -35,6 +43,5 @@ public interface MemberMapper {
 	int toNormalMember(Member m);	
 	
 	int getMemberCount();
-
 
 }

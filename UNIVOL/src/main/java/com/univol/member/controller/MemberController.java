@@ -1,7 +1,6 @@
 package com.univol.member.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -35,7 +34,6 @@ public class MemberController {
 	private final MemberService mService;
 	private final PostService pService;
 	private final ReplyService rService;
-	
 	private final BCryptPasswordEncoder passwordEncoder;
 	
 	/* 메인 페이지 */
@@ -81,21 +79,40 @@ public class MemberController {
 		mService.signUp(m); return "redirect:/logIn"; 
 	}
 	 
+
 	/* 마이페이지 */
 	@GetMapping("/myPage")
-	public ModelAndView myPage(HttpSession session, ModelAndView mv) {
-		Member loginUser = (Member)session.getAttribute("loginUser");
-		if(loginUser == null) {
-			mv.setViewName("redirect:/logIn");
-			return mv;
-			
-		}
-			String id = loginUser.getUserId();
-			ArrayList<HashMap<String, Object>> applyList = mService.getApplyList(id);
-			
-			mv.addObject("applyList", applyList);
-			mv.setViewName("users/myPage");
-			return mv;
+	public ModelAndView myPage(
+	        HttpSession session, ModelAndView mv,
+	        @RequestParam(value = "applyPage", defaultValue = "1") int applyPage,
+	        @RequestParam(value = "myPostPage", defaultValue = "1") int myPostPage) {
+
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    if (loginUser != null) {
+	        String id = loginUser.getUserId();
+	        setApplyList(mv, id, applyPage);
+	        setMyPostList(mv, id, myPostPage);
+	        mv.setViewName("users/myPage");
+	    }
+	    return mv;
+	}
+
+	public void setApplyList(ModelAndView mv, String id, int page) {
+	    int totalCount = mService.getApplyCount(id);
+	    PageInfo pi =  Pagination.getPageInfo(page, totalCount, 5);
+	    if (page < 1) page = 1;                      // 이전 없으면 1페이지 고정
+	    if (page > pi.getMaxPage()) page = pi.getMaxPage(); // 다음 없으면 마지막 페이지 고정
+	    mv.addObject("applyList", mService.getApplyList(pi, id));
+	    mv.addObject("applyPi", pi);
+	}
+
+	public void setMyPostList(ModelAndView mv, String id, int page) {
+	    int totalCount = mService.getMyPostCount(id);
+	    com.univol.common.PageInfo pi = Pagination.getPageInfo(page, totalCount, 5);
+	    if (page < 1) page = 1;
+	    if (page > pi.getMaxPage()) page = pi.getMaxPage();
+	    mv.addObject("myPostList", mService.getMyPostList(pi, id));
+	    mv.addObject("myPostPi", pi);
 	}
 
 	

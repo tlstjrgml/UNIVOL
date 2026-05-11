@@ -38,6 +38,13 @@
 			join users u on p.user_id = u.user_id
 		where p_number = #{pNumber}
 	</select>
+	
+	<update id="updateReview">
+		update post
+		set views = views + 1
+		where p_number = #{pNumber}
+	</update>
+	
 
 	 
 
@@ -87,6 +94,7 @@
 		)
 	</select>
 	
+<<<<<<< HEAD
 	<!-- 관리자페이지용 --> 
 	<select id="getPostCount" resultType="_int">
 		select count(*) from post
@@ -104,5 +112,18 @@
 	</select>
 	
 	
+=======
+	<select id="selectTopPost" resultType="com.univol.post.vo.Post">
+	    select * from (
+	        select p.*, u.user_name
+	        from post p
+	        join users u on p.user_id = u.user_id
+	        where p.p_type = 'V' and p.p_status = 'Y'
+	        order by views desc
+	    )
+    where rownum &lt;= 5
+</select>
 
 </mapper>
+>>>>>>> origin/정현종
+
