@@ -1,4 +1,4 @@
-package com.univol.review.model.exception;
+package com.univol.review.exception;
 
 public class ReviewException extends RuntimeException{
 	public ReviewException() {}

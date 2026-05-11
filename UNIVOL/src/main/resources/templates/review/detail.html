@@ -259,7 +259,7 @@
 				
 				for(const c of data){
 					const commentItem = document.createElement('div');
-					commentItem.classList.add('comment-item'); /* 테스트 으갸갸갸갹 *//*  테스트 야야야야야야야 */
+					commentItem.classList.add('comment-item');  
 					
 					const writerDiv = document.createElement('div');
 					writerDiv.classList.add('comment-writer');
@@ -275,7 +275,6 @@
 					commentItem.append(writerDiv);
 					commentItem.append(cDateDiv);
 					commentItem.append(commentsDiv);
-					/* test3 */
 					divPar.append(commentItem);
 				}
 				document.getElementById('comments').value = '';

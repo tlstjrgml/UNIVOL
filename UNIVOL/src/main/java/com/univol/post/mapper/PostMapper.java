@@ -1,11 +1,11 @@
-package com.univol.post.model.Mapper;
+package com.univol.post.mapper;
 
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.univol.post.model.vo.Post;
+import com.univol.post.vo.Post;
 
 @Mapper
 

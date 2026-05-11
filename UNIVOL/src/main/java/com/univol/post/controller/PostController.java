@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.univol.member.model.vo.Member;
-import com.univol.post.Pagenation;
-import com.univol.post.model.service.PostService;
-import com.univol.post.model.service.ReplyService;
-import com.univol.post.model.vo.PageInfo;
-import com.univol.post.model.vo.Post;
-import com.univol.post.model.vo.Reply;
+import com.univol.member.vo.Member;
+import com.univol.post.service.PostService;
+import com.univol.post.service.ReplyService;
+import com.univol.common.PageInfo;
+import com.univol.common.Pagination;
+import com.univol.post.vo.Post;
+import com.univol.post.vo.Reply;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class PostController {
 			listCount = pService.getSearchCount(keyword); // 검색 결과 갯수(페이지네이션)
 		}
 		
-		PageInfo pi = Pagenation.getPageInfo(currentPage, listCount,10);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount,10);
 		
 		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
 		int endRow = pi.getCurrentPage() * pi.getBoardLimit();
