@@ -1,6 +1,7 @@
 package com.univol.review.mapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,12 +14,12 @@ public interface ReviewMapper {
 
 	int getListCount(char c);
 
-	ArrayList<Review> selectReviewList(@Param("pType") char c, @Param("sort") String sort,  RowBounds rowBounds);
+	ArrayList<Review> selectReviewList(@Param("pType") char c, @Param("sort") String sort, RowBounds rowBounds);
 
 	Review selectReview(int bId);
 
 	int updateReview(int bId);
- 
+
 	int updateView(int bId);
 
 	int updateReviews(Review r);
@@ -33,7 +34,14 @@ public interface ReviewMapper {
 
 	int getSearchCount(@Param("keyword") String keyword);
 
-	ArrayList<Review> searchReviews(@Param("keyword") String keyword,  @Param("sort") String sort, RowBounds rowBounds);
-	
+	ArrayList<Review> searchReviews(@Param("keyword") String keyword, @Param("sort") String sort, RowBounds rowBounds);
+
+	int reviewLike(HashMap<String, Object> map);
+
+	int deleteLike(HashMap<String, Object> map);
+
+	int insertLike(HashMap<String, Object> map);
+
+	int likeCount(int pNumber);
 
 }

@@ -18,8 +18,8 @@ import com.univol.common.Pagination;
 import com.univol.member.vo.Member;
 import com.univol.review.exception.ReviewException;
 import com.univol.review.service.ReviewService;
-import com.univol.review.vo.ReviewReply;
 import com.univol.review.vo.Review;
+import com.univol.review.vo.ReviewReply;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -169,7 +169,24 @@ public class ReviewController {
 		return list;
 	}
 	
-	
+	@PostMapping("like")
+	@ResponseBody
+	public int reviewLike(@RequestParam("pNumber") int pNumber, @RequestParam("userId") String userId) {
+		int result = rService.reviewLike(pNumber, userId);
+
+		if(result > 0) {
+			rService.deleteLike(pNumber, userId);
+		} else {
+			rService.insertLike(pNumber, userId); 
+		}
+		
+		int likeCount = rService.likeCount(pNumber);
+//		System.out.println(pNumber);
+//		System.out.println(userId);
+//		System.out.println(liked);
+		return likeCount;
+		
+	}
 	
 	
 }

@@ -62,12 +62,16 @@
         </form>
       </div>
 
-      <!-- 수정/삭제 버튼 -->
+      <!-- 수정/삭제/좋아요 버튼 -->
       <div class="btn-area" id="view-btn">
         <th:block th:if="${session.loginUser != null && session.loginUser.userId == r.userId}">
           <button id="editBtn">수정</button>
           <button>삭제</button>
         </th:block>
+        <button class="like-btn" id="likeBtn">
+          <span class="heart">🤍</span>
+          <span id="likeCount">좋아요</span>
+        </button>
       </div>
     </div>
 
@@ -142,6 +146,30 @@
             }
             document.getElementById('comments').value = '';
           },
+          error: data => console.log(data)
+        });
+      });
+
+      const likeBtn = document.getElementById('likeBtn');
+      let liked = false;
+
+      likeBtn.addEventListener('click', () => {
+        liked = !liked;
+        if (liked) {
+          likeBtn.innerHTML = '❤️ 안 좋아요';
+        } else {
+          likeBtn.innerHTML = '🤍 좋아요';
+        }
+
+        $.ajax({
+          url: '/review/like',
+          method: 'POST',
+          data: {
+            pNumber: /*[[${r.rNumber}]]*/99,
+            userId: /*[[${session.loginUser.userId}]]*/'user00',
+            liked: liked
+          },
+          success: data => console.log(data),
           error: data => console.log(data)
         });
       });

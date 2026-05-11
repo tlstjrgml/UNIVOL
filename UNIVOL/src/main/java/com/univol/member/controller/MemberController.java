@@ -140,7 +140,6 @@ public class MemberController {
 	}
 
 	
-	
 	/* 회원 탈퇴*/
 	@PostMapping("/deleteMember")
 	@ResponseBody
