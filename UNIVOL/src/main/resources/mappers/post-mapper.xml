@@ -76,6 +76,7 @@
 			where rownum &lt;= #{endRow}
 		)
 		where rn &gt;= #{startRow}
+
 	</select>
 
 	<select id="getSearchCount" resultType="_int">
@@ -96,3 +97,4 @@
 	</update>
 
 </mapper>
+

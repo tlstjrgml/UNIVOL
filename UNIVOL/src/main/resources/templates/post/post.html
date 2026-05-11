@@ -114,11 +114,11 @@
           <th class="col-views">조회수</th>
         </tr>
       </thead>
+      
       <tbody id="board-list">
 
        <tr th:each="p:${plist}" >
-
-          <td class="col-num num" th:text="${p.pNumber}"></td>
+	   	<td class="col-num num" th:text="${p.pNumber}"></td>
           <td class="col-title">
             <a th:href="@{|/post/${pi.currentPage}/${p.pNumber}|}" style="text-decoration: none; color: inherit; display: block;">
               <div class="title-wrap">

@@ -37,7 +37,7 @@ public class PostController {
 			@RequestParam(value = "sort", defaultValue="latest") String sort,
 			@RequestParam(value="keyword", defaultValue="") String keyword) {
 		
-		
+		//정렬 & 검색의 경우 추가.
 		int listCount;
 		if(keyword.isEmpty()) {
 			listCount = pService.getListCount();

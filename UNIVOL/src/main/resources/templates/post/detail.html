@@ -82,7 +82,7 @@
 </head>
 <body>
 
-  <div th:replace="common/navbar"></div>
+  <div th:replace="~{common/navbar}"></div>
 
   <main class="container">
     <a class="back-btn" th:href="@{/post(page=${currentPage})}">← 목록으로</a>
