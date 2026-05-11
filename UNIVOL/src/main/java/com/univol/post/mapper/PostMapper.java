@@ -28,4 +28,8 @@ public interface PostMapper {
 	int rollbackPost(Post p);
 	
 	int deletePost(Post p);
+	
+	int getPostCount();
+	
+	ArrayList<Post> selectAllPost(@Param("startRow") int startRow, @Param("endRow") int endRow);
 }

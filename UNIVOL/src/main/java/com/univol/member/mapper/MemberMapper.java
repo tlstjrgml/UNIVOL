@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.univol.member.vo.Member;
-
-import jakarta.servlet.http.HttpSession;
 
 @Mapper
 
@@ -17,7 +16,7 @@ public interface MemberMapper {
 
 	void signUp(Member m);
 	
-    ArrayList<Member> selectAll();
+    ArrayList<Member> selectAll(@Param("startRow")int startRow, @Param("endRow")int endRow);
 
 	ArrayList<HashMap<String, Object>> getApplyList(String id);
 
@@ -34,6 +33,8 @@ public interface MemberMapper {
 	int toAdminMember(Member m);
 
 	int toNormalMember(Member m);	
+	
+	int getMemberCount();
 
 
 }

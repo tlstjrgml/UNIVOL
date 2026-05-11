@@ -55,18 +55,6 @@
 		WHERE C_NUMBER = #{cNumber}
 	</delete>
 
-	<select id="selectAllReply" resultType="com.univol.post.vo.Reply">
-		SELECT R.C_NUMBER,
-		       R.COMMENTS,
-		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
-		       R.P_NUMBER,
-		       R.USER_ID,
-		       U.USER_NAME,
-		       R.C_STATUS
-		FROM REPLY R
-		JOIN USERS U ON R.USER_ID = U.USER_ID
-		ORDER BY R.C_NUMBER DESC
-	</select>
 	
 	<update id="adminDeleteReply">
 		update reply
@@ -80,4 +68,26 @@
 		where c_number=#{rNumber}
 	</update>
 
+	<select id="getReplyCount" resultType="_int">
+		select count(*) from reply
+	</select>
+	
+	<select id="selectAllReply" resultMap="replyResultMap">
+		SELECT * FROM (
+        SELECT ROWNUM AS RN, A.* FROM (
+            SELECT R.C_NUMBER,
+                   R.COMMENTS,
+                   TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
+                   R.P_NUMBER,
+                   R.USER_ID,
+                   U.USER_NAME,
+                   R.C_STATUS
+            FROM REPLY R
+            JOIN USERS U ON R.USER_ID = U.USER_ID
+            ORDER BY R.C_NUMBER DESC
+        ) A
+        WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE RN &gt;= #{startRow}
+	</select>
 </mapper>

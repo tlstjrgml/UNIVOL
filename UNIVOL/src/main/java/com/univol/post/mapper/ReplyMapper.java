@@ -25,4 +25,10 @@ public interface ReplyMapper {
 	int adminDeleteReply(@Param("rNumber")int rNumber);
 	
 	int adminRollbackReply(@Param("rNumber")int rNumber);
+
+	int getReplyCount();
+	
+	ArrayList<Reply> selectAllReply(@Param("startRow")int replyStartRow, @Param("endRow")int replyEndRow);
+
+
 }

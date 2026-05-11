@@ -39,9 +39,7 @@
 		where p_number = #{pNumber}
 	</select>
 
-	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
-		select * from post
-	</select>
+	 
 
 	<update id="rollbackPost">
 		update post
@@ -88,5 +86,23 @@
 			or u.user_name like '%' || #{keyword} || '%'
 		)
 	</select>
+	
+	<!-- 관리자페이지용 --> 
+	<select id="getPostCount" resultType="_int">
+		select count(*) from post
+	</select>
+	
+	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
+		select * from (
+			select rownum as rn, a.* from (
+				select * from post
+			)a
+			where rownum &lt;=#{endRow}
+		)
+		where rn &gt;=#{startRow}
+		
+	</select>
+	
+	
 
 </mapper>

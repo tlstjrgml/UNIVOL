@@ -108,6 +108,12 @@
             text-align: right;
             margin-top: 20px;
         }
+        
+        .pagination {
+		    display: flex;
+		    justify-content: center;
+		    margin-top: 10px;
+		}
     </style>
 </head>
 <body>
@@ -160,6 +166,18 @@
                    
                 </tbody>
             </table>
+            <div class="pagination">
+	            <th:block th:each="n:${#numbers.sequence(memberPi.startPage, memberPi.endPage)}">
+				    <form th:id="'memberPageForm-' + ${n}" action="/adminPage" method="Get" style="display:none;">
+				        <input type="hidden" name="memberPage" th:value="${n}">
+				    </form>
+				    <button type="button" class="page-btn"
+				            th:text="${n}"
+				            th:classappend="${n == memberPi.currentPage} ? 'active' : ''"
+				            th:onClick="'goToMemberPage(' +${n}+')'">
+				    </button>
+				</th:block>
+            </div>
         </div>
         
         <!-- 전체 게시글 조회 -->
@@ -197,6 +215,18 @@
                     </tr>
                 </tbody>
             </table>
+             <div class="pagination">
+	            <th:block th:each="n:${#numbers.sequence(postPi.startPage, postPi.endPage)}">
+				    <form th:id="'postPageForm-' + ${n}" action="/adminPage" method="Get" style="display:none;">
+				        <input type="hidden" name="postPage" th:value="${n}">
+				    </form>
+				    <button type="button" class="page-btn"
+				            th:text="${n}"
+				            th:classappend="${n == postPi.currentPage} ? 'active' : ''"
+				            th:onClick="'goToPostPage(' +${n}+')'">
+				    </button>
+				</th:block>
+            </div>
         </div>
         
         <!-- 전체 댓글 조회 -->
@@ -230,6 +260,18 @@
         			</tr>
         		</tbody>
         	</table>
+        	<div class="pagination">
+	            <th:block th:each="n:${#numbers.sequence(replyPi.startPage, replyPi.endPage)}">
+				    <form th:id="'replyPageForm-' + ${n}" action="/adminPage" method="Get" style="display:none;">
+				        <input type="hidden" name="replyPage" th:value="${n}">
+				    </form>
+				    <button type="button" class="page-btn"
+				            th:text="${n}"
+				            th:classappend="${n == replyPi.currentPage} ? 'active' : ''"
+				            th:onClick="'goToReplyPage(' +${n}+')'">
+				    </button>
+				</th:block>
+            </div>
         </div>
     </div>
 
@@ -383,6 +425,18 @@
     	$('#ReplyToggleBtn').on('click',function(){
 			$('#replyTable').slideToggle();
     	});
+    	
+    	/* 관리자페이지 회원 페이지네이션 */
+    	function goToMemberPage(pageNum){
+			const form = document.getElementById('memberPageForm-' + pageNum);
+			form.submit();
+    	}
+    	
+    	/* 관리자페이지 게시글 페이지네이션 */
+    	function goToPostPage(pageNum){
+			const form = document.getElementById('postPageForm-' + pageNum);
+			form.submit();
+    	}
     </script>
 </body>
 </html>

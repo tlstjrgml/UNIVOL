@@ -43,8 +43,8 @@ public class MemberService {
 	}
 	
 
-    public ArrayList<Member> selectAll() {
-        return mapper.selectAll();
+    public ArrayList<Member> selectAll(int startRow, int endRow) {
+        return mapper.selectAll(startRow, endRow);
     }
 
     public ArrayList<HashMap<String, Object>> getApplyList(String id) {
@@ -76,6 +76,9 @@ public class MemberService {
 		return mapper.toNormalMember(m);
 	}
    
-    
+	/* 관리자페이지 회원 페이지네이션 */
+	public int getMemberCount() {
+		return mapper.getMemberCount();
+	}
 
 }

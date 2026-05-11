@@ -9,11 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.univol.common.PageInfo;
+import com.univol.common.Pagination;
 import com.univol.member.service.MemberService;
 import com.univol.member.vo.Member;
 import com.univol.post.service.PostService;
@@ -63,7 +66,6 @@ public class MemberController {
 	}
 	
 	/*로그아웃*/
-	  
 	@GetMapping("/logout") public String logout(SessionStatus status) {
 		status.setComplete(); 
 		return "redirect:/";  
@@ -120,23 +122,7 @@ public class MemberController {
 	    return "users/edit";
 	}
 
-	/* 관리자페이지 */
-	@GetMapping("/adminPage")
-	public String adminPage(@ModelAttribute Member m, Model model, HttpSession session) {
-		ArrayList<Member> mlist = mService.selectAll();
-		model.addAttribute("mlist", mlist);
-		ArrayList<Post> plist = pService.selectAllPost();
-		model.addAttribute("plist",plist);
-		ArrayList<Reply> rlist = rService.selectAllReply();
-		model.addAttribute("replyList", rlist);
-		Member loginUser = (Member)session.getAttribute("loginUser");
-		if(loginUser != null &&  loginUser.getIsAdmin().equals("Y")) {     
-			return "users/adminPage";
-		}else {
-			model.addAttribute("message", "올바른 접근이 아닙니다.");
-			return "error/404";
-		}
-	}
+	
 	
 	/* 회원 탈퇴*/
 	@PostMapping("/deleteMember")
@@ -150,32 +136,6 @@ public class MemberController {
 		return result;
 	}
 	
-	/* 회원 상태 변경(정지) */ 
-	@PostMapping("/banMember")
-	@ResponseBody
-	public int banMember(@ModelAttribute Member m) {
-		return mService.banMember(m);
-	}
 	
-	/* 회원 상태 변경(활동) */
-	@PostMapping("/activeMember")
-	@ResponseBody
-	public int activeMember(@ModelAttribute Member m) {
-		return  mService.activeMember(m);
-	}
-	
-	/* 회원 관리자료 변경 */
-	@PostMapping("/toAdminMember")
-	@ResponseBody
-	public int toAdminMember(@ModelAttribute Member m) {
-		return mService.toAdminMember(m);
-	}
-	
-	/* 일반 회원으로 변경 */
-	@PostMapping("/toNormalMember")
-	@ResponseBody
-	public int toNormalMember(@ModelAttribute Member m) {
-		return mService.toNormalMember(m);
-	}
 
 }

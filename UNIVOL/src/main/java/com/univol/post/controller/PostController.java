@@ -99,27 +99,9 @@ public class PostController {
 	    return "post/detail";
 	}
 
-	/* 관리자페이지에서 글 삭제하기 */
-	@PostMapping("/deletePost")
-	@ResponseBody
-	public int deletePost(@ModelAttribute Post p) {
-	    int result = pService.deletePost(p);
-	    if(result > 0) {
-	        return result;
-	    }
-	    return result;
-	}
 
-	/* 관리자페이지에서 글 복구하기 */
-	@PostMapping("/rollbackPost")
-	@ResponseBody
-	public int rollbackPost(@ModelAttribute Post p) {
-	    int result = pService.rollbackPost(p);
-	    if(result > 0) {
-	        return result;
-	    }
-	    return result;
-	}	
+	
+	
 	
 	
 	

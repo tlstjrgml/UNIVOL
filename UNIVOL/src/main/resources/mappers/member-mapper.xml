@@ -22,12 +22,17 @@
     </insert>
 
     <select id="selectAll" resultType="com.univol.member.vo.Member">
-        SELECT user_id, user_pw, user_name,
-               TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
-               gender, phone, address, is_admin, member_status
-        FROM users
-    </select>
-
+    select * from (
+        select rownum as rn, A.* from (
+            SELECT user_id, user_pw, user_name,
+                   TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
+                   gender, phone, address, is_admin, member_status
+            FROM users
+        ) A
+        where rownum &lt;= #{endRow}
+    )
+    where rn >= #{startRow}
+</select>
     <select id="getApplyList" parameterType="String" resultType="map">
 	    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
 	           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE,
@@ -93,4 +98,8 @@
 		where user_id = #{userId}
 	</update>
 
+	<!-- 관리자페이지 회원 페이지네이션 -->
+	<select id="getMemberCount" resultType="_int">
+		select count(*) from users
+	</select>
 </mapper>

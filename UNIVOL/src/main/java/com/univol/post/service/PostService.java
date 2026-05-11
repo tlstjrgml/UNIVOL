@@ -54,4 +54,17 @@ public class PostService {
 	public int rollbackPost(Post p) {
 		return mapper.rollbackPost(p);
 	}
+	
+	public int getPostCount() {
+		return mapper.getPostCount();
+	}
+	
+	public ArrayList<Post> selectAllPost(int startRow, int endRow){
+		return mapper.selectAllPost(startRow, endRow);
+	}
+
+
+	
+
+
 }
