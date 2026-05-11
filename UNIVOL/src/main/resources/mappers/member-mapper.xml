@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.univol.member.model.mapper.MemberMapper">
+<mapper namespace="com.univol.member.mapper.MemberMapper">
 
-    <select id="logIn" resultType="Member">
+    <select id="logIn" resultType="com.univol.member.vo.Member">
         SELECT user_id, user_pw, user_name,
                TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
                gender, phone, address, is_admin, member_status
@@ -21,7 +21,7 @@
         )
     </insert>
 
-    <select id="selectAll" resultType="com.univol.member.model.vo.Member">
+    <select id="selectAll" resultType="com.univol.member.vo.Member">
         SELECT user_id, user_pw, user_name,
                TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
                gender, phone, address, is_admin, member_status
@@ -83,19 +83,42 @@
         WHERE user_id = #{userId}
     </update>
 
-    <select id="getMemberById" parameterType="String" resultType="Member">
+    <select id="getMemberById" parameterType="String" resultType="com.univol.member.vo.Member">
         SELECT user_id, user_pw, user_name,
                TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
                gender, phone, address, is_admin, member_status
         FROM users
         WHERE user_id = #{userId}
     </select>
-	
 
 	<update id="deleteMember">
 		update users
 		set member_status = 'N'
 		where user_id = #{userId}
 	</update>
-	
+
+	<update id="banMember">
+		update users
+		set member_status = 'N'
+		where user_id = #{userId}
+	</update>
+
+	<update id="activeMember">
+		update users
+		set member_status = 'Y'
+		where user_id = #{userId}
+	</update>
+
+	<update id="toAdminMember">
+		update users
+		set is_admin = 'Y'
+		where user_id=#{userId}
+	</update>
+
+	<update id="toNormalMember">
+		update users
+		set is_admin = 'N'
+		where user_id = #{userId}
+	</update>
+
 </mapper>

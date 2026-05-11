@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
@@ -189,6 +189,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div th:replace="~{common/navbar.html}"></div>
@@ -197,7 +198,7 @@
     <div class="unv-layout">
 
       <div class="unv-card">
-        <form action="/review/insert" method="POST">
+  		<form th:action="@{/review/insert}" method="POST">
           <div class="unv-row">
 
             <div class="unv-field full">
@@ -257,6 +258,5 @@
 
     </div>
   </div>
-
 </body>
 </html>

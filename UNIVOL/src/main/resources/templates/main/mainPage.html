@@ -175,7 +175,7 @@
 			$.ajax({
 				url: '/review/top',
 				success: data => {
- 					console.log(data);
+//  					console.log(data);
 					const tbody = document.querySelector('.review-table tbody')
 					tbody.innerHTML = '';
 					
@@ -195,12 +195,13 @@
 						rViews.innerText = r.rViews
 						
 						const rLike = document.createElement('td');
+						/*  rLike.innerText = '♥ ' + (r.) */
 						
-						tr.append(rNumber);
-						tr.append(rTitle);
+						tr.append(rNumber, rTitle, rWriter, rViews, rLike);
+						/* tr.append(rTitle);
 						tr.append(rWriter);
 						tr.append(rViews);
-						tr.append(rLike);
+						tr.append(rLike); */
 						
 						tbody.append(tr);
 					}
