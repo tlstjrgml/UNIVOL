@@ -10,12 +10,14 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
     body { background: #f5f5f0; min-height: 100vh; }
 
+    /* 공통 레이아웃 */
     .container {
       max-width: 1100px;
       margin: 3rem auto;
       padding: 0 2rem;
     }
 
+    /* 섹션 제목 */
     .section-title {
       font-size: 20px;
       font-weight: 700;
@@ -27,18 +29,17 @@
       justify-content: space-between;
       align-items: center;
     }
-
     .section-title a {
       font-size: 13px;
       font-weight: 400;
       color: #426B1F;
       text-decoration: none;
     }
-
     .section-title a:hover {
       text-decoration: underline;
     }
 
+    /* 테이블 공통 */
     .board-table, .review-table {
       width: 100%;
       border-collapse: collapse;
@@ -48,59 +49,50 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.07);
       margin-bottom: 3rem;
     }
-
     .board-table thead tr, .review-table thead tr {
-  background: #426B1F;
-  color: white;
-}
+      background: #426B1F;
+      color: white;
+    }
+    .board-table thead th, .review-table thead th {
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .board-table thead th:nth-child(2), .review-table thead th:nth-child(2) {
+      text-align: left;
+    }
+    .board-table tbody tr, .review-table tbody tr {
+      border-bottom: 1px solid #f0f0ea;
+      transition: background 0.12s;
+      cursor: pointer;
+    }
+    .board-table tbody tr:last-child, .review-table tbody tr:last-child {
+      border-bottom: none;
+    }
+    .board-table tbody tr:hover, .review-table tbody tr:hover {
+      background: #f7faf5;
+    }
+    .board-table tbody td, .review-table tbody td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #444;
+      text-align: center;
+    }
+    .board-table tbody td:nth-child(2), .review-table tbody td:nth-child(2) {
+      text-align: left;
+      color: #222;
+    }
+    .board-table tbody td.views, .review-table tbody td.views {
+      color: #888;
+      font-size: 13px;
+    }
+    .board-table tbody td.likes, .review-table tbody td.likes {
+      color: #c0392b;
+      font-size: 13px;
+    }
 
-.board-table thead th, .review-table thead th {
-  padding: 12px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.board-table thead th:nth-child(2), .review-table thead th:nth-child(2) {
-  text-align: left;
-}
-
-.board-table tbody tr, .review-table tbody tr {
-  border-bottom: 1px solid #f0f0ea;
-  transition: background 0.12s;
-  cursor: pointer;
-}
-
-.board-table tbody tr:last-child, .review-table tbody tr:last-child {
-  border-bottom: none;
-}
-
-.board-table tbody tr:hover, .review-table tbody tr:hover {
-  background: #f7faf5;
-}
-
-.board-table tbody td, .review-table tbody td {
-  padding: 12px 16px;
-  font-size: 14px;
-  color: #444;
-  text-align: center;
-}
-
-.board-table tbody td:nth-child(2), .review-table tbody td:nth-child(2) {
-  text-align: left;
-  color: #222;
-}
-
-.board-table tbody td.views, .review-table tbody td.views {
-  color: #888;
-  font-size: 13px;
-}
-
-.board-table tbody td.likes, .review-table tbody td.likes {
-  color: #c0392b;
-  font-size: 13px;
-}
-
+    /* 빈 목록 */
     .empty {
       text-align: center;
       padding: 2rem;
@@ -112,8 +104,10 @@
 <body>
 
   <div th:replace="~{common/navbar.html}"></div>
+
   <div class="container">
 
+    <!-- 봉사게시판 TOP 5 -->
     <div class="section-title">
       봉사게시판
       <a th:href="@{/post}">더보기 &rsaquo;</a>
@@ -128,11 +122,10 @@
           <th style="width:70px;">좋아요</th>
         </tr>
       </thead>
-      <tbody>
-      </tbody>
+      <tbody></tbody>
     </table>
 
-    
+    <!-- 후기게시판 TOP 5 -->
     <div class="section-title">
       후기게시판
       <a th:href="@{/review}">더보기 &rsaquo;</a>
@@ -147,98 +140,95 @@
           <th style="width:70px;">좋아요</th>
         </tr>
       </thead>
-      <tbody>
-      </tbody>
+      <tbody></tbody>
     </table>
 
   </div>
-	<script>
-		window.onload=()=>{
-			topList();
-			topPostList();		
-			setInterval(() => {
-				topList();
-			}, 2000);
-			
-		} 
-		
-		const topList = () => {
-			$.ajax({
-				url: '/review/top',
-				success: data => {
-					const tbody = document.querySelector('.review-table tbody')
-					tbody.innerHTML = '';
-					
-					for(const r of data){
-						
-						const tr = document.createElement('tr');
-						
-						tr.onclick = () => {
-							location.href = `/review/${r.rNumber}/1`;
-			             };
-						
-						const rNumber = document.createElement('td');
-						rNumber.innerText = r.rNumber;
-						
-						const rTitle = document.createElement('td');
-						rTitle.innerText = r.rTitle;
-						
-						const rWriter = document.createElement('td');
-						rWriter.innerText = r.userName;
-						
-						const rViews = document.createElement('td');
-						rViews.innerText = r.rViews
-						
-						const rLike = document.createElement('td');
-						
-						tr.append(rNumber, rTitle, rWriter, rViews, rLike);
-						
-						tbody.append(tr);
-					}
-				},
-				error: data => console.log(data)
-			});
-			
-		}
-		
-		const topPostList = () => {
-		    $.ajax({
-		        url: '/post/top',
-		        success: data => {
-		            const tbody = document.querySelector('.board-table tbody');
-		            tbody.innerHTML = '';
-		            
-		            for(const p of data) {
-		            
-		                const tr = document.createElement('tr');
-		        
-		            	tr.onclick = () => {
-		                     location.href = `/post/1/${p.pNumber}`;
-		                };
-	  
-		                const pNumber = document.createElement('td');
-		                pNumber.innerText = p.pNumber;
-		                
-		                const pTitle = document.createElement('td');
-		                pTitle.innerText = p.pTitle;
-		                
-		                const pWriter = document.createElement('td');
-		                pWriter.innerText = p.userName;
-		                
-		                const pViews = document.createElement('td');
-		                pViews.innerText = p.views;
-		                
-		                const pLike = document.createElement('td');
-		                
-		                tr.append(pNumber, pTitle, pWriter, pViews, pLike);
-		                tbody.append(tr);
-		            }
-		        },
-		        error: data => console.log(data)
-		    });
-		}
-		
-		
- 	</script> 
+
+  <script>
+    window.onload = () => {
+      /* 초기 데이터 로드 */
+      topList();
+      topPostList();
+
+      /* 후기게시판 2초마다 갱신 */
+      setInterval(() => {
+        topList();
+      }, 2000);
+    };
+
+    /* 후기게시판 TOP 5 조회 */
+    const topList = () => {
+      $.ajax({
+        url: '/review/top',
+        success: data => {
+          const tbody = document.querySelector('.review-table tbody');
+          tbody.innerHTML = '';
+
+          for (const r of data) {
+            const tr = document.createElement('tr');
+            tr.onclick = () => {
+              location.href = `/review/${r.rNumber}/1`;
+            };
+
+            const rNumber = document.createElement('td');
+            rNumber.innerText = r.rNumber;
+
+            const rTitle = document.createElement('td');
+            rTitle.innerText = r.rTitle;
+
+            const rWriter = document.createElement('td');
+            rWriter.innerText = r.userName;
+
+            const rViews = document.createElement('td');
+            rViews.innerText = r.rViews;
+
+            const rLike = document.createElement('td');
+
+            tr.append(rNumber, rTitle, rWriter, rViews, rLike);
+            tbody.append(tr);
+          }
+        },
+        error: data => console.log(data)
+      });
+    };
+
+    /* 봉사게시판 TOP 5 조회 */
+    const topPostList = () => {
+      $.ajax({
+        url: '/post/top',
+        success: data => {
+          const tbody = document.querySelector('.board-table tbody');
+          tbody.innerHTML = '';
+
+          for (const p of data) {
+            const tr = document.createElement('tr');
+            tr.onclick = () => {
+              location.href = `/post/1/${p.pNumber}`;
+            };
+
+            const pNumber = document.createElement('td');
+            pNumber.innerText = p.pNumber;
+
+            const pTitle = document.createElement('td');
+            pTitle.innerText = p.pTitle;
+
+            const pWriter = document.createElement('td');
+            pWriter.innerText = p.userName;
+
+            const pViews = document.createElement('td');
+            pViews.innerText = p.views;
+
+            const pLike = document.createElement('td');
+
+            tr.append(pNumber, pTitle, pWriter, pViews, pLike);
+            tbody.append(tr);
+          }
+        },
+        error: data => console.log(data)
+      });
+    };
+  </script>
+
 </body>
 </html>

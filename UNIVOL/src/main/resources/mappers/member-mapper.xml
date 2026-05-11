@@ -66,6 +66,7 @@
 	                   / 10.0
 	               )
 	               WHEN 'R' THEN CEIL(
+	                   (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'R')
 	                   / 10.0
 	               )
 	           END AS PAGE_NUM
