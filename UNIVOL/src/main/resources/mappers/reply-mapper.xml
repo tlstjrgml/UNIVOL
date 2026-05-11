@@ -10,6 +10,7 @@
 		<result column="P_NUMBER" property="pNumber" javaType="int" />
 		<result column="USER_ID" property="userId" javaType="java.lang.String" />
 		<result column="USER_NAME" property="userName" javaType="java.lang.String" />
+		<result column="C_STATUS" property="cStatus" javaType="java.lang.String"/>
 	</resultMap>
 
 	<insert id="insertReply" parameterType="com.univol.post.vo.Reply">
@@ -27,6 +28,7 @@
 		FROM REPLY R
 		JOIN USERS U ON R.USER_ID = U.USER_ID
 		WHERE R.P_NUMBER = #{pNumber}
+		AND R.C_STATUS='Y'
 		ORDER BY R.C_NUMBER DESC
 	</select>
 
@@ -59,10 +61,23 @@
 		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
 		       R.P_NUMBER,
 		       R.USER_ID,
-		       U.USER_NAME
+		       U.USER_NAME,
+		       R.C_STATUS
 		FROM REPLY R
 		JOIN USERS U ON R.USER_ID = U.USER_ID
 		ORDER BY R.C_NUMBER DESC
 	</select>
+	
+	<update id="adminDeleteReply">
+		update reply
+		set c_status='N'
+		where c_number=#{rNumber}
+	</update>
+	
+	<update id="adminRollbackReply">
+		update reply
+		set c_status='Y'
+		where c_number=#{rNumber}
+	</update>
 
 </mapper>

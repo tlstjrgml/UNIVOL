@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.univol.member.vo.Member;
@@ -89,4 +90,24 @@ public class ReplyController {
 
         return "redirect:/post/"+ currentPage + "/" + pNumber;
     }
+    
+    @PostMapping("/adminDeleteReply")
+    @ResponseBody
+    public int adminDeleteReply(@RequestParam("rNumber") int rNumber) {
+    	int result=replyService.adminDeleteReply(rNumber);	
+    	if(result>0) {
+    		return result;
+    	}return result;
+    }
+    
+    @PostMapping("/adminRollbackReply")
+    @ResponseBody
+    public int adminRollbackReply(@RequestParam("rNumber") int rNumber) {
+    	int result=replyService.adminRollbackReply(rNumber);
+    	if(result > 0) {
+    		return result;
+    	}return result;
+    }
+    
+    
 }

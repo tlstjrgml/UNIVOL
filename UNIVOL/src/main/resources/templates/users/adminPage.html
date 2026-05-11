@@ -213,10 +213,10 @@
         			</tr>
         		</thead>
         		<tbody>
-        			<tr th:each="r:${rlist}">
+        			<tr th:each="r:${replyList}">
         				<td th:text="${r.cNumber}"></td>
         				<td th:text="${r.userId}"></td>
-        				<td th:text="${r.rContents}"></td>
+        				<td th:text="${r.comments}"></td>
         				<td>
         					<div th:if="${r.cStatus == 'Y'}">
         						<button type="button" class="btn replyrollback-btn" style="background-color:blue; color: white;">Y</button>
@@ -345,12 +345,12 @@
 				const rNumber = tr.querySelector('td').innerText;
 				
 				$.ajax({
-					url: '/deleteReply',
+					url: '/adminDeleteReply',
 					type:'post',
 					data:{rNumber:rNumber},
 					success:function(result){
 						btn.style.backgroundColor = "red";
-						btn.nextElementSibling.style.backgroundColor = "#888888";
+						btn.previousElementSibling.style.backgroundColor = "#888888";
 					}
 				});
 			});
@@ -362,12 +362,12 @@
 				const rNumber = tr.querySelector('td').innerText;
 				
 				$.ajax({
-					url: '/rollbackReply',
+					url: '/adminRollbackReply',
 					type:'post',
 					data:{rNumber:rNumber},
 					success:function(result){
 						btn.style.backgroundColor = "blue";
-						btn.previousElementSibling.style.backgroundColor = "#888888"
+						btn.nextElementSibling.style.backgroundColor = "#888888"
 					}
 				});
 			});

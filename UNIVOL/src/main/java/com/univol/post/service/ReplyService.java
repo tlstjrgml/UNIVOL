@@ -38,5 +38,12 @@ public class ReplyService {
 	public ArrayList<Reply> selectAllReply(){
 		return replyMapper.selectAllReply();
 	}
+	
+	public int adminDeleteReply(int rNumber) {
+		return replyMapper.adminDeleteReply(rNumber);
+	}
 
+	public int adminRollbackReply(int rNumber) {
+		return replyMapper.adminRollbackReply(rNumber);
+	}
 }
