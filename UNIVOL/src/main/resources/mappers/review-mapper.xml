@@ -7,13 +7,19 @@
 		where p_type = #{c}
 	</select>
 
+	<!-- 기존 selectReviewList에 정렬 추가 -->
 	<select id="selectReviewList" resultMap="reviewResultSet">
-		select *
-		from post
-			 join users using(user_id)
-		where p_type = #{c}
-		order by p_number desc
-	</select>
+    select p.*, u.user_name
+    from post p
+    join users u on p.user_id = u.user_id
+    where p.p_type = #{pType}
+    order by
+    <choose>
+        <when test="sort == 'views_desc'">p.views DESC</when>
+        <when test="sort == 'views_asc'">p.views ASC</when>
+        <otherwise>p.p_date DESC</otherwise>
+    </choose>
+</select>
 
 	<resultMap type="com.univol.review.vo.Review" id="reviewResultSet">
 		<result column="p_number" property="rNumber"/>
@@ -76,5 +82,35 @@
 		insert into reply
 		values(seq_reply.nextval, #{comments}, default, #{pNumber}, #{userId}, default)
 	</insert>
-
+	
+	<!-- 검색 결과 개수 -->
+	<select id="getSearchCount" resultType="_int">
+    select count(*) from post p
+    join users u on p.user_id = u.user_id
+    where p.p_type = 'R'
+    and (
+        p.p_title like '%' || #{keyword} || '%'
+        or u.user_name like '%' || #{keyword} || '%'
+    )
+	</select>
+	
+	<!-- 검색 + 정렬 목록 -->
+	<select id="searchReviews" resultMap="reviewResultSet">
+    select p.*, u.user_name
+    from post p
+    join users u on p.user_id = u.user_id
+    where p.p_type = 'R'
+    and (
+        p.p_title like '%' || #{keyword} || '%'
+        or u.user_name like '%' || #{keyword} || '%'
+    )
+    order by
+    <choose>
+        <when test="sort == 'views_desc'">p.views DESC</when>
+        <when test="sort == 'views_asc'">p.views ASC</when>
+        <otherwise>p.p_date DESC</otherwise>
+    </choose>
+	</select>
+		
+	
 </mapper>

@@ -32,15 +32,35 @@ public class ReviewController {
 	private final ReviewService rService;
 	
 	@GetMapping("")
-	public ModelAndView selectList(@RequestParam(value="page", defaultValue="1") int currentPage,
-							ModelAndView mv, HttpServletRequest request) {
-		int listCount = rService.getListCount('R');
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Review> list = rService.selectReviewList(pi, 'R');
-		
-		mv.addObject("loc", request.getRequestURI());
-		mv.addObject("list", list).addObject("pi", pi).setViewName("review/review");
-		return mv;
+	public ModelAndView selectList(
+	        @RequestParam(value="page", defaultValue="1") int currentPage,
+	        @RequestParam(value="sort", defaultValue="latest") String sort,
+	        @RequestParam(value="keyword", defaultValue="") String keyword,
+	        ModelAndView mv, HttpServletRequest request) {
+
+	    int listCount;
+	    if(keyword.isEmpty()) {
+	        listCount = rService.getListCount('R');
+	    } else {
+	        listCount = rService.getSearchCount(keyword);
+	    }
+
+	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+
+	    ArrayList<Review> list;
+	    if(keyword.isEmpty()) {
+	        list = rService.selectReviewList(pi, 'R',sort);  // 기존
+	    } else {
+	        list = rService.searchReviews(keyword, sort, pi);  // 검색
+	    }
+
+	    mv.addObject("loc", request.getRequestURI());
+	    mv.addObject("list", list);
+	    mv.addObject("pi", pi);
+	    mv.addObject("keyword", keyword);
+	    mv.addObject("sort", sort);
+	    mv.setViewName("review/review");
+	    return mv;
 	}
 	
 	@GetMapping("write")

@@ -170,7 +170,12 @@
 					tbody.innerHTML = '';
 					
 					for(const r of data){
+						
 						const tr = document.createElement('tr');
+						
+						tr.onclick = () => {
+							location.href = `/review/${r.rNumber}/1`;
+			             };
 						
 						const rNumber = document.createElement('td');
 						rNumber.innerText = r.rNumber;
@@ -209,8 +214,13 @@
 		            tbody.innerHTML = '';
 		            
 		            for(const p of data) {
+		            
 		                const tr = document.createElement('tr');
-		                
+		        
+		            	tr.onclick = () => {
+		                     location.href = `/post/1/${p.pNumber}`;
+		                };
+	  
 		                const pNumber = document.createElement('td');
 		                pNumber.innerText = p.pNumber;
 		                
