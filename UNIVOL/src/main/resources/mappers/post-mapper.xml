@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.univol.post.model.Mapper.PostMapper">
+<mapper namespace="com.univol.post.mapper.PostMapper">
 
-	<select id="selectAll" resultType="com.univol.post.model.vo.Post">
-
+	<select id="selectAll" resultType="com.univol.post.vo.Post">
 		select * from (
 			select rownum as rn, A.* from(
 				select p.*, u.user_name
@@ -22,42 +21,41 @@
 		)
 		where rn &gt;= #{startRow}
 	</select>
-	
+
 	<select id="getListCount" resultType="_int">
-		
 		select count(*) from post
     	where p_Type='V'
 	</select>
-	
+
 	<insert id="insertPost">
 		insert into post
 		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default)
 	</insert>
-	
-	<select id="selectOne" resultType="com.univol.post.model.vo.Post">
-		select p.*, u.user_name 
+
+	<select id="selectOne" resultType="com.univol.post.vo.Post">
+		select p.*, u.user_name
 		from post p
 			join users u on p.user_id = u.user_id
 		where p_number = #{pNumber}
 	</select>
 
-	<select id="selectAllPost" resultType = "com.univol.post.model.vo.Post">
+	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
 		select * from post
-	</select>	
-	
+	</select>
+
 	<update id="rollbackPost">
 		update post
 		set p_status ='Y'
 		where p_number = #{pNumber}
 	</update>
-	
+
 	<update id="deletePost">
 		update post
 		set p_status = 'N'
 		where p_number = #{pNumber}
 	</update>
-	
-	<select id="searchPosts" resultType="com.univol.post.model.vo.Post">
+
+	<select id="searchPosts" resultType="com.univol.post.vo.Post">
 		select * from(
 			select rownum as rn, A.* from(
 				select p.*, u.user_name
@@ -76,15 +74,10 @@
 					</choose>
 			)A
 			where rownum &lt;= #{endRow}
-		
 		)
 		where rn &gt;= #{startRow}
-	
-	
 	</select>
-	
-	
-	
+
 	<select id="getSearchCount" resultType="_int">
 		select count(*) from post p
 		join users u on p.user_id = u.user_id
@@ -95,7 +88,5 @@
 			or u.user_name like '%' || #{keyword} || '%'
 		)
 	</select>
-	
-	
-	
+
 </mapper>

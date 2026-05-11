@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.univol.member.model.vo.Member;
-import com.univol.post.model.service.ReplyService;
-import com.univol.post.model.vo.Reply;
+import com.univol.member.vo.Member;
+import com.univol.post.service.ReplyService;
+import com.univol.post.vo.Reply;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,10 +1,10 @@
-package com.univol.post.model.Mapper;
+package com.univol.post.mapper;
 
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.univol.post.model.vo.Reply;
+import com.univol.post.vo.Reply;
 
 @Mapper
 public interface ReplyMapper {
@@ -18,5 +18,7 @@ public interface ReplyMapper {
 	int updateReply(Reply reply);
 
 	int deleteReply(int cNumber);
+
+	ArrayList<Reply> selectAllReply();
 
 }

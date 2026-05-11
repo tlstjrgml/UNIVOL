@@ -1,11 +1,11 @@
-package com.univol.post.model.service;
+package com.univol.post.service;
 
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
-import com.univol.post.model.Mapper.PostMapper;
-import com.univol.post.model.vo.Post;
+import com.univol.post.mapper.PostMapper;
+import com.univol.post.vo.Post;
 
 import lombok.RequiredArgsConstructor;
 

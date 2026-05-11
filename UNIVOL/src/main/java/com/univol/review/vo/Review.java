@@ -1,4 +1,4 @@
-package com.univol.post.model.vo;
+package com.univol.review.vo;
 
 import java.sql.Date;
 
@@ -13,15 +13,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Post {
-	private int pNumber;
-	private String pTitle;
-	private String contents;
-	private int views;
-	private Date pDate;
-	private char pType;
+public class Review {
+	private int rNumber;
+	private String rTitle;
+	private String rContents;
+	private String rViews;
+	private Date rDate;
+	private String pType;
 	private String userId;
+	private String rStatus;
 	private String userName;
-	private char pStatus;
-	private int likes;
 }

@@ -1,14 +1,14 @@
-package com.univol.review.model.service;
+package com.univol.review.service;
 
 import java.util.ArrayList;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
-import com.univol.member.model.vo.PageInfo;
-import com.univol.post.model.vo.Reply;
+import com.univol.common.PageInfo;
+import com.univol.review.vo.ReviewReply;
 import com.univol.review.mapper.ReviewMapper;
-import com.univol.review.model.vo.Review;
+import com.univol.review.vo.Review;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,8 +22,8 @@ public class ReviewService {
 	}
 
 	public ArrayList<Review> selectReviewList(PageInfo pi, char c) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getReviewLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getReviewLimit());
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectReviewList(c, rowBounds);
 	}
 
@@ -52,11 +52,11 @@ public class ReviewService {
 		return mapper.selectTop();
 	}
 
-	public ArrayList<com.univol.review.model.vo.Reply> selectReplyList(int bId) {
+	public ArrayList<com.univol.review.vo.ReviewReply> selectReplyList(int bId) {
 		return mapper.selectReplyList(bId);
 	}
 
-	public int insertReply(com.univol.review.model.vo.Reply r) {
+	public int insertReply(com.univol.review.vo.ReviewReply r) {
 		return mapper.insertReply(r);
 	}
 
