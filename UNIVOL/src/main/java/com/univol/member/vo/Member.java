@@ -1,4 +1,4 @@
-package com.univol.member.model.vo;
+package com.univol.member.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

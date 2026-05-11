@@ -214,15 +214,15 @@
         		</thead>
         		<tbody>
         			<tr th:each="r:${rlist}">
-        				<td th:text="${수정하기}"></td>
-        				<td th:text="${수정하기}"></td>
-        				<td th:text="${수정하기}"></td>
+        				<td th:text="${r.cNumber}"></td>
+        				<td th:text="${r.userId}"></td>
+        				<td th:text="${r.rContents}"></td>
         				<td>
-        					<div th:if="${}">
+        					<div th:if="${r.cStatus == 'Y'}">
         						<button type="button" class="btn replyrollback-btn" style="background-color:blue; color: white;">Y</button>
         						<button type="button" class="btn replydelete-btn" style="background-color:#888888; color: white">N</button>
         					</div>
-        					<div th:if="${}">
+        					<div th:if="${r.cStatus == 'N'}">
         						<button type="button" class="btn replyrollback-btn" style="background-color:#888888; color:white;">Y</button>
         						<button type="button" class="btn replydelete-btn" style="background-color:red; color:white">N</button>
         					</div>
@@ -231,6 +231,7 @@
         		</tbody>
         	</table>
         </div>
+    </div>
 
     <script>
     

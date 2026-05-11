@@ -1,11 +1,11 @@
-package com.univol.member.model.mapper;
+package com.univol.member.mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.univol.member.model.vo.Member;
+import com.univol.member.vo.Member;
 
 import jakarta.servlet.http.HttpSession;
 

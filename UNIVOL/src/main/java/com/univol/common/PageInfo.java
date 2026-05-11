@@ -1,7 +1,6 @@
-package com.univol.member.model.vo;
+package com.univol.common;
 
 import lombok.AllArgsConstructor;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,11 +12,11 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PageInfo {
-	private int currentPage;
-	private int listCount;
-	private int pageLimit;
-	private int maxPage;
-	private int startPage;
-	private int endPage;
-	private int ReviewLimit;
+    private int currentPage;
+    private int listCount;
+    private int pageLimit;
+    private int maxPage;
+    private int startPage;
+    private int endPage;
+    private int boardLimit;
 }

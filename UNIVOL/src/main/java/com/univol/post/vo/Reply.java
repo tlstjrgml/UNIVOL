@@ -1,4 +1,4 @@
-package com.univol.post.model.vo;
+package com.univol.post.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +18,5 @@ public class Reply {
 	private int pNumber;      // 게시글 번호 (외래키)
 	private String userId;    // 사용자 ID
 	private String userName;  // 사용자명 (조인으로 가져올 때 필요)
+	private String cStatus;
 }
