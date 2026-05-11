@@ -1,4 +1,4 @@
-package com.univol.post.model.vo;
+package com.univol.post.vo;
 
 import java.sql.Date;
 

@@ -1,11 +1,11 @@
-package com.univol.post.model.service;
+package com.univol.post.service;
 
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
-import com.univol.post.model.Mapper.ReplyMapper;
-import com.univol.post.model.vo.Reply;
+import com.univol.post.mapper.ReplyMapper;
+import com.univol.post.vo.Reply;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +33,10 @@ public class ReplyService {
 
 	public int deleteReply(int cNumber) {
 		return replyMapper.deleteReply(cNumber);
+	}
+	
+	public ArrayList<Reply> selectAllReply(){
+		return replyMapper.selectAllReply();
 	}
 
 }

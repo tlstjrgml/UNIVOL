@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.univol.member.model.vo.Member;
-import com.univol.member.model.vo.PageInfo;
-import com.univol.review.model.exception.ReviewException;
-import com.univol.review.model.service.ReviewService;
-import com.univol.review.model.vo.Review;
+import com.univol.common.PageInfo;
+import com.univol.common.Pagination;
+import com.univol.member.vo.Member;
+import com.univol.review.exception.ReviewException;
+import com.univol.review.service.ReviewService;
+import com.univol.review.vo.ReviewReply;
+import com.univol.review.vo.Review;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import templates.common.Pagination;
 
 @Controller
 @RequiredArgsConstructor
@@ -71,9 +72,11 @@ public class ReviewController {
 		}
 		
 		Review r = rService.selectReview(bId, id);
+		ArrayList<ReviewReply> list = rService.selectReplyList(bId);
 		if(r != null) {
 			model.addAttribute("r", r);
 			model.addAttribute("page", page);
+			model.addAttribute("list", list);
 			return "review/detail";
 		} else {
 			throw new ReviewException("게시글 상세보기를 실패하였습니다.");
@@ -136,6 +139,8 @@ public class ReviewController {
 		ArrayList<Review> list = rService.selectTop();
 		return list;
 	}
+
+	// 게시판 삭제
 	@PostMapping("delete")
 	public String deleteReview(@RequestParam("rNumber") int rNumber,
 	                           @RequestParam("page") int page, HttpSession session) {
@@ -149,12 +154,39 @@ public class ReviewController {
 	    
 	}
 	// 검색 기능
-	@GetMapping("")
+	@GetMapping("search")
 	public ModelAndView searchReview(int id) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject(null, mv);
-		mv.setViewName("/rivew");
+		mv.setViewName("/search");
 		return mv;
 	}
+
+	
+	@GetMapping("rinsert")
+	@ResponseBody
+	public ArrayList<ReviewReply> insertReply(@ModelAttribute ReviewReply r){
+		int result = rService.insertReply(r);
+		ArrayList<ReviewReply> list = rService.selectReplyList(r.getPNumber());
+		System.out.println(r.getUserId());
+		return list;
+	}
+	
+	// 댓글 수정
+	@PostMapping("reviewReply/update")
+	public String reupdate(ReviewReply reply, @RequestParam("pNumber")int pno, @RequestParam(value="page", defaultValue="1") int page) { 
+	    int result = rService.reviewUpdate(reply); 
+	    
+	    if(result > 0) {
+	    	return "redirect:/review/" + pno + "/" + page;
+	    }else {
+	    	throw new ReviewException("수정 실패");
+	    }
+	}
+	
+	// 댓글 삭제
+	
+	
+
 	
 }

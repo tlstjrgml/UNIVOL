@@ -6,16 +6,19 @@
 		from post
 		where p_type = #{c}  and p_status = 'Y'
 	</select>
-	
+
 	<select id="selectReviewList" resultMap="reviewResultSet">
 		select *
 		from post
 			 join users using(user_id)
 		where p_type = #{c}
+
 		 and p_status = 'Y' order by p_number desc 
 	</select>
 	
-	<resultMap type="com.univol.review.model.vo.Review" id="reviewResultSet">
+
+	<resultMap type="com.univol.review.vo.Review" id="reviewResultSet">
+
 		<result column="p_number" property="rNumber"/>
 		<result column="P_TITLE" property="rTitle"/>
 		<result column="CONTENTS" property="rContents"/>
@@ -24,17 +27,17 @@
 		<result column="P_TYPE" property="pType"/>
 		<result column="USER_ID" property="userId"/>
 		<result column="P_STATUS" property="rStatus"/>
+		<result column="USER_NAME" property="userName"/>
 	</resultMap>
-	
+
 	<select id="selectReview" resultMap="reviewResultSet">
 		select *
 		from post
 			 join users using(user_id)
-		where p_number = #{id}
-<!-- 		p_status = 'Y' -->
+		where p_number = #{id} and p_status = 'Y'
 	</select>
 
-	<update id="updateReview">
+	<update id="updateView">
 		update post
 		set views = views + 1
 		where p_number = #{id}
@@ -53,16 +56,17 @@
 		insert into post
 		values(#{rNumber}, #{rTitle}, #{rContents}, default, sysdate, #{pType}, #{userId})
 	</insert>
-	
+
 	<select id="selectTop" resultMap="reviewResultSet">
 		select *
 		from(select *
 		    from post
 		        join users using(user_id)
-		        where p_type = 'R'
+		        where p_type = 'R' and p_status = 'Y'
 		        order by views desc)
 		where rownum <![CDATA[<]]> = 5
 	</select>
+
 
 	<update id="deleteReview">
 	    UPDATE POST
@@ -70,6 +74,25 @@
 	    WHERE P_NUMBER = #{rNumber}
 	</update>
 
+	<select id="selectReplyList">
+		select *
+		from reply
+			join users using(user_id)
+		where p_number = #{pNumber} and c_status = 'Y'
+		order by c_number desc
+	</select>
+
+
+	<insert id="insertReply">
+		insert into reply
+		values(seq_reply.nextval, #{comments}, default, #{pNumber}, #{userId}, default)
+	</insert>
+	
+	<!-- 댓글 수정 -->
+	<update id="reviewUpdate">
+      update reply
+      set comments=#{comments}
+      where c_number=#{cNumber} and user_id=#{userId} and c_status='Y'
+	</update>
 
 </mapper>
-

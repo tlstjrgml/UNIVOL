@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.univol.member.model.service.MemberService;
-import com.univol.member.model.vo.Member;
-import com.univol.post.model.service.PostService;
-import com.univol.post.model.vo.Post;
+import com.univol.member.service.MemberService;
+import com.univol.member.vo.Member;
+import com.univol.post.service.PostService;
+import com.univol.post.service.ReplyService;
+import com.univol.post.vo.Post;
+import com.univol.post.vo.Reply;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class MemberController {
 
 	private final MemberService mService;
 	private final PostService pService;
+	private final ReplyService rService;
 	
 	private final BCryptPasswordEncoder passwordEncoder;
 	
@@ -124,6 +127,8 @@ public class MemberController {
 		model.addAttribute("mlist", mlist);
 		ArrayList<Post> plist = pService.selectAllPost();
 		model.addAttribute("plist",plist);
+		ArrayList<Reply> rlist = rService.selectAllReply();
+		model.addAttribute("replyList", rlist);
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		if(loginUser != null &&  loginUser.getIsAdmin().equals("Y")) {     
 			return "users/adminPage";

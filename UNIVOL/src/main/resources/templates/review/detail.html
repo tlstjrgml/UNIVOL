@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <title>봉사 게시글 상세</title>
+  
 
   <!-- 폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -146,6 +148,61 @@
       padding: 10px;
       text-align: left;
     }
+    .reply-btn-small {
+    padding: 6px 14px;
+    background: #f1f1ed; /* 연한 베이지톤 */
+    color: #555;
+    border: 1px solid #d0d0c8;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* 수정 버튼에 마우스 올렸을 때 (강조색) */
+.reply-btn-small:hover {
+    background: #426B1F;
+    color: #fff;
+    border-color: #426B1F;
+}
+
+/* 삭제 버튼 (기존 reply-btn-delete 클래스) */
+.reply-btn-delete {
+    background: #fdf2f2;
+    color: #ef4444;
+    border-color: #fecaca;
+}
+
+/* 삭제 버튼에 마우스 올렸을 때 */
+.reply-btn-delete:hover {
+    background: #ef4444 !important;
+    color: #fff !important;
+    border-color: #ef4444 !important;
+}
+
+/* 수정 시 나타날 폼 박스 (toggle 시 보여줄 박스) */
+.reply-edit-box { 
+    background: #f9f9f7; 
+    border-radius: 8px; 
+    padding: 1.5rem; 
+    margin-top: 10px; 
+    border: 1px solid #e2e2da;
+}
+
+/* 수정창 내부 textarea */
+.reply-edit-textarea { 
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid #d0d0c8; 
+    border-radius: 8px; 
+    font-size: 13px; 
+    resize: none; 
+    min-height: 80px; 
+    outline: none; 
+}
+.reply-edit-textarea:focus { 
+    border-color: #426B1F; 
+}
     .container { max-width: 1000px; margin: 2.5rem auto; padding: 0 2rem; }
     .back-btn { display: inline-block; margin-bottom: 1rem; padding: 8px 16px; background: #eaf3de; color: #426B1F; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; text-decoration: none; transition: background 0.15s; }
     .back-btn:hover { background: #d5e8c6; }
@@ -154,14 +211,15 @@
 <body>
 
   <!-- 로고 -->
-  <div class="logo">UNIVOL</div>
+  <div class="logo" onclick="location.href='/'" style="cursor: pointer;">UNIVOL</div>
 
   <!-- 페이지 제목 -->
   <div class="page-title">게시글 조회</div>
 
   <div class="container">
   	<div>
-  		<a class="back-btn" th:href="@{/review(page=${currentPage})}">← 목록으로</a>
+  		<!-- currentPage 대신 page 사용 -->
+		<a class="back-btn" th:href="@{/review(page=${page})}">← 목록으로</a>
   	</div>
 
     <!-- 🔥 위치 이동된 hr -->
@@ -209,23 +267,46 @@
 		  	</th:block>
 		</div>
 
-    <div class="comment-box">
-      <div class="comment-title">댓글</div>
-      <textarea placeholder="댓글을 입력하세요"></textarea>
-      <div class="btn-area">
-        <button>등록</button>
-      </div>
-
-      <div class="comment-item">
-        <div class="comment-writer">이수연</div>
-        <div class="comment-date">2024.12.11</div>
-        <div>정말 좋은 활동이네요!</div>
-      </div>
-    </div>
+	    <div class="comment-box">
+	    	<div class="comment-title">댓글</div>
+	    		<textarea placeholder="댓글을 입력하세요" id="comments"></textarea>
+	     	<div class="btn-area">
+	        	<button id="replyBtn" th:disabled="${session.loginUser == null}">등록</button>
+			</div>
+			<div id='rList'>
+			    <div class="comment-item" th:each="reply : ${list}">
+			        <div class="comment-writer">[[${reply.userName}]]</div>
+			        <div class="comment-date" th:text="${#dates.format(reply.cDate, 'yyyy-MM-dd')}"></div>
+			        <div class="comment-content-text" th:id="'content-' + ${reply.cNumber}">[[${reply.comments}]]</div>
+			        
+			        <div class="reply-actions" th:if="${session.loginUser != null and reply.userId == session.loginUser.userId}">
+			            <!-- 수정 버튼: 클릭 시 js 함수 호출 -->
+			            <button type="button" class="reply-btn-small" 
+			                    th:onclick="submitUpdate([[${reply.cNumber}]], this)">수정</button>
+			            
+			            <!-- 삭제 버튼 (기존 유지) -->
+			            <form th:action="@{/review/reviewReply/{cno}/delete(cno=${reply.cNumber})}" method="POST" style="display:inline;">
+			                <button type="submit" class="reply-btn-small" onclick="return confirm('삭제하시겠습니까?')">삭제</button>
+			            </form>
+			        </div>
+			    </div>
+			</div>
+			
+			<!-- 수정을 위해 서버로 데이터를 보낼 숨겨진 폼 (딱 하나만 있으면 됩니다) -->
+			<form id="hiddenUpdateForm" th:action="@{/review/reviewReply/update}" method="POST" style="display:none;">
+			    <input type="hidden" name="cNumber" id="updateCno">
+			    <input type="hidden" name="userId" th:value="${session.loginUser.userId}">
+			    <input type="hidden" name="comments" id="updateComments">
+			    <!-- 만약 pNumber(게시글번호)가 필요하다면 추가 -->
+			    <input type="hidden" name="pNumber" th:value="${r.rNumber}"> 
+			    <input type="hidden" name="page" th:value="${page}">
+			</form>
+    	</div>
 
   </div>
 </body>
-<script>
+<script th:inline='javascript'>
+	
 	window.onload = function () {
 	
 	  const viewMode = document.getElementById("view-mode");
@@ -234,13 +315,12 @@
 	  const editBtn = document.getElementById("editBtn");
 	  const cancelBtn = document.getElementById("cancelBtn");
 	
-	  // 수정 버튼 클릭
+	  //  수정 버튼 클릭
 	  editBtn.onclick = function () {
 	    viewMode.style.display = "none";
 	    editMode.style.display = "block";
 	  };
-	
-	  // 취소 버튼 클릭
+	  //  취소 버튼 클릭
 	  cancelBtn.onclick = function () {
 	    viewMode.style.display = "block";
 	    editMode.style.display = "none";
@@ -259,8 +339,76 @@
 		        }
 		    });
 		}
+
+	  document.getElementById('replyBtn').addEventListener('click', () => {
+		$.ajax({
+			url: '/review/rinsert',
+			data: {
+				comments: document.getElementById('comments').value,
+				pNumber: /*[[${r.rNumber}]]*/5,
+				userId: /*[[${session.loginUser.userId}]]*/'user'
+			},
+			success: data => {
+				console.log(data)
+				const divPar = document.querySelector('#rList');
+				divPar.innerHTML = '';
+				
+				for(const c of data){
+					const commentItem = document.createElement('div');
+					commentItem.classList.add('comment-item');  
+					
+					const writerDiv = document.createElement('div');
+					writerDiv.classList.add('comment-writer');
+					writerDiv.innerText = c.userName;
+					
+					const cDateDiv = document.createElement('div');
+					cDateDiv.classList.add('comment-date');
+					cDateDiv.innerText = c.cDate;
+					
+					const commentsDiv = document.createElement('div');
+					commentsDiv.innerText = c.comments
+					
+					commentItem.append(writerDiv);
+					commentItem.append(cDateDiv);
+					commentItem.append(commentsDiv);
+					divPar.append(commentItem);
+				}
+				document.getElementById('comments').value = '';
+			},
+			error: data => console.log(data)
+		}); 
+	  });
+		
 	
 	};
+	// 댓글 수정
+	function submitUpdate(cNumber, btn) {
+
+	    const contentDiv = document.getElementById(`content-${cNumber}`);
+	    const original = contentDiv.innerText;
+	
+	    contentDiv.innerHTML = `<textarea id="edit-${cNumber}" style="width:100%; height:80px;">${original}</textarea>`;
+	
+	    btn.innerText = '완료';
+	
+	    btn.onclick = () => {
+	        const newText =
+	            document.getElementById(`edit-${cNumber}`).value;
+	
+	        if (!newText.trim()) {
+	            alert("내용 입력");
+	            return;
+	        }
+
+        document.getElementById('updateCno').value = cNumber;
+        document.getElementById('updateComments').value = newText;
+
+        document.getElementById('hiddenUpdateForm').submit();
+    };
+    
+    // 댓글 삭제
+    
+}
 
 </script>
 </html>

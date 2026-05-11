@@ -1,4 +1,4 @@
-package com.univol.member.model.service;
+package com.univol.member.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.univol.member.model.mapper.MemberMapper;
-import com.univol.member.model.vo.Member;
+import com.univol.member.mapper.MemberMapper;
+import com.univol.member.vo.Member;
 
 import lombok.RequiredArgsConstructor;
 

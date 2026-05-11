@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
-import com.univol.post.model.vo.Reply;
-import com.univol.review.model.vo.Review;
+import com.univol.review.vo.ReviewReply;
+import com.univol.review.vo.Review;
 
 @Mapper
 public interface ReviewMapper {
@@ -17,7 +17,7 @@ public interface ReviewMapper {
 
 	Review selectReview(int bId);
 
-	int updateReview(int bId);
+	int updateView(int bId);
 
 	int updateReviews(Review r);
 
@@ -25,8 +25,14 @@ public interface ReviewMapper {
 
 	ArrayList<Review> selectTop();
 
-	ArrayList<Reply> selectReply(int pNumber);
+	ArrayList<com.univol.review.vo.ReviewReply> selectReplyList(int bId);
+
+	int insertReply(com.univol.review.vo.ReviewReply r);
+	
 
 	int deleteReview(int rNumber);
+	
+	int reviewUpdate(ReviewReply reply);
+
 
 }
