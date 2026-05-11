@@ -108,15 +108,19 @@
       
     </div>
     <div class="post-content">
-	    <p style="font-size:28px;">
-	    	<strong>봉사 날짜: </strong>	
-	    	<span th:text="${post.pDate}"></span>
-	    </p>
-	    <br/>
-	    <hr>
-	    <br/>
-	    <p th:text="${post.contents}" style="font-size:20px;"></p>
-	</div>
+    <table style="width:100%; border-collapse:collapse; margin-bottom:1.5rem;">
+        <tr>
+            <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; width:120px; font-weight:700; color:#333;">봉사제목</th>
+            <td style="border:1px solid #e0e0d8; padding:12px 16px;" th:text="${post.pTitle}"></td>
+        </tr>
+        <tr>
+            <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; font-weight:700; color:#333;">봉사날짜</th>
+            <td style="border:1px solid #e0e0d8; padding:12px 16px;" th:text="${post.pDate}"></td>
+        </tr>
+    </table>
+    <p style="font-size:1.5em; font-weight:700; color:#333; margin-bottom:8px;">봉사내용</p>
+    <p th:text="${post.contents}" style="font-size:14px; line-height:1.8; color:#555;"></p>
+</div>
     <div class="reply-section">
       <h2 class="reply-title">댓글 (<span th:text="${replyList.size()}">0</span>)</h2>
 
