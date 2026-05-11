@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewService {
 	private final ReviewMapper mapper;
-
+ 
 	public int getListCount(char c) {
 		return mapper.getListCount(c);
 	}
@@ -45,7 +45,7 @@ public class ReviewService {
 	}
 
 	public int insertReview(Review r) {
-		return mapper.insertReview(r);
+		return mapper.insertReview(r);  
 	}
 
 	public ArrayList<Review> selectTop() {

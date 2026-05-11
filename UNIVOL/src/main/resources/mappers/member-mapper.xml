@@ -22,26 +22,18 @@
     </insert>
 
     <select id="selectAll" resultType="com.univol.member.vo.Member">
-<<<<<<< HEAD
-    select * from (
-        select rownum as rn, A.* from (
-            SELECT user_id, user_pw, user_name,
-                   TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
-                   gender, phone, address, is_admin, member_status
-            FROM users
-        ) A
-        where rownum &lt;= #{endRow}
-    )
-    where rn >= #{startRow}
-</select>
-    <select id="getApplyList" parameterType="String" resultType="map">
-=======
-        SELECT user_id, user_pw, user_name,
-               TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
-               gender, phone, address, is_admin, member_status
-        FROM users
-    </select>
-
+	    select * from (
+	        select rownum as rn, A.* from (
+	            SELECT user_id, user_pw, user_name,
+	                   TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
+	                   gender, phone, address, is_admin, member_status
+	            FROM users
+	        ) A
+	        where rownum &lt;= #{endRow}
+	    )
+	    where rn >= #{startRow}
+	</select>
+	
 	  <select id="getApplyCount" parameterType="String" resultType="int">
 	    SELECT COUNT(*) FROM REPLY WHERE USER_ID = #{userId}
 	</select>
@@ -51,7 +43,6 @@
 	</select>
 
 	<select id="getApplyList" parameterType="String" resultType="map">
->>>>>>> origin/정현종
 	    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
 	           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE,
 	           CEIL(
@@ -75,7 +66,6 @@
 	                   / 10.0
 	               )
 	               WHEN 'R' THEN CEIL(
-	                   (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'R')
 	                   / 10.0
 	               )
 	           END AS PAGE_NUM

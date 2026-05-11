@@ -122,17 +122,17 @@
 	          <td class="col-num num" th:text="${r.rNumber}"></td>
 <!-- 	          <td class="title" th:text="${r.rTitle}"> -->
 <!-- 	          <td class="date" th:text="${r.rDate}"> -->
-	          <td class="col-title">
-				  <span class="title" th:text="${r.rTitle}"></span>
-				  <span class="date"  th:text="${r.rDate}"></span>
-				  
-			  </td>
 <!-- 	          <td class="col-title"> -->
-<!-- 	            <div class="title-wrap"> -->
-<!-- 	              <span class="title" th:text="${r.rTitle}"></span> -->
-<!-- 	              <span class="date"  th:text="${r.rDate}"></span> -->
-<!-- 	            </div> -->
-<!-- 	          </td> -->
+<!-- 				  <span class="title" th:text="${r.rTitle}"></span> -->
+<!-- 				  <span class="date"  th:text="${r.rDate}"></span> -->
+				  
+<!-- 			  </td> -->
+	          <td class="col-title">
+	            <div class="title-wrap">
+	              <span class="title" th:text="${r.rTitle}"></span>
+	              <span class="date"  th:text="${r.rDate}"></span>
+	            </div>
+	          </td>
 	          <td class="col-author author" th:text="${r.userName}"></td>
 	          <td class="col-views views"   th:text="${r.rViews}"></td>
 	          <td class="col-likes likes"></td>
@@ -164,20 +164,26 @@
 	<script th:inline="javascript">
 		window.onload = () => {
 			const tbody = document.querySelector('tbody');
-			const tds = tbody.querySelectorAll('td');
+			const all = tbody.querySelectorAll('tr');
 			const loginUser = /*[[${session.loginUser}]]*/null;
-			for(const td of tds){
+			for(const tr of all){
 				if(loginUser != null){
-					td.addEventListener('click', e => {
-						const trTds = e.target.parentElement.querySelectorAll('td');
+					tr.addEventListener('click', e => {
+						const trTds = tr.querySelectorAll('td');
 						const reviewId = trTds[0].innerText;
 						location.href = '/review/' + reviewId + "/" + /*[[${pi.currentPage}]]*/2;
 					})
 				}
 			}
+			
 		}
 		
 		
 	</script>
+
+
+
+
+
 </body>
 </html>
