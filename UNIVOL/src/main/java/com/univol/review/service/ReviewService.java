@@ -21,10 +21,10 @@ public class ReviewService {
 		return mapper.getListCount(c);
 	}
 
-	public ArrayList<Review> selectReviewList(PageInfo pi, char c) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectReviewList(c, rowBounds);
+	public ArrayList<Review> selectReviewList(PageInfo pi, char c, String sort) {
+	    int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+	    RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+	    return mapper.selectReviewList(c, sort, rowBounds);
 	}
 
 	public Review selectReview(int bId, String id) {
@@ -60,5 +60,15 @@ public class ReviewService {
 		return mapper.insertReply(r);
 	}
 
+	public int getSearchCount(String keyword) {
+		return mapper.getSearchCount(keyword);
+	}
+
+
+	public ArrayList<Review> searchReviews(String keyword, String sort, PageInfo pi) {
+	    int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+	    RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+	    return mapper.searchReviews(keyword, sort, rowBounds);
+	}
 	
 }

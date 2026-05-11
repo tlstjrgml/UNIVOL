@@ -3,9 +3,9 @@ package com.univol.review.mapper;
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
-import com.univol.review.vo.ReviewReply;
 import com.univol.review.vo.Review;
 
 @Mapper
@@ -13,7 +13,7 @@ public interface ReviewMapper {
 
 	int getListCount(char c);
 
-	ArrayList<Review> selectReviewList(char c, RowBounds rowBounds);
+	ArrayList<Review> selectReviewList(@Param("pType") char c, @Param("sort") String sort,  RowBounds rowBounds);
 
 	Review selectReview(int bId);
 
@@ -30,6 +30,10 @@ public interface ReviewMapper {
 	ArrayList<com.univol.review.vo.ReviewReply> selectReplyList(int bId);
 
 	int insertReply(com.univol.review.vo.ReviewReply r);
+
+	int getSearchCount(@Param("keyword") String keyword);
+
+	ArrayList<Review> searchReviews(@Param("keyword") String keyword,  @Param("sort") String sort, RowBounds rowBounds);
 	
 
 }
