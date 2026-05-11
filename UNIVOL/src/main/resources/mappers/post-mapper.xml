@@ -13,7 +13,7 @@
 				order by
 					<choose>
 						<when test="sort == 'views_desc'">p.views DESC</when>
-						<when test="sort == 'asc'">p.views ASC</when>
+						<when test="sort == 'views_asc'">p.views ASC</when>
 						<otherwise>p.p_date DESC</otherwise>
 					</choose>
 			) A
@@ -38,15 +38,18 @@
 			join users u on p.user_id = u.user_id
 		where p_number = #{pNumber}
 	</select>
-	
+
 	<update id="updateReview">
 		update post
 		set views = views + 1
 		where p_number = #{pNumber}
 	</update>
-	
 
-	 
+	<update id="updateViews" parameterType="_int">
+		update post
+		set views = views + 1
+		where p_number = #{pNumber}
+	</update>
 
 	<update id="rollbackPost">
 		update post
@@ -93,12 +96,12 @@
 			or u.user_name like '%' || #{keyword} || '%'
 		)
 	</select>
-	
-	<!-- 관리자페이지용 --> 
+
+	<!-- 관리자페이지용 -->
 	<select id="getPostCount" resultType="_int">
 		select count(*) from post
 	</select>
-	
+
 	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
 		select * from (
 			select rownum as rn, a.* from (
@@ -107,10 +110,8 @@
 			where rownum &lt;=#{endRow}
 		)
 		where rn &gt;=#{startRow}
-		
 	</select>
-	
-	
+
 	<select id="selectTopPost" resultType="com.univol.post.vo.Post">
 	    select * from (
 	        select p.*, u.user_name
@@ -119,8 +120,7 @@
 	        where p.p_type = 'V' and p.p_status = 'Y'
 	        order by views desc
 	    )
-    where rownum &lt;= 5
-</select>
+	    where rownum &lt;= 5
+	</select>
 
 </mapper>
-

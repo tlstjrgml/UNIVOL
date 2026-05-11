@@ -14,8 +14,8 @@
 	</resultMap>
 
 	<insert id="insertReply" parameterType="com.univol.post.vo.Reply">
-		INSERT INTO REPLY (C_NUMBER, COMMENTS, C_DATE, P_NUMBER, USER_ID)
-		VALUES (SEQ_REPLY.NEXTVAL, #{comments}, SYSDATE, #{pNumber}, #{userId})
+		INSERT INTO REPLY (C_NUMBER, COMMENTS, C_DATE, P_NUMBER, USER_ID, C_STATUS)
+		VALUES (SEQ_REPLY.NEXTVAL, #{comments}, SYSDATE, #{pNumber}, #{userId}, default)
 	</insert>
 
 	<select id="selectReplyList" parameterType="int" resultMap="replyResultMap">
@@ -24,7 +24,8 @@
 		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
 		       R.P_NUMBER,
 		       R.USER_ID,
-		       U.USER_NAME
+		       U.USER_NAME,
+		       R.C_STATUS
 		FROM REPLY R
 		JOIN USERS U ON R.USER_ID = U.USER_ID
 		WHERE R.P_NUMBER = #{pNumber}
@@ -38,7 +39,8 @@
 		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
 		       R.P_NUMBER,
 		       R.USER_ID,
-		       U.USER_NAME
+		       U.USER_NAME,
+		       R.C_STATUS
 		FROM REPLY R
 		JOIN USERS U ON R.USER_ID = U.USER_ID
 		WHERE R.C_NUMBER = #{cNumber}
@@ -55,13 +57,12 @@
 		WHERE C_NUMBER = #{cNumber}
 	</delete>
 
-	
 	<update id="adminDeleteReply">
 		update reply
 		set c_status='N'
 		where c_number=#{rNumber}
 	</update>
-	
+
 	<update id="adminRollbackReply">
 		update reply
 		set c_status='Y'
@@ -71,23 +72,24 @@
 	<select id="getReplyCount" resultType="_int">
 		select count(*) from reply
 	</select>
-	
+
 	<select id="selectAllReply" resultMap="replyResultMap">
 		SELECT * FROM (
-        SELECT ROWNUM AS RN, A.* FROM (
-            SELECT R.C_NUMBER,
-                   R.COMMENTS,
-                   TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
-                   R.P_NUMBER,
-                   R.USER_ID,
-                   U.USER_NAME,
-                   R.C_STATUS
-            FROM REPLY R
-            JOIN USERS U ON R.USER_ID = U.USER_ID
-            ORDER BY R.C_NUMBER DESC
-        ) A
-        WHERE ROWNUM &lt;= #{endRow}
-    )
-    WHERE RN &gt;= #{startRow}
+		    SELECT ROWNUM AS RN, A.* FROM (
+		        SELECT R.C_NUMBER,
+		               R.COMMENTS,
+		               TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
+		               R.P_NUMBER,
+		               R.USER_ID,
+		               U.USER_NAME,
+		               R.C_STATUS
+		        FROM REPLY R
+		        JOIN USERS U ON R.USER_ID = U.USER_ID
+		        ORDER BY R.C_NUMBER DESC
+		    ) A
+		    WHERE ROWNUM &lt;= #{endRow}
+		)
+		WHERE RN &gt;= #{startRow}
 	</select>
+
 </mapper>
