@@ -1,6 +1,7 @@
 package com.univol.review.mapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
@@ -17,13 +18,10 @@ public interface ReviewMapper {
 
 	Review selectReview(int bId);
 
-<<<<<<< HEAD
 	int updateReview(int bId);
  
-=======
 	int updateView(int bId);
 
->>>>>>> b365c3c56fc67378f98c1bd4481f3c37d75f8d86
 	int updateReviews(Review r);
 
 	int insertReview(Review r);
@@ -33,6 +31,16 @@ public interface ReviewMapper {
 	ArrayList<com.univol.review.vo.ReviewReply> selectReplyList(int bId);
 
 	int insertReply(com.univol.review.vo.ReviewReply r);
+
+	int reviewLike(HashMap<String, Object> map);
+
+	int deleteLike(HashMap<String, Object> map);
+
+	int insertLike(HashMap<String, Object> map);
+
+	int likeCount(int pNumber);
+
+
 	
 
 }

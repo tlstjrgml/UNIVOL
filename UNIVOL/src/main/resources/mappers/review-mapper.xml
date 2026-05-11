@@ -76,5 +76,30 @@
 		insert into reply
 		values(seq_reply.nextval, #{comments}, default, #{pNumber}, #{userId}, default)
 	</insert>
+	
+	<select id="reviewLike" resultType="_int">
+		select count(*)
+		from p_like
+		where user_id = #{userId} and p_number = #{pNumber}
+	</select>
+	
+	<delete id="deleteLike">
+		delete from p_like
+		where user_id = #{userId} and p_number = #{pNumber}
+	</delete>
+	
+	<insert id="insertLike">
+		insert into p_like
+		values(#{userId}, #{pNumber})
+	</insert>
+	
+	<select id="likeCount" resultType="_int">
+		select count(*)
+		from p_like
+		where p_number = #{pNumber}
+	</select>
+	
+	
+	
 
 </mapper>

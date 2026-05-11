@@ -125,7 +125,7 @@ public class MemberController {
 	public String adminPage(@ModelAttribute Member m, Model model, HttpSession session) {
 		ArrayList<Member> mlist = mService.selectAll();
 		model.addAttribute("mlist", mlist);
-		ArrayList<Post> plist = pService.selectAllPost();
+		ArrayList<Post> plist = pService.selectAllPost();  
 		model.addAttribute("plist",plist);
 		ArrayList<Reply> rlist = rService.selectAllReply();
 		model.addAttribute("replyList", rlist);

@@ -200,10 +200,14 @@
 		
 	     <div class="btn-area">
 
-  			<th:block th:if="${session.loginUser.userId == r.userId}">
+  			<th:block th:if="${session.loginUser != null and session.loginUser.userId == r.userId}">
 			    <button id="editBtn">수정</button>
 			    <button>삭제</button>
 		  	</th:block>
+		  	<button class="like-btn" id="likeBtn">
+			  <span class="heart">🤍</span>
+			  <span id="likeCount">좋아요</span>
+			</button>
 		</div>
 
     <div class="comment-box">
@@ -223,68 +227,96 @@
 
   </div>
 </body>
-<script th:inline='javascript'>
-	window.onload = function () {
-	
-	  const viewMode = document.getElementById("view-mode");
-	  const editMode = document.getElementById("edit-mode");
-	
-	  const editBtn = document.getElementById("editBtn");
-	  const cancelBtn = document.getElementById("cancelBtn");
-	
-	  //  수정 버튼 클릭
-	  editBtn.onclick = function () {
-	    viewMode.style.display = "none";
-	    editMode.style.display = "block";
-	  };
-	
-	  //  취소 버튼 클릭
-	  cancelBtn.onclick = function () {
-	    viewMode.style.display = "block";
-	    editMode.style.display = "none";
-	  };
-	  
-	  document.getElementById('replyBtn').addEventListener('click', () => {
-		$.ajax({
-			url: '/review/rinsert',
-			data: {
-				comments: document.getElementById('comments').value,
-				pNumber: /*[[${r.rNumber}]]*/5,
-				userId: /*[[${session.loginUser.userId}]]*/'user'
-			},
-			success: data => {
-				console.log(data)
-				const divPar = document.querySelector('#rList');
-				divPar.innerHTML = '';
-				
-				for(const c of data){
-					const commentItem = document.createElement('div');
-					commentItem.classList.add('comment-item');  
+	<script th:inline='javascript'>
+		window.onload = function () {
+		
+// 		  const viewMode = document.getElementById("view-mode");
+// 		  const editMode = document.getElementById("edit-mode");
+		
+// 		  const editBtn = document.getElementById("editBtn");
+// 		  const cancelBtn = document.getElementById("cancelBtn");
+		
+// 		  //  수정 버튼 클릭
+// 		  editBtn.onclick = function () {
+// 		    viewMode.style.display = "none";
+// 		    editMode.style.display = "block";
+// 		  };
+		
+// 		  //  취소 버튼 클릭
+// 		  cancelBtn.onclick = function () {
+// 		    viewMode.style.display = "block";
+// 		    editMode.style.display = "none";
+// 		  };
+		  
+		  document.getElementById('replyBtn').addEventListener('click', () => {
+			$.ajax({
+				url: '/review/rinsert',
+				data: {
+					comments: document.getElementById('comments').value,
+					pNumber: /*[[${r.rNumber}]]*/5,
+					userId: /*[[${session.loginUser.userId}]]*/'user'
+				},
+				success: data => {
+					console.log(data);
+					const divPar = document.querySelector('#rList');
+					divPar.innerHTML = '';
 					
-					const writerDiv = document.createElement('div');
-					writerDiv.classList.add('comment-writer');
-					writerDiv.innerText = c.userName;
-					
-					const cDateDiv = document.createElement('div');
-					cDateDiv.classList.add('comment-date');
-					cDateDiv.innerText = c.cDate;
-					
-					const commentsDiv = document.createElement('div');
-					commentsDiv.innerText = c.comments
-					
-					commentItem.append(writerDiv);
-					commentItem.append(cDateDiv);
-					commentItem.append(commentsDiv);
-					divPar.append(commentItem);
+					for(const c of data){
+						const commentItem = document.createElement('div');
+						commentItem.classList.add('comment-item');  
+						
+						const writerDiv = document.createElement('div');
+						writerDiv.classList.add('comment-writer');
+						writerDiv.innerText = c.userName;
+						
+						const cDateDiv = document.createElement('div');
+						cDateDiv.classList.add('comment-date');
+						cDateDiv.innerText = c.cdate;
+						
+						const commentsDiv = document.createElement('div');
+						commentsDiv.innerText = c.comments
+						
+						commentItem.append(writerDiv);
+						commentItem.append(cDateDiv);
+						commentItem.append(commentsDiv);
+						divPar.append(commentItem);
+					}
+					document.getElementById('comments').value = '';
+				},
+				error: data => console.log(data)
+			}); 
+		  });
+			
+			const likeBtn = document.getElementById('likeBtn');
+			let liked = false;
+			
+			likeBtn.addEventListener('click', () => {
+				liked = !liked;
+				if (liked) {
+				    likeBtn.innerHTML = '❤️ 안 좋아요';
+				} else{
+				    likeBtn.innerHTML = '🤍 좋아요';
 				}
-				document.getElementById('comments').value = '';
-			},
-			error: data => console.log(data)
-		}); 
-	  });
-	  
+				
+				$.ajax({
+					url: '/review/like',
+					method: 'POST',
+					data: {
+						pNumber: /*[[${r.rNumber}]]*/99,
+						userId: /*[[${session.loginUser.userId}]]*/'user00',
+						liked: liked
+					},
+					success: data => {
+						console.log(data);
+					},
+					error: data => {
+						console.log(data);
+					}
+				})
+			})
+		};
+		
+		
 	
-	};
-
-</script>
+	</script>
 </html>

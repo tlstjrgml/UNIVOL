@@ -1,12 +1,12 @@
 package com.univol.review.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import com.univol.common.PageInfo;
-import com.univol.review.vo.ReviewReply;
 import com.univol.review.mapper.ReviewMapper;
 import com.univol.review.vo.Review;
 
@@ -60,5 +60,31 @@ public class ReviewService {
 		return mapper.insertReply(r);
 	}
 
+	public int reviewLike(int pNumber, String userId) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pNumber", pNumber);
+		map.put("userId", userId);
+		return mapper.reviewLike(map);
+	}
+
+	public int deleteLike(int pNumber, String userId) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pNumber", pNumber);
+		map.put("userId", userId);
+		return mapper.deleteLike(map);
+	}
+
+	public int insertLike(int pNumber, String userId) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pNumber", pNumber);
+		map.put("userId", userId);
+		return mapper.insertLike(map);
+	}
+
+	public int likeCount(int pNumber) {
+		return mapper.likeCount(pNumber);
+	}
+
+	
 	
 }

@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.univol.common.PageInfo;
+import com.univol.common.Pagination;
 import com.univol.member.vo.Member;
 import com.univol.post.service.PostService;
 import com.univol.post.service.ReplyService;
-import com.univol.common.PageInfo;
-import com.univol.common.Pagination;
 import com.univol.post.vo.Post;
 import com.univol.post.vo.Reply;
 
