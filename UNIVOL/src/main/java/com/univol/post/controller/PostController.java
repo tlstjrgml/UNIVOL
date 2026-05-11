@@ -95,16 +95,18 @@ public class PostController {
 		String id = null;
 		if(loginUser != null) {
 			id = loginUser.getUserId();
-			}
-		Post post = pService.selectOne(pNumber,id);
-	    if (post != null) {
-	    	ArrayList<Reply> replylist = rService.selectReplyList(pNumber); 
-	    	model.addAttribute("post",post);
-	    	model.addAttribute("replyList", replylist);
-	    	return "post/detail";
-	    }else {
-	    	throw new RuntimeException("게시글 상세보기를 실패하였습니다.");
-	    }
+			}	
+		Post post = pService.selectOne(pNumber, id);
+		if (post != null) {
+		    // updateReview 관련 코드 전부 제거
+		    ArrayList<Reply> replylist = rService.selectReplyList(pNumber);
+		    model.addAttribute("post", post);
+		    model.addAttribute("replyList", replylist);
+		    model.addAttribute("currentPage", currentPage);
+		    return "post/detail";
+		} else {
+		    throw new RuntimeException("게시글 상세보기를 실패하였습니다.");
+		}
       }
 
 	/* 관리자페이지에서 글 삭제하기 */
@@ -127,7 +129,15 @@ public class PostController {
 	        return result;
 	    }
 	    return result;
-	}	
+	}
+	
+	/* 메인페이지 봉사게시판 5개 보여주기 */
+	@GetMapping("/post/top")
+	@ResponseBody
+	public ArrayList<Post> selectTopPost(){
+		ArrayList<Post> list = pService.selectTopPost();
+		return list;
+	}
 	
 
 }

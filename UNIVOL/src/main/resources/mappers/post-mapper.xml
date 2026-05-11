@@ -42,7 +42,7 @@
 	<update id="updateReview">
 		update post
 		set views = views + 1
-		where p_number = #{id}
+		where p_number = #{pNumber}
 	</update>
 	
 
@@ -95,6 +95,17 @@
 			or u.user_name like '%' || #{keyword} || '%'
 		)
 	</select>
+	
+	<select id="selectTopPost" resultType="com.univol.post.vo.Post">
+	    select * from (
+	        select p.*, u.user_name
+	        from post p
+	        join users u on p.user_id = u.user_id
+	        where p.p_type = 'V' and p.p_status = 'Y'
+	        order by views desc
+	    )
+    where rownum &lt;= 5
+</select>
 
 </mapper>
 

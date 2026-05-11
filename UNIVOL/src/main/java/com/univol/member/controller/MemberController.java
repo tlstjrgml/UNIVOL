@@ -1,7 +1,6 @@
 package com.univol.member.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -21,11 +20,11 @@ import com.univol.member.service.MemberService;
 import com.univol.member.vo.Member;
 import com.univol.post.service.PostService;
 import com.univol.post.service.ReplyService;
+import com.univol.post.vo.Post;
 import com.univol.post.vo.Reply;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
 @SessionAttributes("loginUser")
@@ -115,21 +114,6 @@ public class MemberController {
 	    if (page > pi.getMaxPage()) page = pi.getMaxPage();
 	    mv.addObject("myPostList", mService.getMyPostList(pi, id));
 	    mv.addObject("myPostPi", pi);
-	}
-
-	public ModelAndView myPage(HttpSession session, ModelAndView mv) {
-		Member loginUser = (Member)session.getAttribute("loginUser");
-		if(loginUser == null) {
-			mv.setViewName("redirect:/logIn");
-			return mv;
-			
-		}
-			String id = loginUser.getUserId();
-			ArrayList<HashMap<String, Object>> applyList = mService.getApplyList(id);
-			
-			mv.addObject("applyList", applyList);
-			mv.setViewName("users/myPage");
-			return mv;
 	}
 
 	

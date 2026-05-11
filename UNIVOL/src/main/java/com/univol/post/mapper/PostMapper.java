@@ -13,7 +13,7 @@ public interface PostMapper {
 
 	ArrayList<Post> selectAll(@Param("startRow") int startRow, @Param("endRow")int endRow, @Param("sort")String sort);
 
-	Post selectOne(int pNumber);
+	Post selectOne(@Param("pNumber") int pNumber, @Param("userId") String userId);
 
 	int insertPost(Post p);
 	
@@ -28,4 +28,9 @@ public interface PostMapper {
 	int rollbackPost(Post p);
 	
 	int deletePost(Post p);
+
+	int updateReview(int pNumber);
+
+	ArrayList<Post> selectTopPost();
+
 }

@@ -21,8 +21,17 @@ public class PostService {
 	}
 
 
-	public Post selectOne(int pNumber) {
-		return mapper.selectOne(pNumber);
+	public Post selectOne(int pNumber, String userId) {
+	    Post post = mapper.selectOne(pNumber, userId);
+	    if(post != null) {
+	        if(userId != null && !post.getUserId().equals(userId)) {
+	            int result = mapper.updateReview(pNumber);
+	            if(result > 0) {
+	                post.setViews(post.getViews() + 1);
+	            }
+	        }
+	    }
+	    return post;
 	}
 
 	public int insertPost(Post p) {
@@ -53,5 +62,15 @@ public class PostService {
 	
 	public int rollbackPost(Post p) {
 		return mapper.rollbackPost(p);
+	}
+
+
+	public int updateReview(int pNumber) {
+		return mapper.updateReview(pNumber);
+	}
+
+
+	public ArrayList<Post> selectTopPost() {
+		return mapper.selectTopPost();
 	}
 }
