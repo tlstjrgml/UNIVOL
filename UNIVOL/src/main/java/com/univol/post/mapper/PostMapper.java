@@ -28,4 +28,6 @@ public interface PostMapper {
 	int rollbackPost(Post p);
 	
 	int deletePost(Post p);
+
+	int updateViews(int pNumber);
 }

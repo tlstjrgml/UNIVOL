@@ -88,14 +88,20 @@ public class PostController {
 
 	/* 글 상세조회 */
 	@GetMapping("/post/{currentPage}/{pNumber}")
-	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model) {
-	    Post post = pService.selectOne(pNumber);
+	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model, HttpSession session) {
+	    Member loginUser = (Member)session.getAttribute("loginUser");
+	    String userId = null;
+	    if(loginUser != null) {
+	    	userId = loginUser.getUserId();
+	    }
+		Post post = pService.selectOne(pNumber, userId);
 	    if(post == null) {
 	        return "error/404";
 	    }
-	    ArrayList<Reply> replylist = rService.selectReplyList(pNumber);
+	    ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
 	    model.addAttribute("post", post);
-	    model.addAttribute("replyList", replylist);
+	    model.addAttribute("replyList",replyList );
+	    model.addAttribute("currentPage", currentPage);
 	    return "post/detail";
 	}
 

@@ -116,7 +116,7 @@
       </thead>
       <tbody id="board-list">
 
-       <tr th:each="p:${plist}" th:onclick="|location.href='/post/${pi.currentPage}/${p.pNumber}'|">
+       <tr th:each="p:${plist}" >
 
           <td class="col-num num" th:text="${p.pNumber}"></td>
           <td class="col-title">
