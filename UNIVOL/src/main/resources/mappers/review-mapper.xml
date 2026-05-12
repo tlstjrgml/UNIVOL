@@ -8,11 +8,15 @@
 	</select>
 
 	<select id="selectReviewList" resultMap="reviewResultSet">
-		select *
-		from post
-			 join users using(user_id)
-		where p_type = #{c}
-		order by p_number desc
+		select p.p_number, p.p_title, p.views, p.p_date, p.p_type, p.user_id,
+            p.p_status, p.p_status, p.is_notice, p.create_date, u.user_name, count(l.p_number) as like_count
+		from post p
+		    join users u on p.user_id = u.user_id
+		    left join p_like l on p.p_number = l.p_number
+		where p.p_status = 'Y' and p.p_type = 'R'
+		group by p.p_number, p.p_title, p.views, p.p_date, p.p_type, p.user_id,
+		            p.p_status, p.p_status, p.is_notice, p.create_date, u.user_name
+		order by like_count desc
 	</select>
 
 	<resultMap type="com.univol.review.vo.Review" id="reviewResultSet">
@@ -56,11 +60,15 @@
 
 	<select id="selectTop" resultMap="reviewResultSet">
 		select *
-		from(select *
-		    from post
-		        join users using(user_id)
-		        where p_type = 'R' and p_status = 'Y'
-		        order by views desc)
+		from(select p.*, u.user_name, nvl(l.like_count, 0) as like_count
+			    from post p
+			        join users u on p.user_id = u.user_id
+			        left join (
+			            select p_number, count(*) as like_count
+			            from p_like
+			            group by p_number
+			        ) l on p.p_number = l.p_number
+			    where p.p_type = 'R' and p.p_status = 'Y')
 		where rownum <![CDATA[<]]> = 5
 	</select>
 

@@ -192,10 +192,12 @@
 						rWriter.innerText = r.userName;
 						
 						const rViews = document.createElement('td');
-						rViews.innerText = r.rViews
+						rViews.classList.add('views');
+						rViews.innerText = r.rViews;
 						
 						const rLike = document.createElement('td');
-						/*  rLike.innerText = '♥ ' + (r.) */
+						rLike.classList.add('likes');
+						rLike.innerText = '♥ ' + r.likeCount; 
 						
 						tr.append(rNumber, rTitle, rWriter, rViews, rLike);
 						/* tr.append(rTitle);

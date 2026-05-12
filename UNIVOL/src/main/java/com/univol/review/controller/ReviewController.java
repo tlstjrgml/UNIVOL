@@ -1,6 +1,7 @@
 package com.univol.review.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -70,10 +71,14 @@ public class ReviewController {
 		if(loginUser != null) {
 			id = loginUser.getUserId();
 		}
+		int likeCount = rService.likeCount(bId);
+		int isLiked = rService.reviewLike(bId, id);
 		
 		Review r = rService.selectReview(bId, id);
 		ArrayList<ReviewReply> list = rService.selectReplyList(bId);
 		if(r != null) {
+			model.addAttribute("isLiked", isLiked);
+			model.addAttribute("likeCount", likeCount);
 			model.addAttribute("r", r);
 			model.addAttribute("page", page);
 			model.addAttribute("list", list);
@@ -137,6 +142,7 @@ public class ReviewController {
 	@ResponseBody
 	public ArrayList<Review> selectTop(){
 		ArrayList<Review> list = rService.selectTop();
+			
 		return list;
 	}
 	
@@ -151,7 +157,7 @@ public class ReviewController {
 	
 	@PostMapping("like")
 	@ResponseBody
-	public int reviewLike(@RequestParam("pNumber") int pNumber, @RequestParam("userId") String userId) {
+	public HashMap<String, Object> reviewLike(@RequestParam("pNumber") int pNumber, @RequestParam("userId") String userId) {
 		int result = rService.reviewLike(pNumber, userId);
 
 		if(result > 0) {
@@ -161,10 +167,11 @@ public class ReviewController {
 		}
 		
 		int likeCount = rService.likeCount(pNumber);
-//		System.out.println(pNumber);
-//		System.out.println(userId);
-//		System.out.println(liked);
-		return likeCount;
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("liked", result == 0);
+		map.put("likeCount", likeCount);
+		return map;
 		
 	}
 	

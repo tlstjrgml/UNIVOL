@@ -204,9 +204,13 @@
 			    <button id="editBtn">수정</button>
 			    <button>삭제</button>
 		  	</th:block>
-		  	<button class="like-btn" id="likeBtn">
-			  <span class="heart">🤍</span>
-			  <span id="likeCount">좋아요</span>
+		  	<button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
+			  <span class="heart" id="heart">🤍[[${likeCount}]]</span>
+			  <span id="likeText">좋아요</span>
+			</button>
+			<button th:if="${isLiked == 1}" class="like-btn" id="likeBtn">
+			  <span class="heart" id="heart">❤️[[${likeCount}]]</span>
+			  <span id="likeText">안 좋아요</span>
 			</button>
 		</div>
 
@@ -288,15 +292,10 @@
 		  });
 			
 			const likeBtn = document.getElementById('likeBtn');
-			let liked = false;
+			const heart = document.getElementById('heart');
+			const likeText = document.getElementById('likeText');
 			
 			likeBtn.addEventListener('click', () => {
-				liked = !liked;
-				if (liked) {
-				    likeBtn.innerHTML = '❤️ 안 좋아요';
-				} else{
-				    likeBtn.innerHTML = '🤍 좋아요';
-				}
 				
 				$.ajax({
 					url: '/review/like',
@@ -304,10 +303,17 @@
 					data: {
 						pNumber: /*[[${r.rNumber}]]*/99,
 						userId: /*[[${session.loginUser.userId}]]*/'user00',
-						liked: liked
 					},
 					success: data => {
-						console.log(data);
+						console.log(data.likeCount);
+						if(data.liked){
+							heart.innerText = '❤️' + data.likeCount; 
+							likeText.innerText = '안 좋아요';
+						} else {
+							heart.innerText = '🤍' + data.likeCount; 
+							likeText.innerText = '좋아요';	
+						}
+						
 					},
 					error: data => {
 						console.log(data);
