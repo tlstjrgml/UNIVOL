@@ -29,6 +29,18 @@
 		<result column="P_STATUS" property="rStatus"/>
 		<result column="USER_NAME" property="userName"/>
 	</resultMap>
+	
+	<resultMap id="replyResultSet" type="com.univol.review.vo.ReviewReply">
+
+	    <result column="C_NUMBER" property="cNumber"/>
+	    <result column="COMMENTS" property="comments"/>
+	    <result column="C_DATE" property="cDate"/>
+	    <result column="P_NUMBER" property="pNumber"/>
+	    <result column="USER_ID" property="userId"/>
+	    <result column="USER_NAME" property="userName"/>
+	    <result column="C_STATUS" property="cStatus"/>
+
+	</resultMap>
 
 	<select id="selectReview" resultMap="reviewResultSet">
 		select *
@@ -95,4 +107,10 @@
       where c_number=#{cNumber} and user_id=#{userId} and c_status='Y'
 	</update>
 
+	<!-- 댓글 삭제 -->
+	<update id="reviewDelete">
+		UPDATE reply
+		SET c_status = 'N'
+		WHERE c_number = #{cnum}
+	</update>
 </mapper>

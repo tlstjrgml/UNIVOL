@@ -203,6 +203,12 @@
 .reply-edit-textarea:focus { 
     border-color: #426B1F; 
 }
+.reply-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    margin-top: 8px;
+}
     .container { max-width: 1000px; margin: 2.5rem auto; padding: 0 2rem; }
     .back-btn { display: inline-block; margin-bottom: 1rem; padding: 8px 16px; background: #eaf3de; color: #426B1F; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; text-decoration: none; transition: background 0.15s; }
     .back-btn:hover { background: #d5e8c6; }
@@ -279,20 +285,31 @@
 			        <div class="comment-date" th:text="${#dates.format(reply.cDate, 'yyyy-MM-dd')}"></div>
 			        <div class="comment-content-text" th:id="'content-' + ${reply.cNumber}">[[${reply.comments}]]</div>
 			        
-			        <div class="reply-actions" th:if="${session.loginUser != null and reply.userId == session.loginUser.userId}">
+			        <div class="reply-actions" th:if="${session.loginUser != null and #strings.equals(reply.userId, session.loginUser.userId)}">
 			            <!-- 수정 버튼: 클릭 시 js 함수 호출 -->
 			            <button type="button" class="reply-btn-small" 
 			                    th:onclick="submitUpdate([[${reply.cNumber}]], this)">수정</button>
 			            
 			            <!-- 삭제 버튼 (기존 유지) -->
-			            <form th:action="@{/review/reviewReply/{cno}/delete(cno=${reply.cNumber})}" method="POST" style="display:inline;">
-			                <button type="submit" class="reply-btn-small" onclick="return confirm('삭제하시겠습니까?')">삭제</button>
-			            </form>
+			            <form th:action="@{/review/reviewReply/delete}" method="POST" class="delete-form">
+						    
+						    <input type="hidden" name="cNumber" th:value="${reply.cNumber}">
+						    <input type="hidden" name="rNumber" th:value="${r.rNumber}">
+    						<input type="hidden" name="page" th:value="${page}">
+    						
+						    <button type="button" class="btn-pre-delete reply-btn-small">삭제</button>
+						
+						    <!-- 클릭하면 나타날 실제 조작 버튼 -->
+						    <span class="confirm-group" style="display: none;">
+						        <button type="submit" class="reply-btn-small" style="background-color: #d33; color: white;">확인</button>
+						        <button type="button" class="btn-cancel reply-btn-small">취소</button>
+						    </span>
+						</form>
 			        </div>
 			    </div>
 			</div>
 			
-			<!-- 수정을 위해 서버로 데이터를 보낼 숨겨진 폼 (딱 하나만 있으면 됩니다) -->
+			<!-- 수정을 위해 서버로 데이터를 보낼 숨겨진 폼 -->
 			<form id="hiddenUpdateForm" th:action="@{/review/reviewReply/update}" method="POST" style="display:none;">
 			    <input type="hidden" name="cNumber" id="updateCno">
 			    <input type="hidden" name="userId" th:value="${session.loginUser.userId}">
@@ -315,30 +332,36 @@
 	  const editBtn = document.getElementById("editBtn");
 	  const cancelBtn = document.getElementById("cancelBtn");
 	
-	  //  수정 버튼 클릭
-	  editBtn.onclick = function () {
-	    viewMode.style.display = "none";
-	    editMode.style.display = "block";
-	  };
-	  //  취소 버튼 클릭
-	  cancelBtn.onclick = function () {
-	    viewMode.style.display = "block";
-	    editMode.style.display = "none";
-	  };
-	  
-	  // 삭제 버튼 클릭
+	// 수정 버튼
+	  if (editBtn != null) {
+	    editBtn.onclick = function () {
+	      viewMode.style.display = "none";
+	      editMode.style.display = "block";
+	    };
+	  }
+
+	  // 취소 버튼
+	  if (cancelBtn != null) {
+	    cancelBtn.onclick = function () {
+	      viewMode.style.display = "block";
+	      editMode.style.display = "none";
+	    };
+	  }
+
+	  // 삭제 버튼
 	  const deleteMode = document.getElementById("btn");
 
-		if (deleteMode != null) {
-		    deleteMode.addEventListener('click', () => {
-		        if (confirm("삭제하겠습니까?")) {
-		            const form = document.querySelector("#edit-mode form");
-		            form.action = "/review/delete";
-		            form.method = "post";
-		            form.submit();
-		        }
-		    });
-		}
+	  if (deleteMode != null) {
+	    deleteMode.addEventListener('click', () => {
+	      if (confirm("삭제하겠습니까?")) {
+	        const form = document.querySelector("#edit-mode form");
+	        form.action = "/review/delete";
+	        form.method = "post";
+	        form.submit();
+	      }
+	    });
+	  }
+		
 
 	  document.getElementById('replyBtn').addEventListener('click', () => {
 		$.ajax({
@@ -400,15 +423,30 @@
 	            return;
 	        }
 
-        document.getElementById('updateCno').value = cNumber;
-        document.getElementById('updateComments').value = newText;
-
-        document.getElementById('hiddenUpdateForm').submit();
-    };
+	        document.getElementById('updateCno').value = cNumber;
+	        document.getElementById('updateComments').value = newText;
+	
+	        document.getElementById('hiddenUpdateForm').submit();
+    	};
     
-    // 댓글 삭제
-    
-}
+	}
+	 // 댓글 삭제
+    window.onload = () => {
+    	document.addEventListener('click', (e) => {
+    	    // 삭제 버튼 클릭
+    	    if (e.target.classList.contains('btn-pre-delete')) {
+    	        const form = e.target.closest('.delete-form');
+    	        e.target.style.display = 'none'; 
+    	        form.querySelector('.confirm-group').style.display = 'inline'; 
+    	    }
+    	    // 취소 버튼 클릭
+    	    if (e.target.classList.contains('btn-cancel')) {
+    	        const form = e.target.closest('.delete-form');
+    	        form.querySelector('.confirm-group').style.display = 'none';
+    	        form.querySelector('.btn-pre-delete').style.display = 'inline';
+    	    }
+    	});
+    }
 
 </script>
 </html>

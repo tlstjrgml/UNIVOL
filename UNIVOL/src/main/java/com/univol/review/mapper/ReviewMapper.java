@@ -34,5 +34,7 @@ public interface ReviewMapper {
 	
 	int reviewUpdate(ReviewReply reply);
 
+	int reviewDelete(int cnum);
+
 
 }

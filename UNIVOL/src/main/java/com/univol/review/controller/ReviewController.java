@@ -88,10 +88,12 @@ public class ReviewController {
 	                     @PathVariable("page") int page,
 	                     Model model) {
 
-	    Review r = rService.selectReview(rNumber, null);
+		Review r = rService.selectReview(rNumber, null);
+	    ArrayList<ReviewReply> list = rService.selectReplyList(rNumber);
 
 	    model.addAttribute("r", r);
 	    model.addAttribute("page", page);
+	    model.addAttribute("list", list); 
 
 	    return "review/detail";
 	}
@@ -185,7 +187,18 @@ public class ReviewController {
 	}
 	
 	// 댓글 삭제
-	
+	@PostMapping("/reviewReply/delete")
+	public String redelete(@RequestParam("cNumber") int cnum, @RequestParam("rNumber") int rnum,
+            @RequestParam(value="page", defaultValue="1") int page) {
+		int result = rService.reviewDelete(cnum);
+		System.out.println();
+		if(result > 0) {
+			return "redirect:/review/detail/" + rnum + "/" + page;
+		}else {
+			throw new ReviewException("삭제 실패");
+		}
+		
+	}
 	
 
 	

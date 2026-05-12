@@ -69,6 +69,10 @@ public class ReviewService {
 		return mapper.reviewUpdate(reply);
 	}
 
+	public int reviewDelete(int cnum) {
+		return mapper.reviewDelete(cnum);
+	}
+
 	
 
 }
