@@ -73,7 +73,8 @@
 			            from p_like
 			            group by p_number
 			        ) l on p.p_number = l.p_number
-			    where p.p_type = 'R' and p.p_status = 'Y')
+			    where p.p_type = 'R' and p.p_status = 'Y'
+			    order by views desc)
 		where rownum <![CDATA[<]]> = 5
 	</select>
 
