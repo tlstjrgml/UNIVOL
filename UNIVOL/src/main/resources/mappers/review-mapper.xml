@@ -109,8 +109,43 @@
 
 	<!-- 댓글 삭제 -->
 	<update id="reviewDelete">
-		UPDATE reply
-		SET c_status = 'N'
-		WHERE c_number = #{cnum}
+		update reply
+		set c_status='N'
+		where c_number=#{cnum}
 	</update>
+	
+	<!-- 검색 게시글 전체 조회 -->
+	<!-- <select id="searchReview" resultMap="reviewResultSet">
+		select *
+		from post join users using(user_id)
+		where p_title like '%' || #{keyword} || '%'
+		   OR user_name like '%' || #{keyword} || '%'
+		order by p_number desc
+	</select>-->
+	
+	<select id="searchReview" resultMap="reviewResultSet">
+		SELECT *
+		FROM (
+		    SELECT ROWNUM RNUM, A.*
+		    FROM (
+		        select *
+		        from post
+		        join users using(user_id)
+		        where p_title like '%' || #{keyword} || '%'
+           			OR user_name like '%' || #{keyword} || '%'
+		        order by p_number desc
+		    ) A
+		)
+		WHERE RNUM BETWEEN #{pi.startRow} AND #{pi.endRow}
+	</select>
+	
+	<!-- 검색 게시글 개수 -->
+	<select id="searchCount" resultType="int">
+	    select count(*)
+	    from post 
+	    join users  using(user_id)
+	    where p_title like '%' || #{keyword} || '%'
+	       OR user_name like '%' || #{keyword} || '%'
+	</select>
+	
 </mapper>

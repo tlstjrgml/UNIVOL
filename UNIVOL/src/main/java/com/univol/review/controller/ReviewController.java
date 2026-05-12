@@ -156,12 +156,27 @@ public class ReviewController {
 	    
 	}
 	// 검색 기능
-	@GetMapping("search")
-	public ModelAndView searchReview(int id) {
-		ModelAndView mv = new ModelAndView();
-		mv.addObject(null, mv);
-		mv.setViewName("/search");
-		return mv;
+	@GetMapping("/search")
+	public String searchReview(@RequestParam(value="keyword", defaultValue="") String keyword,
+	                           @RequestParam(value="page", defaultValue="1") int page,
+	                           Model model) {
+
+	    int listCount = rService.searchCount(keyword);
+
+	    PageInfo pi = Pagination.getPageInfo(page, listCount, 10);
+
+	    ArrayList<Review> list = rService.searchReview(keyword, pi);
+
+	    model.addAttribute("list", list);
+	    model.addAttribute("loc", "/review/search");
+	    model.addAttribute("keyword", keyword);
+	    model.addAttribute("pi", pi);
+	    model.addAttribute("keyword", keyword == null ? "" : keyword);
+	    
+	    System.out.println("keyword = " + keyword);
+	    System.out.println("page = " + page);
+
+	    return "review/review";
 	}
 
 	

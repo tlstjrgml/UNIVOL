@@ -3,9 +3,11 @@ package com.univol.review.mapper;
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import com.univol.review.vo.ReviewReply;
+import com.univol.common.PageInfo;
 import com.univol.review.vo.Review;
 
 @Mapper
@@ -35,6 +37,10 @@ public interface ReviewMapper {
 	int reviewUpdate(ReviewReply reply);
 
 	int reviewDelete(int cnum);
+
+	int searchCount(String keyword);
+
+	ArrayList<Review> searchReview(@Param("keyword") String keyword, @Param("pi") PageInfo pi);
 
 
 }

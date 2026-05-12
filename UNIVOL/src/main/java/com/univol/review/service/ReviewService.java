@@ -73,6 +73,14 @@ public class ReviewService {
 		return mapper.reviewDelete(cnum);
 	}
 
+	public int searchCount(String keyword) {
+		return mapper.searchCount(keyword);
+	}
+
+	public ArrayList<Review> searchReview(String keyword, PageInfo pi) {
+		return mapper.searchReview(keyword, pi);
+	}
+
 	
 
 }
