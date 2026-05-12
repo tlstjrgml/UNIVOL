@@ -84,4 +84,12 @@ public class PostService {
 		return mapper.selectAllPost(startRow, endRow);
 	}
 
+	/* 관리자 - 게시글 상태 변경 */
+	public int deletePost(Post p) {
+	    return mapper.deletePost(p);
+	}
+
+	public int rollbackPost(Post p) {
+	    return mapper.rollbackPost(p);
+	}
 }

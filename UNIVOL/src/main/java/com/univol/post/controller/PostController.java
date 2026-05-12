@@ -147,18 +147,6 @@ public class PostController {
 		}
 	}
 
-	// mainPage 봉사게시판 조회수 top5 띄우기.
-	@GetMapping("/post/top")
-	@ResponseBody
-	public ArrayList<Post> selectTop(){
-		return pService.selectTop();
-	}
-	
-	
-	
-	
-	
-	
 	
 }
 
