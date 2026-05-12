@@ -1,6 +1,8 @@
 package com.univol.post.mapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.univol.post.vo.Post;
@@ -28,4 +30,10 @@ public interface PostMapper {
 	ArrayList<Post> selectTopPost();
 	
 	int userDeletePost(int pNumber);
+	
+	int postLike(HashMap<String, Object> map);
+	void deleteLike(HashMap<String, Object> map);
+	void insertLike(HashMap<String, Object> map);
+	int likeCount(int pNumber);
+	
 }

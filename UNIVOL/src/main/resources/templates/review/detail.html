@@ -92,7 +92,7 @@
           <button id="editBtn">수정</button>
           <button id="deleteBtn">삭제</button>
         </th:block>
-        <button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
+        	<button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
 			  <span class="heart" id="heart">🤍[[${likeCount}]]</span>
 			  <span id="likeText">좋아요</span>
 			</button>
@@ -244,7 +244,7 @@
 					}
 				})
 			})
- 		}
+ 	}
 
     /* 댓글 수정 */
     function submitUpdate(cNumber, btn) {

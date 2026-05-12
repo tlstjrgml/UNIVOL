@@ -39,9 +39,9 @@ public interface ReviewMapper {
 
 	int reviewLike(HashMap<String, Object> map);
 
-	int deleteLike(HashMap<String, Object> map);
+	void deleteLike(HashMap<String, Object> map);
 
-	int insertLike(HashMap<String, Object> map);
+	void insertLike(HashMap<String, Object> map);
 
 	int likeCount(int pNumber);
 

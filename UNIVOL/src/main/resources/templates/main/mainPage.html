@@ -165,23 +165,24 @@
           tbody.innerHTML = '';
 
           for (const r of data) {
+//         	console.log(r);
             const tr = document.createElement('tr');
             tr.onclick = () => {
               location.href = `/review/${r.rNumber}/1`;
             };
 
             const rNumber = document.createElement('td');
-            rNumber.innerText = r.rNumber;
+            rNumber.innerText = r.rnumber;
 
             const rTitle = document.createElement('td');
-            rTitle.innerText = r.rTitle;
+            rTitle.innerText = r.rtitle;
 
             const rWriter = document.createElement('td');
             rWriter.innerText = r.userName;
 
             const rViews = document.createElement('td');
             rViews.classList.add('views');
-            rViews.innerText = r.rViews;
+            rViews.innerText = r.rviews;
 
             const rLike = document.createElement('td');
             rLike.classList.add('likes');
@@ -204,24 +205,28 @@
           tbody.innerHTML = '';
 
           for (const p of data) {
+//         	console.log(p);
             const tr = document.createElement('tr');
             tr.onclick = () => {
               location.href = `/post/1/${p.pNumber}`;
             };
 
             const pNumber = document.createElement('td');
-            pNumber.innerText = p.pNumber;
+            pNumber.innerText = p.pnumber;
 
             const pTitle = document.createElement('td');
-            pTitle.innerText = p.pTitle;
+            pTitle.innerText = p.ptitle;
 
             const pWriter = document.createElement('td');
             pWriter.innerText = p.userName;
 
             const pViews = document.createElement('td');
+            pViews.classList.add('views');
             pViews.innerText = p.views;
 
             const pLike = document.createElement('td');
+            pLike.classList.add('likes');
+			pLike.innerText = '♥ ' + p.likeCount; 
 
             tr.append(pNumber, pTitle, pWriter, pViews, pLike);
             tbody.append(tr);
