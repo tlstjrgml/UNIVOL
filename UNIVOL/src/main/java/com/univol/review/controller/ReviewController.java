@@ -191,7 +191,7 @@ public class ReviewController {
 	public String redelete(@RequestParam("cNumber") int cnum, @RequestParam("rNumber") int rnum,
             @RequestParam(value="page", defaultValue="1") int page) {
 		int result = rService.reviewDelete(cnum);
-		System.out.println();
+		
 		if(result > 0) {
 			return "redirect:/review/detail/" + rnum + "/" + page;
 		}else {
