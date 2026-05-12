@@ -152,7 +152,6 @@ public class ReviewController {
 	@ResponseBody
 	public ArrayList<Review> selectTop(){
 		ArrayList<Review> list = rService.selectTop();
-			
 		return list;
 	}
 

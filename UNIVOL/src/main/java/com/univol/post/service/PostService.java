@@ -1,6 +1,7 @@
 package com.univol.post.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
 
@@ -78,5 +79,31 @@ public class PostService {
 	
 	public int userDeletePost(int pNumber) {
 		return mapper.userDeletePost(pNumber);
+	}
+
+	public int postLike(int pNumber, String userId) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pNumber", pNumber);
+		map.put("userId", userId);
+		return mapper.postLike(map);
+	}
+
+	public void deleteLike(int pNumber, String userId) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pNumber", pNumber);
+		map.put("userId", userId);
+		mapper.deleteLike(map);
+	}
+
+	public void insertLike(int pNumber, String userId) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pNumber", pNumber);
+		map.put("userId", userId);
+		mapper.insertLike(map);
+	}
+
+	public int likeCount(int pNumber) {
+		HashMap<String, Object> map = new HashMap<>();
+		return mapper.likeCount(pNumber);
 	}
 }

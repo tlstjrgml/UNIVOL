@@ -1,6 +1,7 @@
 package com.univol.post.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -99,7 +100,12 @@ public class PostController {
 	    if(post == null) {
 	        return "error/404";
 	    }
+	    int likeCount = pService.likeCount(pNumber);
+	    int isLiked = pService.postLike(pNumber, userId);
 	    ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
+	    
+	    model.addAttribute("likeCount", likeCount);
+	    model.addAttribute("isLiked", isLiked);
 	    model.addAttribute("post", post);
 	    model.addAttribute("replyList", replyList);
 	    model.addAttribute("currentPage", currentPage);
@@ -127,5 +133,23 @@ public class PostController {
 			throw new PostException("게시글 삭제에 실패했습니다");
 		}
 		
+	}
+	
+	@PostMapping("/post/like")
+	@ResponseBody
+	public HashMap<String, Object> reviewLike(@RequestParam("pNumber") int pNumber, @RequestParam("userId") String userId) {
+		int result = pService.postLike(pNumber, userId);
+		
+		if(result > 0) {
+			pService.deleteLike(pNumber, userId);
+		} else {
+			pService.insertLike(pNumber, userId); 
+		}
+		int likeCount = pService.likeCount(pNumber);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("liked", result == 0);
+		map.put("likeCount", likeCount);
+		return map;
 	}
 }
