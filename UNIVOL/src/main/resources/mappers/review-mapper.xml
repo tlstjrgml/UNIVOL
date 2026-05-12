@@ -82,14 +82,19 @@
 		WHERE P_NUMBER = #{rNumber}
 	</update>
 
-	<!-- 메인페이지 TOP 5 -->
+	<!-- 메인페이지 TOP 5 (좋아요 수 포함) -->
 	<select id="selectTop" resultMap="reviewResultSet">
 		SELECT *
 		FROM (
-			SELECT *
-			FROM POST
-				JOIN USERS USING(USER_ID)
-			WHERE P_TYPE = 'R' AND P_STATUS = 'Y'
+			SELECT P.*, U.USER_NAME, NVL(L.LIKE_COUNT, 0) AS LIKE_COUNT
+			FROM POST P
+				JOIN USERS U ON P.USER_ID = U.USER_ID
+				LEFT JOIN (
+					SELECT P_NUMBER, COUNT(*) AS LIKE_COUNT
+					FROM P_LIKE
+					GROUP BY P_NUMBER
+				) L ON P.P_NUMBER = L.P_NUMBER
+			WHERE P.P_TYPE = 'R' AND P.P_STATUS = 'Y'
 			ORDER BY VIEWS DESC
 		)
 		WHERE ROWNUM <![CDATA[<=]]> 5

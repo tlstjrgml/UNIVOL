@@ -144,7 +144,6 @@
     </table>
 
   </div>
-
   <script>
     window.onload = () => {
       /* 초기 데이터 로드 */
@@ -181,9 +180,12 @@
             rWriter.innerText = r.userName;
 
             const rViews = document.createElement('td');
+            rViews.classList.add('views');
             rViews.innerText = r.rViews;
 
             const rLike = document.createElement('td');
+            rLike.classList.add('likes');
+			rLike.innerText = '♥ ' + r.likeCount; 
 
             tr.append(rNumber, rTitle, rWriter, rViews, rLike);
             tbody.append(tr);

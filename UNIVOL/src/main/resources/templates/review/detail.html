@@ -93,9 +93,14 @@
           <button id="editBtn">수정</button>
           <button id="deleteBtn">삭제</button>
         </th:block>
-        <button class="like-btn" id="likeBtn">
-          <span class="heart">🤍</span>
-          <span id="likeCount">좋아요</span>
+        <!-- 좋아요 버튼: 좋아요 상태에 따라 다르게 표시 -->
+        <button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
+          <span class="heart" id="heart">🤍[[${likeCount}]]</span>
+          <span id="likeText">좋아요</span>
+        </button>
+        <button th:if="${isLiked == 1}" class="like-btn" id="likeBtn">
+          <span class="heart" id="heart">❤️[[${likeCount}]]</span>
+          <span id="likeText">안 좋아요</span>
         </button>
       </div>
     </div>
@@ -217,24 +222,33 @@
         });
       });
 
-      /* 좋아요 버튼 */
+      /* 좋아요 버튼: 서버 응답 기반으로 상태 업데이트 */
       const likeBtn = document.getElementById('likeBtn');
-      let liked = false;
-      likeBtn.addEventListener('click', () => {
-        liked = !liked;
-        likeBtn.innerHTML = liked ? '❤️ 안 좋아요' : '🤍 좋아요';
-        $.ajax({
-          url: '/review/like',
-          method: 'POST',
-          data: {
-            pNumber: /*[[${r.rNumber}]]*/99,
-            userId: /*[[${session.loginUser.userId}]]*/'user00',
-            liked: liked
-          },
-          success: data => console.log(data),
-          error: data => console.log(data)
+      const heart = document.getElementById('heart');
+      const likeText = document.getElementById('likeText');
+
+      if (likeBtn) {
+        likeBtn.addEventListener('click', () => {
+          $.ajax({
+            url: '/review/like',
+            method: 'POST',
+            data: {
+              pNumber: /*[[${r.rNumber}]]*/99,
+              userId: /*[[${session.loginUser.userId}]]*/'user00'
+            },
+            success: data => {
+              if (data.liked) {
+                heart.innerText = '❤️' + data.likeCount;
+                likeText.innerText = '안 좋아요';
+              } else {
+                heart.innerText = '🤍' + data.likeCount;
+                likeText.innerText = '좋아요';
+              }
+            },
+            error: data => console.log(data)
+          });
         });
-      });
+      }
 
       /* 댓글 삭제 확인/취소 버튼 */
       document.addEventListener('click', (e) => {

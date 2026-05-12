@@ -23,4 +23,5 @@ public class Review {
 	private String userId;
 	private String rStatus;
 	private String userName;
+	private int likeCount;
 }
