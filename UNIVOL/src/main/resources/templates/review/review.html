@@ -9,31 +9,11 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
     body { background: #f5f5f0; min-height: 100vh; }
 
-    .header {
-      background: #fff;
-      border-bottom: 1px solid #e0e0d8;
-      padding: 0 2rem;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      height: 58px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #426B1F; letter-spacing: 2px; cursor: pointer; }
-    .nav { display: flex; gap: 24px; justify-content: center; }
-    .nav a { font-size: 14px; color: #444; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; }
-    .nav a.active, .nav a:hover { color: #426B1F; border-bottom-color: #426B1F; }
-    .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
-    .username { font-size: 14px; color: #666; }
-    .header-btn { font-size: 13px; padding: 6px 14px; border-radius: 8px; border: 1px solid #426B1F; cursor: pointer; text-decoration: none; transition: background 0.15s; }
-    .btn-outline { background: transparent; color: #426B1F; }
-    .btn-outline:hover { background: #eaf3de; }
-
+    /* 공통 레이아웃 */
     .container { max-width: 1200px; margin: 2.5rem auto; padding: 0 3rem; }
     .page-title { font-size: 22px; font-weight: 700; color: #222; margin-bottom: 1.5rem; }
 
+    /* 검색/정렬 툴바 */
     .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
     .filter-group { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
     select, .search-input { font-size: 13px; padding: 7px 12px; border: 1px solid #d0d0c8; border-radius: 8px; background: #fff; color: #333; outline: none; cursor: pointer; transition: border-color 0.15s; }
@@ -44,35 +24,34 @@
     .write-btn { font-size: 13px; padding: 7px 18px; border-radius: 8px; border: none; background: #426B1F; color: #fff; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
     .write-btn:hover { background: #305215; }
 
+    /* 게시판 테이블 */
     .card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; overflow: hidden; }
-
     .board-table { width: 100%; border-collapse: collapse; }
-
     .board-table thead tr { background: #f7f7f2; border-bottom: 1px solid #e0e0d8; }
     .board-table thead th { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 12px; text-align: center; }
     .board-table thead th.col-title { text-align: left; }
-
     .board-table tbody tr { border-bottom: 1px solid #f0f0ea; cursor: pointer; transition: background 0.12s; }
     .board-table tbody tr:last-child { border-bottom: none; }
     .board-table tbody tr:hover { background: #f7faf5; }
-
     .board-table tbody td { padding: 14px 12px; text-align: center; vertical-align: middle; }
     .board-table tbody td.col-title { text-align: left; }
 
-    .num    { font-size: 13px; color: #aaa; }
+    /* 게시글 목록 아이템 */
+    .num { font-size: 13px; color: #aaa; }
     .title-wrap { display: flex; flex-direction: column; gap: 3px; }
-    .title  { font-size: 14px; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 500px; }
-    .date   { font-size: 11px; color: #bbb; }
+    .title { font-size: 14px; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 500px; }
+    .date { font-size: 11px; color: #bbb; }
     .author { font-size: 13px; color: #555; }
-    .views  { font-size: 13px; color: #888; }
-    .likes  { font-size: 13px; color: #c0392b; }
+    .views { font-size: 13px; color: #888; }
+    .likes { font-size: 13px; color: #c0392b; }
 
+    /* 컬럼 너비 */
     .col-num    { width: 70px; }
-    .col-title  { }
     .col-author { width: 90px; }
     .col-views  { width: 80px; }
     .col-likes  { width: 70px; }
 
+    /* 페이지네이션 */
     .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 1.5rem; }
     .page-btn { text-decoration: none; width: 34px; height: 34px; border-radius: 8px; border: 1px solid #e0e0d8; background: #fff; font-size: 13px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s; }
     .page-btn:hover { background: #eaf3de; color: #426B1F; border-color: #426B1F; }
@@ -82,107 +61,90 @@
 </head>
 <body>
 
+  <div th:replace="~{common/navbar.html}"></div>
 
-	<div th:replace="~{common/navbar.html}"></div>
+  <main class="container">
+    <h1 class="page-title">후기게시판</h1>
 
-	
-	<main class="container">
-	  <h1 class="page-title">후기게시판</h1>
-	
-	  <div class="toolbar">
-	    <div class="filter-group">
-	      <select id="sort-field">
-	        <option value="latest">최신순</option>
-	        <option value="views_desc">조회수 높은순</option>
-	        <option value="views_asc">조회수 낮은순</option>
-	        <option value="likes_desc">좋아요 높은순</option>
-	        <option value="likes_asc">좋아요 낮은순</option>
-	      </select>
-	      <input type="text" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
-	      <button class="search-btn">검색</button>
-	    </div>
-	    <button class="write-btn" th:if="${session.loginUser}" onclick="location.href='/review/write'">+ 글쓰기</button>
-<!-- 	    로그인 안 됐을 때 글쓰기 안되는 거 -->
-	    
-	  </div>
-	
-	  <div class="card">
-	    <table class="board-table">
-	      <thead>
-	        <tr>
-	          <th class="col-num">글번호</th>
-	          <th class="col-title">제목</th>
-	          <th class="col-author">작성자</th>
-	          <th class="col-views">조회수</th>
-	          <th class="col-likes">좋아요</th>
-	        </tr>
-	      </thead>
-	      <tbody id="board-list">
-	        <tr th:each="r : ${list}">
-	          <td class="col-num num" th:text="${r.rNumber}"></td>
-<!-- 	          <td class="title" th:text="${r.rTitle}"> -->
-<!-- 	          <td class="date" th:text="${r.rDate}"> -->
-<!-- 	          <td class="col-title"> -->
-<!-- 				  <span class="title" th:text="${r.rTitle}"></span> -->
-<!-- 				  <span class="date"  th:text="${r.rDate}"></span> -->
-				  
-<!-- 			  </td> -->
-	          <td class="col-title">
-	            <div class="title-wrap">
-	              <span class="title" th:text="${r.rTitle}"></span>
-	              <span class="date"  th:text="${r.rDate}"></span>
-	            </div>
-	          </td>
-	          <td class="col-author author" th:text="${r.userName}"></td>
-	          <td class="col-views views"   th:text="${r.rViews}"></td>
-	          <td class="col-likes likes">♥ [[${r.likeCount}]]</td>
-	        </tr>
-	      </tbody>
-	    </table>
-	  </div>
-	
+    <!-- 검색/정렬 툴바 -->
+    <div class="toolbar">
+      <form class="filter-group" method="get" action="/review">
+        <select name="sort" onchange="this.form.submit()">
+          <option value="latest"     th:selected="${sort == 'latest'}">최신순</option>
+          <option value="views_desc" th:selected="${sort == 'views_desc'}">조회수 높은순</option>
+          <option value="views_asc"  th:selected="${sort == 'views_asc'}">조회수 낮은순</option>
+        </select>
+        <input type="text" name="keyword" th:value="${keyword}"
+               class="search-input" placeholder="제목 또는 작성자 검색"/>
+        <button type="submit" class="search-btn">검색</button>
+      </form>
+      <!-- 글쓰기 버튼: 로그인한 회원만 노출 -->
+      <button class="write-btn" th:if="${session.loginUser}"
+              onclick="location.href='/review/write'">+ 글쓰기</button>
+    </div>
 
-		<nav class="pagination" aria-label="페이지 탐색">
-			<a class="page-btn" 
-				th:if="${pi.currentPage > pi.startPage}"
-				th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
-				<span aria-hidden="true">&#8249;</span>
-			</a>
-	    	<a class="page-btn" 
-	    		th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
-	    		th:href="@{${loc}(page=${p})}">[[${p}]]</a>
-			<a class="page-btn" 
-				th:if="${pi.currentPage < pi.maxPage}"
-				th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
-				<span aria-hidden="true">&#8250;</span>
-			</a>
-		</nav>
-	
-	</main>
-	
-	<script th:inline="javascript">
-		window.onload = () => {
-			const tbody = document.querySelector('tbody');
-			const all = tbody.querySelectorAll('tr');
-			const loginUser = /*[[${session.loginUser}]]*/null;
-			for(const tr of all){
-				if(loginUser != null){
-					tr.addEventListener('click', e => {
-						const trTds = tr.querySelectorAll('td');
-						const reviewId = trTds[0].innerText;
-						location.href = '/review/' + reviewId + "/" + /*[[${pi.currentPage}]]*/2;
-					})
-				}
-			}
-			
-		}
-		
-		
-	</script>
+    <!-- 게시글 목록 -->
+    <div class="card">
+      <table class="board-table">
+        <thead>
+          <tr>
+            <th class="col-num">글번호</th>
+            <th class="col-title">제목</th>
+            <th class="col-author">작성자</th>
+            <th class="col-views">조회수</th>
+            <th class="col-likes">좋아요</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="r : ${list}"
+              th:onclick="|location.href='/review/' + ${r.rNumber} + '/' + ${pi.currentPage}|">
+            <td class="col-num num" th:text="${r.rNumber}"></td>
+            <td class="col-title">
+              <div class="title-wrap">
+                <span class="title" th:text="${r.rTitle}"></span>
+                <span class="date"  th:text="${r.rDate}"></span>
+              </div>
+            </td>
+            <td class="col-author author" th:text="${r.userName}"></td>
+            <td class="col-views views"   th:text="${r.rViews}"></td>
+            <td class="col-likes likes">♥ [[${r.likeCount}]]</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
+    <!-- 페이지네이션 -->
+    <nav class="pagination">
+      <button type="button" class="page-btn"
+              th:if="${pi.currentPage > 1}"
+              th:onclick="'goToPage(' + ${pi.currentPage - 1} + ')'">&#8249;</button>
 
+      <th:block th:each="n : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+        <form th:id="'pageForm-' + ${n}" action="/review" method="get" style="display:none;">
+          <input type="hidden" name="page"    th:value="${n}">
+          <input type="hidden" name="keyword" th:value="${keyword}">
+          <input type="hidden" name="sort"    th:value="${sort}">
+        </form>
+        <button type="button" class="page-btn"
+                th:text="${n}"
+                th:classappend="${n == pi.currentPage} ? 'active'"
+                th:onclick="'goToPage(' + ${n} + ')'">
+        </button>
+      </th:block>
 
+      <button type="button" class="page-btn"
+              th:if="${pi.currentPage < pi.maxPage}"
+              th:onclick="'goToPage(' + ${pi.currentPage + 1} + ')'">&#8250;</button>
+    </nav>
 
+  </main>
+
+  <script>
+    /* 페이지네이션 */
+    function goToPage(pageNum) {
+      document.getElementById('pageForm-' + pageNum).submit();
+    }
+  </script>
 
 </body>
 </html>

@@ -17,7 +17,7 @@ public class Review {
 	private int rNumber;
 	private String rTitle;
 	private String rContents;
-	private String rViews;
+	private int rViews;
 	private Date rDate;
 	private String pType;
 	private String userId;

@@ -9,11 +9,11 @@
 				select p.*, u.user_name
 				from post p
 				join users u on p.user_id = u.user_id
-				where p.p_type = 'V'
+				where p.p_type = 'V' and p.p_status='Y'
 				order by
 					<choose>
 						<when test="sort == 'views_desc'">p.views DESC</when>
-						<when test="sort == 'asc'">p.views ASC</when>
+						<when test="sort == 'views_asc'">p.views ASC</when>
 						<otherwise>p.p_date DESC</otherwise>
 					</choose>
 			) A
@@ -24,12 +24,12 @@
 
 	<select id="getListCount" resultType="_int">
 		select count(*) from post
-    	where p_Type='V'
+    	where p_Type='V' and p_status='Y'
 	</select>
 
 	<insert id="insertPost">
 		insert into post
-		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default)
+		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default, #{isNotice}, default)
 	</insert>
 
 	<select id="selectOne" resultType="com.univol.post.vo.Post">
@@ -39,9 +39,17 @@
 		where p_number = #{pNumber}
 	</select>
 
-	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
-		select * from post
-	</select>
+	<update id="updateReview">
+		update post
+		set views = views + 1
+		where p_number = #{pNumber}
+	</update>
+
+	<update id="updateViews" parameterType="_int">
+		update post
+		set views = views + 1
+		where p_number = #{pNumber}
+	</update>
 
 	<update id="rollbackPost">
 		update post
@@ -61,7 +69,7 @@
 				select p.*, u.user_name
 				from post p
 				join users u on p.user_id = u.user_id
-				where p.p_type = 'V'
+				where p.p_type = 'V' and p.p_status='Y'
 				and (p.p_title like '%' || #{keyword} || '%'
 					 or p.contents like '%' || #{keyword} || '%'
 					 or u.user_name like '%' || #{keyword} || '%'
@@ -81,12 +89,44 @@
 	<select id="getSearchCount" resultType="_int">
 		select count(*) from post p
 		join users u on p.user_id = u.user_id
-		where p.p_type = 'V'
+		where p.p_type = 'V' and p.p_status='Y'
 		and (
 			p.p_title like '%' || #{keyword} || '%'
 			or p.contents like '%' || #{keyword} || '%'
 			or u.user_name like '%' || #{keyword} || '%'
 		)
+	</select>
+	
+	<update id="userDeletePost">
+		update post
+		set p_status = 'N'
+		where p_number=#{pNumber}
+	</update>
+
+	<!-- 관리자페이지용 -->
+	<select id="getPostCount" resultType="_int">
+		select count(*) from post
+	</select>
+
+	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
+		select * from (
+			select rownum as rn, a.* from (
+				select * from post
+			)a
+			where rownum &lt;=#{endRow}
+		)
+		where rn &gt;=#{startRow}
+	</select>
+
+	<select id="selectTopPost" resultType="com.univol.post.vo.Post">
+	    select * from (
+	        select p.*, u.user_name
+	        from post p
+	        join users u on p.user_id = u.user_id
+	        where p.p_type = 'V' and p.p_status = 'Y'
+	        order by views desc
+	    )
+	    where rownum &lt;= 5
 	</select>
 
 </mapper>
