@@ -1,6 +1,7 @@
 package com.univol.post.mapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -34,6 +35,12 @@ public interface PostMapper {
 
 	/* 메인페이지 TOP 5 */
 	ArrayList<Post> selectTopPost();
+
+	/* 좋아요 */
+	int postLike(HashMap<String, Object> map);
+	void deleteLike(HashMap<String, Object> map);
+	void insertLike(HashMap<String, Object> map);
+	int likeCount(int pNumber);
 
 	/* 관리자 - 게시글 목록 */
 	int getPostCount();

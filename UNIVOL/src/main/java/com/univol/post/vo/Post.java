@@ -26,6 +26,7 @@ public class Post {
 	private int likes;
 	private String isNotice;
 	private Date createDate;
+	private int likeCount;
 	
 	
 }

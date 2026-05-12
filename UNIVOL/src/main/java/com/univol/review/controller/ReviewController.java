@@ -161,8 +161,9 @@ public class ReviewController {
 	/* 메인페이지 후기 TOP 5 */
 	@GetMapping("top")
 	@ResponseBody
-	public ArrayList<Review> selectTop() {
-		return rService.selectTop();
+	public ArrayList<Review> selectTop(){
+		ArrayList<Review> list = rService.selectTop();
+		return list;
 	}
 
 	/* 후기 삭제 */

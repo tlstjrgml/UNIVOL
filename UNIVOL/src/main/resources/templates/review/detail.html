@@ -93,6 +93,7 @@
           <button id="editBtn">수정</button>
           <button id="deleteBtn">삭제</button>
         </th:block>
+<<<<<<< HEAD
         <!-- 좋아요 버튼: 좋아요 상태에 따라 다르게 표시 -->
         <button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
           <span class="heart" id="heart">🤍[[${likeCount}]]</span>
@@ -102,6 +103,16 @@
           <span class="heart" id="heart">❤️[[${likeCount}]]</span>
           <span id="likeText">안 좋아요</span>
         </button>
+=======
+        	<button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
+			  <span class="heart" id="heart">🤍[[${likeCount}]]</span>
+			  <span id="likeText">좋아요</span>
+			</button>
+			<button th:if="${isLiked == 1}" class="like-btn" id="likeBtn">
+			  <span class="heart" id="heart">❤️[[${likeCount}]]</span>
+			  <span id="likeText">안 좋아요</span>
+			</button>
+>>>>>>> 5ea177f6f44a73f9be01eabd24c4f0b8bcdc124c
       </div>
     </div>
 

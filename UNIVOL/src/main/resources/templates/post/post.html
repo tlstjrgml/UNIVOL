@@ -43,6 +43,7 @@
     .date { font-size: 11px; color: #bbb; }
     .author { font-size: 13px; color: #555; }
     .views { font-size: 13px; color: #888; }
+    .likes { font-size: 13px; color: #c0392b; }
 
     /* 공지 배지 */
     .badge-notice { display: inline-block; font-size: 10px; font-weight: 700; background: #eaf3de; color: #426B1F; border-radius: 4px; padding: 2px 6px; margin-right: 6px; vertical-align: middle; align-self: flex-start; }
@@ -51,6 +52,7 @@
     .col-num    { width: 70px; }
     .col-author { width: 90px; }
     .col-views  { width: 80px; }
+    .col-likes  { width: 70px; }
 
     /* 페이지네이션 */
     .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 1.5rem; }
@@ -90,6 +92,7 @@
             <th class="col-title">제목</th>
             <th class="col-author">작성자</th>
             <th class="col-views">조회수</th>
+            <th class="col-likes">좋아요</th>
           </tr>
         </thead>
         <tbody id="board-list">
@@ -110,6 +113,7 @@
             </td>
             <td class="col-author author" th:text="${p.userName}"></td>
             <td class="col-views views" th:text="${p.views}"></td>
+            <td class="col-likes likes">♥ [[${p.likeCount}]]</td>
           </tr>
         </tbody>
       </table>

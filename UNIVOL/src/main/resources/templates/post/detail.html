@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title th:text="${post.pTitle} + ' - UNIVOL'"></title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
     body { background: #f5f5f0; min-height: 100vh; }
@@ -113,6 +114,29 @@
           <button id="deletePostBtn" type="submit"
                   style="padding:6px 16px; background:#c0392b; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
         </form>
+        <button id="editPostBtn" type="button" style="padding:6px 16px; background:#426B1F; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
+        <button id="deletePostBtn" type="button" style="padding:6px 16px; background:#c0392b; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
+      </div>
+      
+      <div style="display:flex; justify-content:flex-end; gap:6px;">
+       	<th:block th:if="${loginUser != null && loginUser.userId == post.userId || loginUser.isAdmin == 'Y'}">
+       	
+	      	<form th:action="@{/post/edit/{pNumber}(pNumber=${post.pNumber})}" method="post">
+	      		<button id="editPostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
+	      	</form>
+	      	<form th:action="@{/post/delete/{pNumber}(pNumber=${post.pNumber})}" method="post">
+	      		<button id="deletePostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: red; border: none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
+	      	</form>
+       	</th:block>
+	      	 <button th:if="${isLiked == 0}" class="like-btn" id="likeBtn" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">
+			  <span class="heart" id="heart">🤍[[${likeCount}]]</span>
+			  <span id="likeText">좋아요</span>
+			</button>
+			<button th:if="${isLiked == 1}" class="like-btn" id="likeBtn" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">
+			  <span class="heart" id="heart">❤️[[${likeCount}]]</span>
+			  <span id="likeText">안 좋아요</span>
+			</button>
+      	
       </div>
     </div>
 
@@ -215,7 +239,6 @@
           e.preventDefault();
         }
       });
-    }
 
     /* 댓글 수정 폼 토글 */
     function toggleEditForm(cNumber) {
@@ -267,6 +290,38 @@
       form.submit();
       return false;
     }
+    
+    window.onload = function () {
+    	const likeBtn = document.getElementById('likeBtn');
+		const heart = document.getElementById('heart');
+		const likeText = document.getElementById('likeText');
+		
+		likeBtn.addEventListener('click', () => {
+			
+			$.ajax({
+				url: '/post/like',
+				method: 'POST',
+				data: {
+					pNumber: /*[[${post.pNumber}]]*/77,
+					userId: /*[[${session.loginUser.userId}]]*/'user11',
+				},
+				success: data => {
+// 						console.log(data.likeCount);
+					if(data.liked){
+						heart.innerText = '❤️' + data.likeCount; 
+						likeText.innerText = '안 좋아요';
+					} else {
+						heart.innerText = '🤍' + data.likeCount; 
+						likeText.innerText = '좋아요';	
+					}
+					
+				},
+				error: data => {
+					console.log(data);
+				}
+			})
+		})
+    } 
   </script>
 
 </body>

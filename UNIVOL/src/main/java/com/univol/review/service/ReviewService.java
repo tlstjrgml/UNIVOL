@@ -108,18 +108,18 @@ public class ReviewService {
 		return mapper.reviewLike(map);
 	}
 
-	public int deleteLike(int pNumber, String userId) {
+	public void deleteLike(int pNumber, String userId) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("pNumber", pNumber);
 		map.put("userId", userId);
-		return mapper.deleteLike(map);
+		mapper.deleteLike(map);
 	}
 
-	public int insertLike(int pNumber, String userId) {
+	public void insertLike(int pNumber, String userId) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("pNumber", pNumber);
 		map.put("userId", userId);
-		return mapper.insertLike(map);
+		mapper.insertLike(map);
 	}
 
 	public int likeCount(int pNumber) {
