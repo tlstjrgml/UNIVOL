@@ -27,7 +27,7 @@
 		       U.USER_NAME,
 		       R.C_STATUS
 		FROM REPLY R
-		JOIN USERS U ON R.USER_ID = U.USER_ID
+		JOIN USERS U ON (R.USER_ID = U.USER_ID)
 		WHERE R.P_NUMBER = #{pNumber}
 		ORDER BY R.C_NUMBER DESC
 	</select>
@@ -41,7 +41,7 @@
 		       U.USER_NAME,
 		       R.C_STATUS
 		FROM REPLY R
-		JOIN USERS U ON R.USER_ID = U.USER_ID
+		JOIN USERS U ON (R.USER_ID = U.USER_ID)
 		WHERE R.C_NUMBER = #{cNumber}
 	</select>
 
@@ -65,7 +65,7 @@
 		       U.USER_NAME,
 		       R.C_STATUS
 		FROM REPLY R
-		JOIN USERS U ON R.USER_ID = U.USER_ID
+		JOIN USERS U ON (R.USER_ID = U.USER_ID)
 		ORDER BY R.C_NUMBER DESC
 	</select>
 

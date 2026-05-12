@@ -130,6 +130,7 @@
             <div class="reply-date" th:text="${reply.cDate}"></div>
             <div th:id="'reply-edit-form-' + ${reply.cNumber}"></div>
           </div>
+
           <div class="reply-actions" th:if="${loginUser != null && reply.userId == loginUser.userId}">
             <button type="button" class="reply-btn-small" th:onclick="'toggleEditForm(' + ${reply.cNumber} + ')'">수정</button>
             <form th:id="'delete-form-' + ${reply.cNumber}" action="/post/reply/{cNumber}/delete" method="POST" th:action="@{/post/reply/{cNumber}/delete(cNumber=${reply.cNumber})}" style="display:inline;">
@@ -139,6 +140,17 @@
           	  <input type="hidden" name="keyword" th:value="${keyword}">
               <button type="button" class="reply-btn-small reply-btn-delete" onclick="if(confirm('댓글을 삭제하시겠습니까?')) this.form.submit();">삭제</button>
             </form>
+
+            <!-- 좋아요 버튼. -->
+            <button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
+            	<span class="heart" id="heart">🤍[[${likeCount}]]</span>
+            	<span id="likeText">좋아요</span>
+            </button>
+            <button th:if="${isLiked == 1}" class="like-btn" id="likeBtn">
+            	<span class="heart" id="heart">❤️[[${likeCount}]]</span>
+				  	<span id="likeText">좋아요</span>
+            </button>
+
           </div>
         </div>
       </div>
@@ -193,6 +205,36 @@
     form.submit();
     return false;
   }
+
+  const likeBtn = document.getElementById('likeBtn');
+  const heart = document.getElementById('heart');
+  const likeText = document.getElementById('likeText');
+
+  likeBtn.addEventListener('click', () => {
+	  $.ajax({
+		  url: '/review/like',
+		  method: 'POST',
+		  data: {
+			  pNumber: "${reply.cNumber}",
+			  userId: "${session.loginUser.userId}",
+			  liked: liked
+		  },
+		  success: data => {
+			  console.log(data);
+			  if(data.liked){
+					heart.innerText = '❤️' + data.likeCount;
+					likeText.innerText = '좋아요';
+				} else {
+					heart.innerText = '🤍' + data.likeCount;
+					likeText.innerText = '좋아요';
+				}
+		  },
+		  error: data => {
+			  console.log(data);
+		  }
+	  });
+  });
+
 </script>
 
 </body>
