@@ -106,7 +106,7 @@
       <p th:text="${post.contents}" style="font-size:14px; line-height:1.8; color:#555; margin-bottom:1.5rem;"></p>
 
       <!-- 게시글 수정/삭제 버튼: 작성자 또는 관리자만 노출 -->
-      <div th:if="${loginUser != null && (loginUser.userId == post.userId || loginUser.isAdmin == 'Y')}"
+      <!-- <div th:if="${loginUser != null && (loginUser.userId == post.userId || loginUser.isAdmin == 'Y')}"
            style="display:flex; justify-content:flex-end; gap:6px;">
         <button id="editPostBtn" type="button"
                 style="padding:6px 16px; background:#426B1F; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
@@ -116,7 +116,7 @@
         </form>
         <button id="editPostBtn" type="button" style="padding:6px 16px; background:#426B1F; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
         <button id="deletePostBtn" type="button" style="padding:6px 16px; background:#c0392b; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
-      </div>
+      </div> -->
       
       <div style="display:flex; justify-content:flex-end; gap:6px;">
        	<th:block th:if="${loginUser != null && loginUser.userId == post.userId || loginUser.isAdmin == 'Y'}">
@@ -239,6 +239,7 @@
           e.preventDefault();
         }
       });
+    }
 
     /* 댓글 수정 폼 토글 */
     function toggleEditForm(cNumber) {

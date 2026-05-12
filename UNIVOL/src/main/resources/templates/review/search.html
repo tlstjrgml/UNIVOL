@@ -68,7 +68,6 @@
     .likes  { font-size: 13px; color: #c0392b; }
 
     .col-num    { width: 70px; }
-    .col-title  { }
     .col-author { width: 90px; }
     .col-views  { width: 80px; }
     .col-likes  { width: 70px; }
@@ -88,7 +87,7 @@
 		<main class="container">
 		  <h1 class="page-title">후기게시판</h1>
 		
-		  <!-- 🔥 검색 + 정렬 -->
+		  <!--  검색 + 정렬 -->
 		  <div class="toolbar">
 		    <div class="filter-group">
 		
@@ -100,7 +99,7 @@
 		        <option value="likes_asc">좋아요 낮은순</option>
 		      </select>
 		
-		      <!-- 🔥 검색 폼 -->
+		      <!--  검색 폼 -->
 		      <form action="/review/search" method="get">
 		        <input type="text"
 		               id="search-input"
@@ -121,7 +120,7 @@
 		    </button>
 		  </div>
 		
-		  <!-- 🔥 게시글 리스트 -->
+		  <!--  게시글 리스트 -->
 		  <div class="card">
 		    <table class="board-table">
 		      <thead>
@@ -137,7 +136,7 @@
 		        <tr th:each="r : ${list}">
 		          <td th:text="${r.rNumber}"></td>
 		
-		          <!-- 🔥 상세보기 링크 -->
+		          <!--  상세보기 링크 -->
 		          <td>
 		            <a th:href="@{'/review/detail/' + ${r.rNumber} + '/' + ${pi.currentPage}}">
 		              <span th:text="${r.rTitle}"></span>

@@ -98,7 +98,10 @@ public class ReviewController {
 		}
 
 		int likeCount = rService.likeCount(bId);
-		int isLiked = rService.reviewLike(bId, id);
+		int isLiked = 0;
+		if(id != null) {
+			isLiked = rService.reviewLike(bId, id);
+		}
 
 		Review r = rService.selectReview(bId, id);
 		ArrayList<ReviewReply> list = rService.selectReplyList(bId);

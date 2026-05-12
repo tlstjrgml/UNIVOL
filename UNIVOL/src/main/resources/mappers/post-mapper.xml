@@ -151,7 +151,6 @@
 		<result column="USER_ID" property="userId"/>
 		<result column="USER_NAME" property="userName"/>
 		<result column="P_STATUS" property="pStatus"/>
-		<result column="LIKES" property="likes"/>
 	</resultMap>
 	
 	<select id="selectTop" resultMap="postResultSet">
