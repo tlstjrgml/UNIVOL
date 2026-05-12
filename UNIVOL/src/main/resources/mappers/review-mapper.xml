@@ -4,15 +4,24 @@
 	<select id="getListCount">
 		select count(*)
 		from post
-		where p_type = #{c}
+		where p_type = #{c} and p_status = 'Y'
 	</select>
 
 	<select id="selectReviewList" resultMap="reviewResultSet">
-		select *
-		from post
-			 join users using(user_id)
-		where p_type = #{c}
-		order by p_number desc
+		select p.p_number, p.p_title, p.views, p.p_date, p.p_type, p.user_id,
+            p.p_status, p.p_status, p.is_notice, p.create_date, u.user_name, count(l.p_number) as like_count
+		from post p
+		    join users u on p.user_id = u.user_id
+		    left join p_like l on p.p_number = l.p_number
+		where p.p_status = 'Y' and p.p_type = 'R'
+		group by p.p_number, p.p_title, p.views, p.p_date, p.p_type, p.user_id,
+		            p.p_status, p.p_status, p.is_notice, p.create_date, u.user_name
+		order by
+		<choose>
+		    <when test="sort == 'views_desc'">p.views DESC</when>
+		    <when test="sort == 'views_asc'">p.views ASC</when>
+		    <otherwise>p.p_date DESC</otherwise>
+		</choose>
 	</select>
 
 	<resultMap type="com.univol.review.vo.Review" id="reviewResultSet">
@@ -47,22 +56,32 @@
 	</update>
 
 	<insert id="insertReview">
-		<selectKey order="BEFORE" resultType="_int" keyProperty="rNumber">
-			select seq_post.nextval from dual
-		</selectKey>
-		insert into post
-		values(#{rNumber}, #{rTitle}, #{rContents}, default, sysdate, #{pType}, #{userId})
+	    <selectKey order="BEFORE" resultType="_int" keyProperty="rNumber">
+	        select seq_post.nextval from dual
+	    </selectKey>
+	    insert into post
+	    values(#{rNumber}, #{rTitle}, #{rContents}, default, sysdate, #{pType}, #{userId}, 'Y')
 	</insert>
 
 	<select id="selectTop" resultMap="reviewResultSet">
 		select *
-		from(select *
-		    from post
-		        join users using(user_id)
-		        where p_type = 'R' and p_status = 'Y'
-		        order by views desc)
+		from(select p.*, u.user_name, nvl(l.like_count, 0) as like_count
+			    from post p
+			        join users u on p.user_id = u.user_id
+			        left join (
+			            select p_number, count(*) as like_count
+			            from p_like
+			            group by p_number
+			        ) l on p.p_number = l.p_number
+			    where p.p_type = 'R' and p.p_status = 'Y')
 		where rownum <![CDATA[<]]> = 5
 	</select>
+
+	<update id="deleteReview">
+	    UPDATE POST
+	    SET P_STATUS = 'N'
+	    WHERE P_NUMBER = #{rNumber}
+	</update>
 
 	<select id="selectReplyList">
 		select *
@@ -76,5 +95,61 @@
 		insert into reply
 		values(seq_reply.nextval, #{comments}, default, #{pNumber}, #{userId}, default)
 	</insert>
+
+	<!-- 댓글 수정 -->
+	<update id="reviewUpdate">
+		update reply
+		set comments=#{comments}
+		where c_number=#{cNumber} and user_id=#{userId} and c_status='Y'
+	</update>
+
+	<select id="getSearchCount" resultType="_int">
+		select count(*) from post p
+		join users u on p.user_id = u.user_id
+		where p.p_type = 'R'
+		and (
+		    p.p_title like '%' || #{keyword} || '%'
+		    or u.user_name like '%' || #{keyword} || '%'
+		)
+	</select>
+
+	<select id="searchReviews" resultMap="reviewResultSet">
+		select p.*, u.user_name
+		from post p
+		join users u on p.user_id = u.user_id
+		where p.p_type = 'R'
+		and (
+		    p.p_title like '%' || #{keyword} || '%'
+		    or u.user_name like '%' || #{keyword} || '%'
+		)
+		order by
+		<choose>
+		    <when test="sort == 'views_desc'">p.views DESC</when>
+		    <when test="sort == 'views_asc'">p.views ASC</when>
+		    <otherwise>p.p_date DESC</otherwise>
+		</choose>
+	</select>
+
+	<select id="reviewLike" resultType="_int">
+		select count(*)
+		from p_like
+		where user_id = #{userId} and p_number = #{pNumber}
+	</select>
+
+	<delete id="deleteLike">
+		delete from p_like
+		where user_id = #{userId} and p_number = #{pNumber}
+	</delete>
+
+	<insert id="insertLike">
+		insert into p_like
+		values(#{userId}, #{pNumber})
+	</insert>
+
+	<select id="likeCount" resultType="_int">
+		select count(*)
+		from p_like
+		where p_number = #{pNumber}
+	</select>
 
 </mapper>
