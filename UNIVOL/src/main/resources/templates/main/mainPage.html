@@ -130,15 +130,6 @@
         </tr>
       </thead>
       <tbody>
-       	<tr>
-          <td>1</td>
-          <td>겨울방학 청소년 멘토링 봉사 모집</td>
-          <td>홍길동</td>
-          <td class="views">1,085</td>
-          <td class="likes">♥ 34</td>
-        </tr>
-	    <!-- test -->
-         
       </tbody>
     </table>
 
@@ -173,6 +164,33 @@
 		
 		const topList = () => {
 			$.ajax({
+				url: '/post/top',
+				success: data => {
+					
+					const tbody = document.querySelector('.board-table tbody')
+					tbody.innerHTML = '';
+					
+					for(const p of data){
+						const tr = document.createElement('tr');
+						tr.innerHTML = `
+							<td>${p.pnumber}</td>
+							<td>${p.ptitle}</td>
+							<td>${p.userName}</td>
+							<td>${p.views}</td>
+							<td>♥ ${p.likes || 0}</td>
+						`;
+						tr.onclick = () => {
+							location.href= '/post/' + p.pnumber; 
+						}
+						tbody.append(tr);
+						console.log(data);
+					}
+				},
+				error: data => console.log(data)
+			});
+		
+			
+			$.ajax({
 				url: '/review/top',
 				success: data => {
 //  					console.log(data);
@@ -183,16 +201,16 @@
 						const tr = document.createElement('tr');
 						
 						const rNumber = document.createElement('td');
-						rNumber.innerText = r.rNumber;
+						rNumber.innerText = r.rnumber;
 						
 						const rTitle = document.createElement('td');
-						rTitle.innerText = r.rTitle;
+						rTitle.innerText = r.rtitle;
 						
 						const rWriter = document.createElement('td');
 						rWriter.innerText = r.userName;
 						
 						const rViews = document.createElement('td');
-						rViews.innerText = r.rViews
+						rViews.innerText = r.rviews
 						
 						const rLike = document.createElement('td');
 						/*  rLike.innerText = '♥ ' + (r.) */

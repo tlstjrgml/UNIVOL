@@ -30,4 +30,6 @@ public interface PostMapper {
 	int deletePost(Post p);
 
 	int updateViews(int pNumber);
+
+	ArrayList<Post> selectTop();
 }

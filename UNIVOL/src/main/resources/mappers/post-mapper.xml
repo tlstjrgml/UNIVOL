@@ -95,6 +95,29 @@
 		set views = views + 1
 		where p_number = #{pNumber}
 	</update>
+	
+	<resultMap type="com.univol.post.vo.Post" id="postResultSet">
+		<result column="p_number" property="pNumber"/>
+		<result column="P_TITLE" property="pTitle"/>
+		<result column="CONTENTS" property="contents"/>
+		<result column="VIEWS" property="views"/>
+		<result column="P_DATE" property="pDate"/>
+		<result column="P_TYPE" property="pType"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="P_STATUS" property="pStatus"/>
+		<result column="LIKES" property="likes"/>
+	</resultMap>
+	
+	<select id="selectTop" resultMap="postResultSet">
+		select * 
+		from (select * 
+				from post join users using (user_id) 
+				where p_type = 'V' and p_status='Y' 
+				order by views desc)
+		where rownum <![CDATA[<=]]>5
+	
+	</select>
 
 </mapper>
 

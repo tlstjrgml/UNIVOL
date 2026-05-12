@@ -87,8 +87,8 @@ public class PostController {
 	}
 
 	/* 글 상세조회 */
-	@GetMapping("/post/{currentPage}/{pNumber}")
-	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model, HttpSession session,
+	@GetMapping({"/post/{currentPage}/{pNumber}", "/post/{pNumber}"})
+	public String selectOne(@PathVariable(value="currentPage", required=false) Integer currentPage, @PathVariable("pNumber") int pNumber, Model model, HttpSession session,
 							@RequestParam(value="sort", defaultValue="latest") String sort,
 							@RequestParam(value="keyword", defaultValue="") String keyword) {
 	    Member loginUser = (Member)session.getAttribute("loginUser");
@@ -96,6 +96,9 @@ public class PostController {
 	    if(loginUser != null) {
 	    	userId = loginUser.getUserId();
 	    }
+	    
+	    int page = (currentPage == null) ? 1 :currentPage;
+	    
 		Post post = pService.selectOne(pNumber, userId);
 	    if(post == null) {
 	        return "error/404";
@@ -103,7 +106,7 @@ public class PostController {
 	    ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
 	    model.addAttribute("post", post);
 	    model.addAttribute("replyList",replyList );
-	    model.addAttribute("currentPage", currentPage);
+	    model.addAttribute("currentPage", page);
 	    model.addAttribute("sort", sort);
 	    model.addAttribute("keyword", keyword);
 	    return "post/detail";
@@ -131,7 +134,12 @@ public class PostController {
 	    return result;
 	}	
 	
-	
+	// mainPage 봉사게시판 조회수 top5 띄우기.
+	@GetMapping("/post/top")
+	@ResponseBody
+	public ArrayList<Post> selectTop(){
+		return pService.selectTop();
+	}
 	
 	
 	

@@ -63,4 +63,9 @@ public class PostService {
 	public int rollbackPost(Post p) {
 		return mapper.rollbackPost(p);
 	}
+
+
+	public ArrayList<Post> selectTop() {
+		return mapper.selectTop();
+	}
 }
