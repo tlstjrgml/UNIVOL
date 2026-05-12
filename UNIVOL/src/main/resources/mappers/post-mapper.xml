@@ -102,6 +102,12 @@
 		set p_status = 'N'
 		where p_number=#{pNumber}
 	</update>
+	
+	<update id="userEditPost">
+		update post
+		set contents=#{contents}, p_Date=#{pDate}, p_Title=#{pTitle}
+		where p_number = #{pNumber}
+	</update>
 
 	<!-- 관리자페이지용 -->
 	<select id="getPostCount" resultType="_int">

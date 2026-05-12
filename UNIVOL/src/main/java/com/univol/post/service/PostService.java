@@ -79,4 +79,8 @@ public class PostService {
 	public int userDeletePost(int pNumber) {
 		return mapper.userDeletePost(pNumber);
 	}
+	
+	public int userEditPost(Post p) {
+		return mapper.userEditPost(p);
+	}
 }

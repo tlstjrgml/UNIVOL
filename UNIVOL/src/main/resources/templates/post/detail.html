@@ -89,7 +89,7 @@
     </div>
 
     <!-- 게시글 본문: 봉사 정보 테이블 + 내용 -->
-    <div class="post-content">
+    <div class="post-content" id="post-content">
       <table style="width:100%; border-collapse:collapse; margin-bottom:1.5rem;">
         <tr>
           <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; width:120px; font-weight:700; color:#333;">봉사제목</th>
@@ -114,7 +114,7 @@
       <div th:if="${loginUser != null && loginUser.userId == post.userId || loginUser.isAdmin == 'Y'}"
            style="display:flex; justify-content:flex-end; gap:6px;">
       	<form th:action="@{/post/edit/{pNumber}(pNumber=${post.pNumber})}" method="post">
-      		<button id="editPostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
+      		<button id="editPostBtn" type="button" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
       	</form>
       	<form th:action="@{/post/delete/{pNumber}(pNumber=${post.pNumber})}" method="post">
       		<button id="deletePostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: red; border: none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
@@ -175,10 +175,48 @@
   </main>
 
   <script th:inline="javascript">
-    const pNumber = /*[[${post.pNumber}]]*/0;
+    const contentDiv = document.getElementById('post-content');
+	const originalContent = contentDiv.innerHTML;
+	const pNumber = /*[[${post.pNumber}]]*/0;
+	const pTitle = /*[[${post.pTitle}]]*/'';
+	const pDate = /*[[${post.pDate}]]*/'';
+	const contents = /*[[${post.contents}]]*/'';
+	const currentPage = /*[[${currentPage}]]*/1;
 
+   	/* 게시글 수정 */
+   	document.addEventListener('click', (e)=>{
+		if(e.target.id == 'editPostBtn'){
+   		contentDiv.innerHTML = `
+   		    <form action="/post/edit/${pNumber}" method="post" style="display:flex; flex-direction:column; gap:1rem;">
+   		        <table style="width:100%; border-collapse:collapse; margin-bottom:1.5rem;">
+   		            <tr>
+   		                <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; width:120px; font-weight:700; color:#333;">봉사제목</th>
+   		                <td style="border:1px solid #e0e0d8; padding:12px 16px;">
+   		                    <input type="text" name="pTitle" value="${pTitle}" style="width:100%; padding:8px; border:1px solid #d0d0c8; border-radius:6px; font-size:14px; outline:none;">
+   		                </td>
+   		            </tr>
+   		            <tr>
+   		                <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; font-weight:700; color:#333;">봉사날짜</th>
+   		                <td style="border:1px solid #e0e0d8; padding:12px 16px;">
+   		                    <input type="date" name="pDate" value="${pDate.substring(0,10)}" style="padding:8px; border:1px solid #d0d0c8; border-radius:6px; font-size:14px; outline:none;">
+   		                </td>
+   		            </tr>
+   		        </table>
+   		        <p style="font-size:14px; font-weight:700; color:#333; margin-bottom:8px;">봉사내용</p>
+   		        <textarea name="contents" style="width:100%; padding:12px; border:1px solid #d0d0c8; border-radius:8px; font-size:14px; line-height:1.8; min-height:150px; resize:vertical; outline:none;">${contents}</textarea>
+   		        <input type="hidden" name="currentPage" value="${currentPage}">
+   		        <div style="display:flex; justify-content:flex-end; gap:6px;">
+   		            <button type="submit" style="padding:6px 16px; background:#426B1F; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">저장</button>
+   		            <button type="button" onclick="contentDiv.innerHTML = originalContent" style="padding:6px 16px; background:#ddd; color:#666; border:none; border-radius:6px; font-size:13px; cursor:pointer;">취소</button>
+   		        </div>
+   		    </form>
+		`;
 
-    /* 게시글 삭제 - 미구현 */
+		}
+
+   	});
+    
+    /* 게시글 삭제 */
     document.getElementById('deletePostBtn').addEventListener('click', (e)=>{
 	
 		const result = confirm('정말로 삭제하시겠습니까? 삭제된 글은 복구가 어렵습니다.')

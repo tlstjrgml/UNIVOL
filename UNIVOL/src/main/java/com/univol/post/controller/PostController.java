@@ -126,6 +126,19 @@ public class PostController {
 		}else {
 			throw new PostException("게시글 삭제에 실패했습니다");
 		}
+	}
+	
+	/* 사용자 글 수정 */
+	@PostMapping("/post/edit/{pNumber}")
+	public String userEditPost(@PathVariable("pNumber") int pNumber,@ModelAttribute Post p,@RequestParam("currentPage") int currentPage) {
 		
+		p.setPNumber(pNumber);
+		int result = pService.userEditPost(p);
+		
+		if(result > 0) {
+			return "redirect:/post/" + currentPage + "/" + pNumber;
+		}else {
+			throw new PostException("게시글 수정을 실패했습니다");
+		}
 	}
 }

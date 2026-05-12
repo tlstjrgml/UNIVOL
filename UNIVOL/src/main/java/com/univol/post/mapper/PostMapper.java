@@ -1,8 +1,11 @@
 package com.univol.post.mapper;
 
+import java.sql.Date;
 import java.util.ArrayList;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
 import com.univol.post.vo.Post;
 
 @Mapper
@@ -28,4 +31,6 @@ public interface PostMapper {
 	ArrayList<Post> selectTopPost();
 	
 	int userDeletePost(int pNumber);
+	
+	int userEditPost(Post p);
 }
