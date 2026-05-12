@@ -109,7 +109,7 @@ public class MemberController {
 
 	public void setMyPostList(ModelAndView mv, String id, int page) {
 	    int totalCount = mService.getMyPostCount(id);
-	    com.univol.common.PageInfo pi = Pagination.getPageInfo(page, totalCount, 5);
+	    PageInfo pi = Pagination.getPageInfo(page, totalCount, 5);
 	    if (page < 1) page = 1;
 	    if (page > pi.getMaxPage()) page = pi.getMaxPage();
 	    mv.addObject("myPostList", mService.getMyPostList(pi, id));
