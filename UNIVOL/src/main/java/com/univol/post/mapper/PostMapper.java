@@ -26,4 +26,6 @@ public interface PostMapper {
 	int updateViews(int pNumber);
 	int updateReview(int pNumber);
 	ArrayList<Post> selectTopPost();
+	
+	int userDeletePost(int pNumber);
 }

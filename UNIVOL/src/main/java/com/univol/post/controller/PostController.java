@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.univol.common.PageInfo;
 import com.univol.common.Pagination;
 import com.univol.member.vo.Member;
+import com.univol.post.model.exception.PostException;
 import com.univol.post.service.PostService;
 import com.univol.post.service.ReplyService;
 import com.univol.post.vo.Post;
@@ -114,5 +115,17 @@ public class PostController {
 	public ArrayList<Post> selectTopPost(){
 		ArrayList<Post> list = pService.selectTopPost();
 		return list;
+	}
+	
+	/* 사용자 글 삭제 */
+	@PostMapping("/post/delete/{pNumber}")
+	public String userDeletePost(@PathVariable("pNumber") int pNumber) {
+		int result = pService.userDeletePost(pNumber);
+		if(result>0) {
+			return "redirect:/post";
+		}else {
+			throw new PostException("게시글 삭제에 실패했습니다");
+		}
+		
 	}
 }

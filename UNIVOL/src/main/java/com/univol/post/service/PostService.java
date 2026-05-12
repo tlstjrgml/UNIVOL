@@ -75,4 +75,8 @@ public class PostService {
 	public ArrayList<Post> selectTopPost() {
 		return mapper.selectTopPost();
 	}
+	
+	public int userDeletePost(int pNumber) {
+		return mapper.userDeletePost(pNumber);
+	}
 }
