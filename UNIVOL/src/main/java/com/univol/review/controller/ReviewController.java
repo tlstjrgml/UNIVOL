@@ -18,8 +18,8 @@ import com.univol.common.Pagination;
 import com.univol.member.vo.Member;
 import com.univol.review.exception.ReviewException;
 import com.univol.review.service.ReviewService;
-import com.univol.review.vo.ReviewReply;
 import com.univol.review.vo.Review;
+import com.univol.review.vo.ReviewReply;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -49,9 +49,9 @@ public class ReviewController {
 
 	    ArrayList<Review> list;
 	    if(keyword.isEmpty()) {
-	        list = rService.selectReviewList(pi, 'R',sort);  // 기존
+	        list = rService.selectReviewList(pi, 'R', sort);
 	    } else {
-	        list = rService.searchReviews(keyword, sort, pi);  // 검색
+	        list = rService.searchReviews(keyword, sort, pi);
 	    }
 
 	    mv.addObject("loc", request.getRequestURI());
@@ -109,10 +109,8 @@ public class ReviewController {
 	                     Model model) {
 
 	    Review r = rService.selectReview(rNumber, null);
-
 	    model.addAttribute("r", r);
 	    model.addAttribute("page", page);
-
 	    return "review/detail";
 	}
 	
@@ -121,29 +119,21 @@ public class ReviewController {
 	                           @RequestParam("page") int page,
 	                           HttpSession session) {
 
-	    // 로그인 회원 꺼내기 (Member)
 	    Member loginMember = (Member) session.getAttribute("loginUser");
-
 	    if (loginMember == null) {
 	        throw new ReviewException("로그인이 필요합니다.");
 	    }
 
-	    // 기존 게시글 조회
 	    Review origin = rService.selectReview(r.getRNumber(), null);
-
 	    if (origin == null) {
 	        throw new ReviewException("게시글이 존재하지 않습니다.");
 	    }
 
-	    // 권한 체크 (내 글인지 확인)
 	    if (!origin.getUserId().equals(loginMember.getUserId())) {
 	        throw new ReviewException("본인 글만 수정 가능합니다.");
 	    }
 
-	    // 서버에서 작성자 강제 세팅 (보안)
 	    r.setUserId(loginMember.getUserId());
-
-	    // 수정 실행
 	    int result = rService.updateReviews(r);
 
 	    if (result > 0) {
@@ -159,7 +149,26 @@ public class ReviewController {
 		ArrayList<Review> list = rService.selectTop();
 		return list;
 	}
-	
+
+	@PostMapping("delete")
+	public String deleteReview(@RequestParam("rNumber") int rNumber,
+	                           @RequestParam("page") int page, HttpSession session) {
+	    int result = rService.deleteReview(rNumber);
+	    if (result > 0) {
+	        return "redirect:/review";
+	    } else {
+	        throw new ReviewException("삭제 실패");
+	    }
+	}
+
+	@GetMapping("search")
+	public ModelAndView searchReview(int id) {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject(null, mv);
+		mv.setViewName("/search");
+		return mv;
+	}
+
 	@GetMapping("rinsert")
 	@ResponseBody
 	public ArrayList<ReviewReply> insertReply(@ModelAttribute ReviewReply r){
@@ -168,8 +177,27 @@ public class ReviewController {
 		System.out.println(r.getUserId());
 		return list;
 	}
-	
-	
-	
-	
+
+	@PostMapping("like")
+	@ResponseBody
+	public int reviewLike(@RequestParam("pNumber") int pNumber, @RequestParam("userId") String userId) {
+		int result = rService.reviewLike(pNumber, userId);
+		if(result > 0) {
+			rService.deleteLike(pNumber, userId);
+		} else {
+			rService.insertLike(pNumber, userId); 
+		}
+		int likeCount = rService.likeCount(pNumber);
+		return likeCount;
+	}
+
+	@PostMapping("reviewReply/update")
+	public String reupdate(ReviewReply reply, @RequestParam("pNumber") int pno, @RequestParam(value="page", defaultValue="1") int page) { 
+	    int result = rService.reviewUpdate(reply); 
+	    if(result > 0) {
+	    	return "redirect:/review/" + pno + "/" + page;
+	    } else {
+	    	throw new ReviewException("수정 실패");
+	    }
+	}
 }

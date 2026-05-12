@@ -1,4 +1,4 @@
-	<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
@@ -9,30 +9,8 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
     body { background: #f5f5f0; min-height: 100vh; }
 
-    .unv-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 40px;
-      color: #426B1F;
-      text-align: center;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-    }
-
-    .unv-page-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: #222;
-      text-align: center;
-      margin-bottom: 14px;
-    }
-
-    .unv-divider {
-      border: none;
-      border-top: 2px solid #426B1F;
-      max-width: 1200px;
-      margin: 0 auto 28px auto;
-    }
-
+    /* 전체 레이아웃 */
+    .unv-wrap { padding: 2.5rem 2rem; }
     .unv-layout {
       display: grid;
       grid-template-columns: 1fr 320px;
@@ -42,6 +20,7 @@
       align-items: start;
     }
 
+    /* 폼 카드 */
     .unv-card {
       background: #fff;
       border-radius: 12px;
@@ -49,25 +28,15 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
       padding: 40px 44px;
     }
-
     .unv-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0 24px;
     }
+    .unv-field { margin-bottom: 24px; }
+    .unv-field.full { grid-column: 1 / -1; }
 
-    .unv-field {
-      margin-bottom: 24px;
-    }
-
-    .unv-field.full {
-      grid-column: 1 / -1;
-    }
-
-    .unv-wrap {
-      padding: 2.5rem 2rem;
-    }
-
+    /* 폼 요소 */
     label {
       display: block;
       font-size: 14px;
@@ -75,7 +44,6 @@
       color: #426B1F;
       margin-bottom: 8px;
     }
-
     input[type="text"],
     textarea {
       width: 100%;
@@ -89,22 +57,20 @@
       outline: none;
       transition: border 0.15s;
     }
-
     input[type="text"]:focus,
     textarea:focus {
       border-color: #426B1F;
       background: #fff;
     }
-
     textarea { resize: none; }
 
+    /* 버튼 */
     .unv-btn-group {
       display: flex;
       justify-content: center;
       gap: 12px;
       margin-top: 10px;
     }
-
     button {
       padding: 12px 40px;
       border: none;
@@ -115,12 +81,12 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-
     .btn-primary { background: #426B1F; color: #fff; }
     .btn-primary:hover { background: #2f3616; }
     .btn-secondary { background: #e8e8e3; color: #555; }
     .btn-secondary:hover { background: #d5d5ce; }
 
+    /* 작성 가이드 패널 */
     .unv-guide {
       background: #fff;
       border-radius: 12px;
@@ -128,7 +94,6 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
       padding: 30px 26px;
     }
-
     .unv-guide-title {
       font-size: 15px;
       font-weight: 700;
@@ -137,23 +102,19 @@
       padding-bottom: 12px;
       border-bottom: 2px solid #426B1F;
     }
-
     .unv-guide-section { margin-bottom: 22px; }
-
     .unv-guide-section-title {
       font-size: 13px;
       font-weight: 700;
       color: #426B1F;
       margin-bottom: 10px;
     }
-
     .unv-guide-item {
       display: flex;
       align-items: flex-start;
       gap: 8px;
       margin-bottom: 10px;
     }
-
     .unv-guide-dot {
       width: 6px;
       height: 6px;
@@ -162,50 +123,38 @@
       margin-top: 6px;
       flex-shrink: 0;
     }
-
-    .unv-guide-text {
-      font-size: 13px;
-      color: #555;
-      line-height: 1.7;
-    }
-
+    .unv-guide-text { font-size: 13px; color: #555; line-height: 1.7; }
     .unv-guide-notice {
       background: #f5f5f0;
       border-radius: 8px;
       padding: 16px 18px;
       margin-top: 4px;
     }
-
-    .unv-guide-notice p {
-      font-size: 12px;
-      color: #777;
-      line-height: 1.8;
-      margin: 0;
-    }
-
-    .unv-guide-notice strong {
-      color: #426B1F;
-      font-weight: 700;
-    }
+    .unv-guide-notice p { font-size: 12px; color: #777; line-height: 1.8; margin: 0; }
+    .unv-guide-notice strong { color: #426B1F; font-weight: 700; }
   </style>
 </head>
-
 <body>
 
+  <!-- 네비게이션 바 -->
   <div th:replace="~{common/navbar.html}"></div>
 
+  <!-- 본문 레이아웃 -->
   <div class="unv-wrap">
     <div class="unv-layout">
 
+      <!-- 작성 폼 -->
       <div class="unv-card">
-  		<form th:action="@{/review/insert}" method="POST">
+        <form th:action="@{/review/insert}" method="POST">
           <div class="unv-row">
 
+            <!-- 제목 -->
             <div class="unv-field full">
               <label for="rTitle">제목</label>
               <input type="text" id="rTitle" name="rTitle" placeholder="제목을 입력하세요" required>
             </div>
 
+            <!-- 내용 -->
             <div class="unv-field full">
               <label for="rContents">내용</label>
               <textarea id="rContents" name="rContents" rows="13" placeholder="내용을 입력하세요" required></textarea>
@@ -213,13 +162,15 @@
 
           </div>
 
+          <!-- 등록/취소 버튼 -->
           <div class="unv-btn-group">
             <button type="submit" class="btn-primary">완료</button>
-            <button type="button" class="btn-secondary" onclick="javascript:history.back();">취소</button>
+            <button type="button" class="btn-secondary" onclick="history.back()">취소</button>
           </div>
         </form>
       </div>
 
+      <!-- 작성 가이드 패널 -->
       <div class="unv-guide">
         <div class="unv-guide-title">작성 가이드</div>
 
@@ -258,5 +209,6 @@
 
     </div>
   </div>
+
 </body>
 </html>

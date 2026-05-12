@@ -1,14 +1,15 @@
 package com.univol.review.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import com.univol.common.PageInfo;
-import com.univol.review.vo.ReviewReply;
 import com.univol.review.mapper.ReviewMapper;
 import com.univol.review.vo.Review;
+import com.univol.review.vo.ReviewReply;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,11 +53,15 @@ public class ReviewService {
 		return mapper.selectTop();
 	}
 
-	public ArrayList<com.univol.review.vo.ReviewReply> selectReplyList(int bId) {
+	public ArrayList<ReviewReply> selectReplyList(int bId) {
 		return mapper.selectReplyList(bId);
 	}
 
-	public int insertReply(com.univol.review.vo.ReviewReply r) {
+	public int deleteReview(int rNumber) {
+		return mapper.deleteReview(rNumber);
+	}
+
+	public int insertReply(ReviewReply r) {
 		return mapper.insertReply(r);
 	}
 
@@ -64,11 +69,39 @@ public class ReviewService {
 		return mapper.getSearchCount(keyword);
 	}
 
-
 	public ArrayList<Review> searchReviews(String keyword, String sort, PageInfo pi) {
 	    int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 	    RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 	    return mapper.searchReviews(keyword, sort, rowBounds);
 	}
-	
+
+	public int reviewLike(int pNumber, String userId) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pNumber", pNumber);
+		map.put("userId", userId);
+		return mapper.reviewLike(map);
+	}
+
+	public int deleteLike(int pNumber, String userId) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pNumber", pNumber);
+		map.put("userId", userId);
+		return mapper.deleteLike(map);
+	}
+
+	public int insertLike(int pNumber, String userId) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pNumber", pNumber);
+		map.put("userId", userId);
+		return mapper.insertLike(map);
+	}
+
+	public int likeCount(int pNumber) {
+		return mapper.likeCount(pNumber);
+	}
+
+	public int reviewUpdate(ReviewReply reply) {
+		return mapper.reviewUpdate(reply);
+	}
+
 }
