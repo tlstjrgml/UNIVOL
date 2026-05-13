@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.univol.member.vo.Member;
-import com.univol.post.service.PostService;
-import com.univol.post.service.ReplyService;
 import com.univol.common.PageInfo;
 import com.univol.common.Pagination;
+import com.univol.member.vo.Member;
+import com.univol.post.model.exception.PostException;
+import com.univol.post.service.PostService;
+import com.univol.post.service.ReplyService;
 import com.univol.post.vo.Post;
 import com.univol.post.vo.Reply;
 
@@ -37,15 +38,14 @@ public class PostController {
 			@RequestParam(value = "sort", defaultValue="latest") String sort,
 			@RequestParam(value="keyword", defaultValue="") String keyword) {
 		
-		//정렬 & 검색의 경우 추가.
 		int listCount;
 		if(keyword.isEmpty()) {
 			listCount = pService.getListCount();
 		}else {
-			listCount = pService.getSearchCount(keyword); // 검색 결과 갯수(페이지네이션)
+			listCount = pService.getSearchCount(keyword);
 		}
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount,10);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		
 		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
 		int endRow = pi.getCurrentPage() * pi.getBoardLimit();
@@ -54,15 +54,13 @@ public class PostController {
 		if(keyword.isEmpty()) {
 			plist = pService.selectAll(startRow, endRow, sort);
 		}else {
-			plist = pService.searchPosts(keyword, sort, startRow, endRow); // 검색 글 목록
+			plist = pService.searchPosts(keyword, sort, startRow, endRow);
 		}
 		
-		
-		model.addAttribute("pi",pi);
+		model.addAttribute("pi", pi);
 		model.addAttribute("plist", plist);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("sort", sort);
-		
 		
 		return "post/post";
 	}
@@ -70,19 +68,20 @@ public class PostController {
 	/* 글 작성하는 뷰로 이동하기 */
 	@GetMapping("/post/write")
 	public String postWrite() {
-		
 		return "post/write";
 	}
 
 	/* 글 작성을 완료하면 post페이지로 보내기 */
 	@PostMapping("/post/write")
-	public String insertPost(@ModelAttribute Post p, HttpSession session) {
+	public String insertPost(@ModelAttribute Post p, HttpSession session,
+			@RequestParam(value="isNotice", defaultValue="N") String isNotice) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		p.setPType('V');
 		p.setUserId(loginUser.getUserId());
+		if(p.getIsNotice() == null) {
+			p.setIsNotice("N");
+		}
 		pService.insertPost(p);
-		
-		
 		return "redirect:/post";
 	}
 
@@ -105,50 +104,37 @@ public class PostController {
 	    }
 	    ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
 	    model.addAttribute("post", post);
-	    model.addAttribute("replyList",replyList );
-	    model.addAttribute("currentPage", page);
+
+	    model.addAttribute("replyList", replyList);
+	    model.addAttribute("currentPage", currentPage);
 	    model.addAttribute("sort", sort);
 	    model.addAttribute("keyword", keyword);
+	    model.addAttribute("loginUser", loginUser);
 	    return "post/detail";
 	}
 
-	/* 관리자페이지에서 글 삭제하기 */
-	@PostMapping("/deletePost")
-	@ResponseBody
-	public int deletePost(@ModelAttribute Post p) {
-	    int result = pService.deletePost(p);
-	    if(result > 0) {
-	        return result;
-	    }
-	    return result;
-	}
-
-	/* 관리자페이지에서 글 복구하기 */
-	@PostMapping("/rollbackPost")
-	@ResponseBody
-	public int rollbackPost(@ModelAttribute Post p) {
-	    int result = pService.rollbackPost(p);
-	    if(result > 0) {
-	        return result;
-	    }
-	    return result;
-	}	
-	
-	// mainPage 봉사게시판 조회수 top5 띄우기.
+	/* 메인페이지 봉사게시판 5개 보여주기 */
 	@GetMapping("/post/top")
 	@ResponseBody
-	public ArrayList<Post> selectTop(){
-		return pService.selectTop();
+	public ArrayList<Post> selectTopPost(){
+		ArrayList<Post> list = pService.selectTopPost();
+		return list;
 	}
 	
-	
-	
-	
-	
-	
-	
-}
 
 
  
 
+	/* 사용자 글 삭제 */
+	@PostMapping("/post/delete/{pNumber}")
+	public String userDeletePost(@PathVariable("pNumber") int pNumber) {
+		int result = pService.userDeletePost(pNumber);
+		if(result>0) {
+			return "redirect:/post";
+		}else {
+			throw new PostException("게시글 삭제에 실패했습니다");
+		}
+		
+	
+	}
+}

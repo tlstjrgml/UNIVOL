@@ -3,6 +3,7 @@ package com.univol.post.mapper;
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.univol.post.vo.Reply;
 
@@ -20,5 +21,14 @@ public interface ReplyMapper {
 	int deleteReply(int cNumber);
 
 	ArrayList<Reply> selectAllReply();
+	
+	int adminDeleteReply(@Param("rNumber")int rNumber);
+	
+	int adminRollbackReply(@Param("rNumber")int rNumber);
+
+	int getReplyCount();
+	
+	ArrayList<Reply> selectAllReply(@Param("startRow")int replyStartRow, @Param("endRow")int replyEndRow);
+
 
 }

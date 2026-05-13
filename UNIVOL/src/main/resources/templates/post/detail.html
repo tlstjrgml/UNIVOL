@@ -8,48 +8,28 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
     body { background: #f5f5f0; min-height: 100vh; }
-
-    .header {
-      background: #fff;
-      border-bottom: 1px solid #e0e0d8;
-      padding: 0 2rem;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      height: 58px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; color: #426B1F; letter-spacing: 2px; cursor: pointer; }
-    .nav { display: flex; gap: 24px; justify-content: center; }
-    .nav a { font-size: 14px; color: #444; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; }
-    .nav a.active, .nav a:hover { color: #426B1F; border-bottom-color: #426B1F; }
-    .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
-    .username { font-size: 14px; color: #666; }
-    .header-btn { font-size: 13px; padding: 6px 14px; border-radius: 8px; border: 1px solid #426B1F; cursor: pointer; text-decoration: none; transition: background 0.15s; }
-    .btn-outline { background: transparent; color: #426B1F; }
-    .btn-outline:hover { background: #eaf3de; }
-
     .container { max-width: 1000px; margin: 2.5rem auto; padding: 0 2rem; }
 
+    /* 게시글 헤더 */
     .post-header { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
     .post-title { font-size: 28px; font-weight: 700; color: #222; margin-bottom: 1rem; }
     .post-meta { display: flex; gap: 1.5rem; font-size: 13px; color: #888; border-bottom: 1px solid #f0f0ea; padding-bottom: 1rem; }
     .meta-item { display: flex; align-items: center; gap: 4px; }
 
+    /* 게시글 본문 */
     .post-content { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; line-height: 1.8; color: #333; font-size: 14px; min-height: 300px; }
 
+    /* 댓글 섹션 */
     .reply-section { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; padding: 2rem; }
     .reply-title { font-size: 16px; font-weight: 700; color: #222; margin-bottom: 1.5rem; }
-
+    .reply-input-box form { display: flex; flex-direction: column; align-items: flex-end; }
     .reply-input-box { margin-bottom: 2rem; padding: 1.5rem; background: #f9f9f7; border-radius: 8px; }
     .reply-textarea { width: 100%; padding: 12px; border: 1px solid #d0d0c8; border-radius: 8px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; resize: vertical; min-height: 80px; outline: none; }
     .reply-textarea:focus { border-color: #426B1F; }
     .reply-btn { margin-top: 8px; padding: 8px 20px; background: #426B1F; color: #fff; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; transition: background 0.15s; }
     .reply-btn:hover { background: #305215; }
 
-    .reply-list { }
+    /* 댓글 목록 */
     .reply-item { padding: 1.5rem; border-bottom: 1px solid #f0f0ea; display: flex; justify-content: space-between; align-items: flex-start; }
     .reply-item:last-child { border-bottom: none; }
     .reply-content-wrap { flex: 1; }
@@ -57,12 +37,14 @@
     .reply-text { font-size: 13px; color: #555; margin: 6px 0; line-height: 1.6; }
     .reply-date { font-size: 11px; color: #aaa; }
 
+    /* 댓글 수정/삭제 버튼 */
     .reply-actions { display: flex; gap: 8px; }
     .reply-btn-small { font-size: 11px; padding: 4px 10px; border: 1px solid #d0d0c8; background: #fff; color: #666; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
     .reply-btn-small:hover { border-color: #426B1F; color: #426B1F; }
     .reply-btn-delete { border-color: #e0cccc; color: #c0392b; }
     .reply-btn-delete:hover { border-color: #c0392b; background: #fff5f5; }
 
+    /* 댓글 수정 폼 */
     .reply-edit-box { background: #f9f9f7; border-radius: 8px; padding: 1.5rem; margin-top: 10px; }
     .reply-edit-textarea { width: 100%; padding: 12px; border: 1px solid #d0d0c8; border-radius: 8px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; resize: none; min-height: 60px; outline: none; }
     .reply-edit-textarea:focus { border-color: #426B1F; }
@@ -72,12 +54,10 @@
     .reply-cancel-btn { padding: 6px 14px; background: #ddd; color: #666; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; }
     .reply-cancel-btn:hover { background: #ccc; }
 
+    /* 기타 */
     .empty-message { text-align: center; padding: 2rem; color: #aaa; font-size: 13px; }
-
     .back-btn { display: inline-block; margin-bottom: 1rem; padding: 8px 16px; background: #eaf3de; color: #426B1F; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; text-decoration: none; transition: background 0.15s; }
     .back-btn:hover { background: #d5e8c6; }
-
-    .hidden-form { display: none; }
   </style>
 </head>
 <body>
@@ -85,17 +65,21 @@
   <div th:replace="~{common/navbar}"></div>
 
   <main class="container">
-  <!-- 상세조회 이후 목록으로 돌아갔을 때 이전페이지 유지. -->
+
+    <!-- 목록으로 버튼: 이전 페이지/검색 상태 유지 -->
     <a class="back-btn" th:href="@{/post(page=${currentPage}, sort=${sort}, keyword=${keyword})}">← 목록으로</a>
 
+    <!-- 게시글 헤더: 제목, 작성자, 작성일, 조회수 -->
     <div class="post-header">
-      <h1 class="post-title" th:text="${post.pTitle}"></h1>
+      <div style="display:flex; align-items:baseline; gap:12px;">
+        <h1 class="post-title" th:text="${post.pTitle}"></h1>
+      </div>
       <div class="post-meta">
         <div class="meta-item">
           <span th:text="${post.userName}"></span>
         </div>
         <div class="meta-item">
-          <span th:text="${#dates.format(post.pDate, 'yyyy-MM-dd')}"></span>
+          <span th:text="${#dates.format(post.createDate, 'yyyy-MM-dd')}"></span>
         </div>
         <div class="meta-item">
           <span>조회수</span>
@@ -104,15 +88,50 @@
       </div>
     </div>
 
-    <div class="post-content" th:utext="${post.contents}"></div>
+    <!-- 게시글 본문: 봉사 정보 테이블 + 내용 -->
+    <div class="post-content">
+      <table style="width:100%; border-collapse:collapse; margin-bottom:1.5rem;">
+        <tr>
+          <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; width:120px; font-weight:700; color:#333;">봉사제목</th>
+          <td style="border:1px solid #e0e0d8; padding:12px 16px;" th:text="${post.pTitle}"></td>
+        </tr>
+        <tr>
+          <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; font-weight:700; color:#333;">봉사날짜</th>
+          <td style="border:1px solid #e0e0d8; padding:12px 16px;" th:text="${post.pDate}"></td>
+        </tr>
+      </table>
 
+      <p style="font-size:14px; font-weight:700; color:#333; margin-bottom:8px;">봉사내용</p>
+      <p th:text="${post.contents}" style="font-size:14px; line-height:1.8; color:#555; margin-bottom:1.5rem;"></p>
+
+      <!-- 게시글 수정/삭제 버튼: 작성자만 노출, 기능은 미구현 -->
+      <!-- <div th:if="${loginUser != null && loginUser.userId == post.userId}"
+           style="display:flex; justify-content:flex-end; gap:6px;">
+        <button id="editPostBtn" type="button" style="padding:6px 16px; background:#426B1F; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
+        <button id="deletePostBtn" type="button" style="padding:6px 16px; background:#c0392b; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
+      </div> -->
+      
+      <div th:if="${loginUser != null && loginUser.userId == post.userId || loginUser.isAdmin == 'Y'}"
+           style="display:flex; justify-content:flex-end; gap:6px;">
+      	<form th:action="@{/post/edit/{pNumber}(pNumber=${post.pNumber})}" method="post">
+      		<button id="editPostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
+      	</form>
+      	<form th:action="@{/post/delete/{pNumber}(pNumber=${post.pNumber})}" method="post">
+      		<button id="deletePostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: red; border: none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
+      	</form>
+      	
+      	
+      </div>
+    </div>
+
+    <!-- 댓글 섹션 -->
     <div class="reply-section">
       <h2 class="reply-title">댓글 (<span th:text="${replyList.size()}">0</span>)</h2>
 
+      <!-- 댓글 등록 폼 -->
       <div class="reply-input-box">
         <form action="/post/{pNumber}/reply" method="POST" th:action="@{/post/{pNumber}/reply(pNumber=${post.pNumber})}">
           <textarea class="reply-textarea" name="comments" placeholder="참여하려면 댓글을 달아주세요"></textarea>
-          <!-- currentPager값 넘기는 히든 코드 쓰기... -->
           <input type="hidden" name="currentPage" th:value="${currentPage}">
           <input type="hidden" name="sort" th:value="${sort}">
           <input type="hidden" name="keyword" th:value="${keyword}">
@@ -120,10 +139,13 @@
         </form>
       </div>
 
+      <!-- 댓글 목록 -->
       <div class="reply-list" id="reply-list">
         <div th:if="${replyList.isEmpty()}" class="empty-message">아직 댓글이 없습니다.</div>
 
-        <div th:each="reply : ${replyList}" class="reply-item" th:id="'reply-' + ${reply.cNumber}" th:data-pnumber="${reply.pNumber}">
+        <div th:each="reply : ${replyList}" class="reply-item"
+             th:id="'reply-' + ${reply.cNumber}"
+             th:data-pnumber="${reply.pNumber}">
           <div class="reply-content-wrap">
             <div class="reply-author" th:text="${reply.userName}"></div>
             <div class="reply-text" th:id="'reply-text-' + ${reply.cNumber}" th:text="${reply.comments}"></div>
@@ -131,14 +153,23 @@
             <div th:id="'reply-edit-form-' + ${reply.cNumber}"></div>
           </div>
 
+<<<<<<< HEAD
+=======
+          <!-- 댓글 수정/삭제 버튼: 본인 댓글만 노출 -->
+>>>>>>> origin/신석희
           <div class="reply-actions" th:if="${loginUser != null && reply.userId == loginUser.userId}">
-            <button type="button" class="reply-btn-small" th:onclick="'toggleEditForm(' + ${reply.cNumber} + ')'">수정</button>
-            <form th:id="'delete-form-' + ${reply.cNumber}" action="/post/reply/{cNumber}/delete" method="POST" th:action="@{/post/reply/{cNumber}/delete(cNumber=${reply.cNumber})}" style="display:inline;">
+            <button type="button" class="reply-btn-small"
+                    th:onclick="'toggleEditForm(' + ${reply.cNumber} + ')'">수정</button>
+            <form th:id="'delete-form-' + ${reply.cNumber}"
+                  method="POST"
+                  th:action="@{/post/reply/{cNumber}/delete(cNumber=${reply.cNumber})}"
+                  style="display:inline;">
               <input type="hidden" name="pNumber" th:value="${post.pNumber}">
               <input type="hidden" name="currentPage" th:value="${currentPage}">
               <input type="hidden" name="sort" th:value="${sort}">
-          	  <input type="hidden" name="keyword" th:value="${keyword}">
-              <button type="button" class="reply-btn-small reply-btn-delete" onclick="if(confirm('댓글을 삭제하시겠습니까?')) this.form.submit();">삭제</button>
+              <input type="hidden" name="keyword" th:value="${keyword}">
+              <button type="button" class="reply-btn-small reply-btn-delete"
+                      onclick="if(confirm('댓글을 삭제하시겠습니까?')) this.form.submit();">삭제</button>
             </form>
 
             <!-- 좋아요 버튼. -->
@@ -157,85 +188,71 @@
     </div>
   </main>
 
-<script>
-  function toggleEditForm(cNumber) {
-    const formDiv = document.getElementById(`reply-edit-form-${cNumber}`);
-    const textDiv = document.getElementById(`reply-text-${cNumber}`);
-    const replyItem = document.getElementById(`reply-${cNumber}`);
-    const pNumber = replyItem.getAttribute('data-pnumber');
+  <script th:inline="javascript">
+    const pNumber = /*[[${post.pNumber}]]*/0;
 
-    if(formDiv.innerHTML === '') {
-      const originalText = textDiv.textContent;
-      const currentPage = document.querySelector('input[name="currentPage"]').value;
-      const sort = document.querySelector('input[name="sort"]').value;
-      const keyword = document.querySelector('input[name="keyword"]').value;
-      formDiv.innerHTML = `
-        <div class="reply-edit-box">
-          <form action="/post/reply/{cNumber}/update" method="POST" onsubmit="return submitEditForm(event, ${cNumber})">
-            <textarea class="reply-edit-textarea" name="comments" id="edit-textarea-${cNumber}">${originalText}</textarea>
-            <input type="hidden" name="pNumber" value="${pNumber}">
-            <input type="hidden" name="currentPage" value="${currentPage}">
-            <input type="hidden" name="sort" value="${sort}">
-            <input type="hidden" name="keyword" value="${keyword}">
-            <div class="reply-edit-actions">
-              <button type="submit" class="reply-edit-btn">저장</button>
-              <button type="button" class="reply-cancel-btn" onclick="cancelEdit(${cNumber})">취소</button>
-            </div>
-          </form>
-        </div>
-      `;
-      textDiv.style.display = 'none';
-    } else {
-      cancelEdit(cNumber);
+
+    /* 게시글 삭제 - 미구현 */
+    document.getElementById('deletePostBtn').addEventListener('click', (e)=>{
+	
+		const result = confirm('정말로 삭제하시겠습니까? 삭제된 글은 복구가 어렵습니다.')
+			if(result == false){
+			e.preventDefault();
+			}
+		});
+
+    /* 댓글 수정 폼 토글 */
+    function toggleEditForm(cNumber) {
+      const formDiv = document.getElementById(`reply-edit-form-${cNumber}`);
+      const textDiv = document.getElementById(`reply-text-${cNumber}`);
+      const replyItem = document.getElementById(`reply-${cNumber}`);
+      const pNumber = replyItem.getAttribute('data-pnumber');
+
+      if (formDiv.innerHTML === '') {
+        const originalText = textDiv.textContent;
+        const currentPage = document.querySelector('input[name="currentPage"]').value;
+        const sort = document.querySelector('input[name="sort"]').value;
+        const keyword = document.querySelector('input[name="keyword"]').value;
+        formDiv.innerHTML = `
+          <div class="reply-edit-box">
+            <form action="/post/reply/{cNumber}/update" method="POST" onsubmit="return submitEditForm(event, ${cNumber})">
+              <textarea class="reply-edit-textarea" name="comments" id="edit-textarea-${cNumber}">${originalText}</textarea>
+              <input type="hidden" name="pNumber" value="${pNumber}">
+              <input type="hidden" name="currentPage" value="${currentPage}">
+              <input type="hidden" name="sort" value="${sort}">
+              <input type="hidden" name="keyword" value="${keyword}">
+              <div class="reply-edit-actions">
+                <button type="submit" class="reply-edit-btn">저장</button>
+                <button type="button" class="reply-cancel-btn" onclick="cancelEdit(${cNumber})">취소</button>
+              </div>
+            </form>
+          </div>
+        `;
+        textDiv.style.display = 'none';
+      } else {
+        cancelEdit(cNumber);
+      }
     }
-  }
 
-  function cancelEdit(cNumber) {
-    const formDiv = document.getElementById(`reply-edit-form-${cNumber}`);
-    const textDiv = document.getElementById(`reply-text-${cNumber}`);
-    formDiv.innerHTML = '';
-    textDiv.style.display = 'block';
-  }
+    /* 댓글 수정 취소 */
+    function cancelEdit(cNumber) {
+      const formDiv = document.getElementById(`reply-edit-form-${cNumber}`);
+      const textDiv = document.getElementById(`reply-text-${cNumber}`);
+      formDiv.innerHTML = '';
+      textDiv.style.display = 'block';
+    }
 
-  function submitEditForm(event, cNumber) {
-    event.preventDefault();
-    const textarea = document.getElementById(`edit-textarea-${cNumber}`);
-    const form = textarea.closest('form');
-    form.action = `/post/reply/${cNumber}/update`;
-    form.submit();
-    return false;
-  }
 
-  const likeBtn = document.getElementById('likeBtn');
-  const heart = document.getElementById('heart');
-  const likeText = document.getElementById('likeText');
-
-  likeBtn.addEventListener('click', () => {
-	  $.ajax({
-		  url: '/review/like',
-		  method: 'POST',
-		  data: {
-			  pNumber: "${reply.cNumber}",
-			  userId: "${session.loginUser.userId}",
-			  liked: liked
-		  },
-		  success: data => {
-			  console.log(data);
-			  if(data.liked){
-					heart.innerText = '❤️' + data.likeCount;
-					likeText.innerText = '좋아요';
-				} else {
-					heart.innerText = '🤍' + data.likeCount;
-					likeText.innerText = '좋아요';
-				}
-		  },
-		  error: data => {
-			  console.log(data);
-		  }
-	  });
-  });
-
-</script>
+    /* 댓글 수정 저장 */
+    function submitEditForm(event, cNumber) {
+      event.preventDefault();
+      const textarea = document.getElementById(`edit-textarea-${cNumber}`);
+      const form = textarea.closest('form');
+      form.action = `/post/reply/${cNumber}/update`;
+      form.submit();
+      return false;
+    }
+  </script>
 
 </body>
 </html>
