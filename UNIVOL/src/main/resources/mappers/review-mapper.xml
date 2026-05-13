@@ -72,7 +72,7 @@
 			SELECT SEQ_POST.NEXTVAL FROM DUAL
 		</selectKey>
 		INSERT INTO POST
-		VALUES(#{rNumber}, #{rTitle}, #{rContents}, DEFAULT, SYSDATE, #{pType}, #{userId}, 'Y')
+		VALUES(#{rNumber}, #{rTitle}, #{rContents}, DEFAULT, SYSDATE, #{pType}, #{userId}, 'Y','N', default)
 	</insert>
 
 	<!-- 게시글 삭제 -->

@@ -156,6 +156,7 @@
     window.onload = function () {
       const viewMode = document.getElementById("view-mode");
       const editMode = document.getElementById("edit-mode");
+      const userId = /*[[${session.loginUser != null ? session.loginUser.userId : ''}]]*/'';
 
       /* 게시글 수정 버튼 */
       const editBtn = document.getElementById("editBtn");
@@ -218,6 +219,25 @@
               const commentsDiv = document.createElement('div');
               commentsDiv.innerText = c.comments;
               commentItem.append(writerDiv, cDateDiv, commentsDiv);
+              if (c.userId === userId) {
+                  const actionsDiv = document.createElement('div');
+                  actionsDiv.classList.add('reply-actions');
+                  actionsDiv.innerHTML = `
+                    <button type="button" class="reply-btn-small" onclick="submitUpdate(${c.cNumber}, this)">수정</button>
+                    <form action="/review/reviewReply/delete" method="POST" class="delete-form" style="display:inline;">
+                      <input type="hidden" name="cNumber" value="${c.cNumber}">
+                      <input type="hidden" name="rNumber" value="${document.getElementById('updateCno').closest('form').querySelector('[name=pNumber]').value}">
+                      <input type="hidden" name="page" value="${document.querySelector('input[name=page]').value}">
+                      <button type="button" class="btn-pre-delete reply-btn-small reply-btn-delete">삭제</button>
+                      <span class="confirm-group" style="display:none;">
+                        <button type="submit" class="reply-btn-small" style="background-color:#d33; color:white;">확인</button>
+                        <button type="button" class="btn-cancel reply-btn-small">취소</button>
+                      </span>
+                    </form>
+                  `;
+                  commentItem.append(actionsDiv);
+                }
+              
               divPar.append(commentItem);
             }
             document.getElementById('comments').value = '';

@@ -26,7 +26,7 @@
 							p.views ASC
 						</when>
 						<otherwise>
-							p.p_date DESC
+							p.p_number DESC
 						</otherwise>
 					</choose>
 			) A
@@ -169,13 +169,20 @@
 	</select>
 
 	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
-		select * from (
-			select rownum as rn, a.* from (
-				select * from post
-			)a
-			where rownum &lt;=#{endRow}
-		)
-		where rn &gt;=#{startRow}
+		 SELECT * FROM (
+        SELECT ROWNUM AS RN, A.* FROM (
+            SELECT P.*, NVL(L.LIKE_COUNT, 0) AS LIKE_COUNT
+            FROM POST P
+            LEFT JOIN (
+                SELECT P_NUMBER, COUNT(*) AS LIKE_COUNT
+                FROM P_LIKE
+                GROUP BY P_NUMBER
+            ) L ON P.P_NUMBER = L.P_NUMBER
+            ORDER BY P.P_NUMBER DESC
+        ) A
+        WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE RN &gt;= #{startRow}
 	</select>
 	
 	<select id="selectTopPost" resultType="com.univol.post.vo.Post">

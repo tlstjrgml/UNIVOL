@@ -80,7 +80,9 @@
         <input th:value="${keyword}" type="text" name="keyword" id="search-input" class="search-input" placeholder="제목 또는 작성자 검색" />
         <button type="submit" class="search-btn">검색</button>
       </form>
-      <button class="write-btn">+ 글쓰기</button>
+      <th:block th:if="${session.loginUser != null}">
+      	<button class="write-btn">+ 글쓰기</button>
+      </th:block>
     </div>
 
     <!-- 게시글 목록 -->

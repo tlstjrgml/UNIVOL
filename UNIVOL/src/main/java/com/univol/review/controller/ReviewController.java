@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.univol.common.PageInfo;
 import com.univol.common.Pagination;
 import com.univol.member.vo.Member;
+import com.univol.post.model.exception.PostException;
 import com.univol.review.exception.ReviewException;
 import com.univol.review.service.ReviewService;
 import com.univol.review.vo.Review;
@@ -92,6 +93,9 @@ public class ReviewController {
 	public String selectReview(@PathVariable("id") int bId, @PathVariable("page") int page,
 			HttpSession session, Model model) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
+		if(loginUser== null) {
+			throw new PostException ("로그인이 필요한 페이지입니다");
+		}
 		String id = null;
 		if (loginUser != null) {
 			id = loginUser.getUserId();
