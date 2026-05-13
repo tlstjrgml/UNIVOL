@@ -6,6 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -164,12 +165,13 @@
     <h2>회원가입</h2>
     <hr class="divider">
 
-    <form th:action="@{/signUp}" method="post">
+    <form th:action="@{/signUp}" method="post" onsubmit="return validatePw()">
 
         <div class="form-group">
             <label for="userId">아이디</label>
             <input type="text" id="userId" name="userId"
                    placeholder="아이디를 입력하세요" required>
+            <label id="idCheckResult">Please check your ID.</label>
         </div>
 
         <div class="form-group">
@@ -182,6 +184,7 @@
             <label for="userPwCheck">비밀번호 확인</label>
             <input type="password" id="userPwCheck"
                    placeholder="비밀번호를 다시 입력하세요" required>
+                   
         </div>
 
         <div class="form-group">
@@ -225,6 +228,67 @@
 
     </form>
 </div>
+
+	<script th:inline="javascript">
+	
+		
+		window.onload = () => {
+		    document.getElementById('userId').addEventListener('change', e => {
+		        checkValue(e.target);
+		    });
+		}
+		
+		let idCheck = false;
+		
+		const checkValue = obj => {
+			const resultLabel = document.getElementById('idCheckResult');
+		    if (obj.value.trim() == '') {
+		        resultLabel.style.color = 'black';
+		        resultLabel.innerText = 'Please check your ID.';
+		        idCheck = false;
+		    } else {
+		        $.ajax({
+		            url: '/checkValue',
+		            data: { column: obj.id, value: obj.value.trim() },
+		            success: data => {
+		                if (data == 0) {
+		                    resultLabel.innerText = 'You can use this ' + obj.id + '.';
+		                    resultLabel.style.color = 'green';
+		                    idCheck = true;
+		                } else {
+		                    resultLabel.innerText = "You can't use this " + obj.id + '.';
+		                    resultLabel.style.color = 'red';
+		                    idCheck = false;
+		                }
+		            },
+		            error: data => console.log(data)
+		        });
+		    }
+		}
+		
+		function validatePw() {
+		    const pw = document.getElementById('userPw').value;
+		    const pwCheck = document.getElementById('userPwCheck').value;
+	    
+		    if (pw !== pwCheck) {
+		        alert('비밀번호가 일치하지 않습니다.');
+		        document.getElementById('userPwCheck').focus();
+		        return false;
+		    }
+		    
+		    if (!idCheck) {
+		        alert('아이디 중복 확인을 해주세요.');
+		        document.getElementById('userId').focus();
+		        return false;
+		    }
+		    return true;
+		}
+		
+
+	
+	</script>
+	
+	
 
 </body>
 </html>

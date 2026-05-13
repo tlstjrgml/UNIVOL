@@ -139,4 +139,9 @@
 	<select id="getMemberCount" resultType="_int">
 		select count(*) from users
 	</select>
+	
+	<!-- id중복 체크 -->
+	<select id="checkValue" resultType="_int">
+   		select count(*) from users where user_Id = #{val}
+   </select>
 </mapper>
