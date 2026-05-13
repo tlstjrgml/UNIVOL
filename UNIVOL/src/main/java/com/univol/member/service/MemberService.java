@@ -97,4 +97,8 @@ public class MemberService {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.getMyPostList(userId, rowBounds);
 	}
+
+	public int checkValue(HashMap<String, String> map) {
+		return mapper.checkValue(map);
+	}
 }

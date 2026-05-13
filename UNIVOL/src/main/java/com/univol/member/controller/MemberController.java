@@ -1,5 +1,7 @@
 package com.univol.member.controller;
 
+import java.util.HashMap;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -147,5 +149,16 @@ public class MemberController {
 			status.setComplete();
 		}
 		return result;
+	}
+	
+	/*회원가입 id중복 체크 */
+	@GetMapping("/checkValue")
+	@ResponseBody
+	public int checkValue(@RequestParam("column") String col,@RequestParam("value") String val){
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("col", col);
+		map.put("val", val);
+		int count = mService.checkValue(map);
+		return count;
 	}
 }
