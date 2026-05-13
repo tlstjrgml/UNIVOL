@@ -16,6 +16,7 @@ import com.univol.common.PageInfo;
 import com.univol.common.Pagination;
 import com.univol.member.service.MemberService;
 import com.univol.member.vo.Member;
+import com.univol.post.model.exception.PostException;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -87,6 +88,8 @@ public class MemberController {
 			setApplyList(mv, id, applyPage);
 			setMyPostList(mv, id, myPostPage);
 			mv.setViewName("users/myPage");
+		}else {
+				throw new PostException ("로그인이 필요한 페이지입니다");
 		}
 		return mv;
 	}

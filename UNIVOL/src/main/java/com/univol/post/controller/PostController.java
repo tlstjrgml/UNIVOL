@@ -97,17 +97,20 @@ public class PostController {
 			@RequestParam(value = "keyword", defaultValue = "") String keyword) {
 
 		Member loginUser = (Member) session.getAttribute("loginUser");
+		if(loginUser== null) {
+			throw new PostException ("로그인이 필요한 페이지입니다");
+		}
 		String userId = null;
 		if (loginUser != null) {
 			userId = loginUser.getUserId();
 		}
-
 		int page = (currentPage == null) ? 1 : currentPage;
 
 		Post post = pService.selectOne(pNumber, userId);
 		if (post == null) {
 			return "error/404";
 		}
+		
 
 		int likeCount = pService.likeCount(pNumber);
 		int isLiked = pService.postLike(pNumber, userId);
