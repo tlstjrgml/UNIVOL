@@ -236,4 +236,7 @@ public class ReviewController {
 			throw new ReviewException("삭제 실패");
 		}
 	}
+	
+	/* 검색 */
+	
 }

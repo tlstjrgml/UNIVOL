@@ -55,7 +55,7 @@
   <div class="container">
 
     <!-- 목록으로 버튼 -->
-    <a class="back-btn" th:href="@{/review(page=${page})}">← 목록으로</a>
+    <a class="back-btn" th:href="@{/review(page=${currentPage}, sort=${sort}, keyword=${keyword})}">← 목록으로</a>
 
     <!-- 게시글 박스 -->
     <div class="post-box">
