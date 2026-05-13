@@ -10,11 +10,15 @@
 	</select>
 
 	<select id="selectReviewList" resultMap="reviewResultSet">
-		SELECT P.*, U.USER_NAME
-		FROM POST P
-		JOIN USERS U ON P.USER_ID = U.USER_ID
-		WHERE P.P_TYPE = #{pType} AND P.P_STATUS = 'Y'
-		ORDER BY
+		select p.p_number, p.p_title, p.views, p.p_date, p.p_type, p.user_id,
+            p.p_status, p.p_status, p.is_notice, p.create_date, u.user_name, count(l.p_number) as like_count
+		from post p
+		    join users u on p.user_id = u.user_id
+		    left join p_like l on p.p_number = l.p_number
+		where p.p_status = 'Y' and p.p_type = 'R'
+		group by p.p_number, p.p_title, p.views, p.p_date, p.p_type, p.user_id,
+		            p.p_status, p.p_status, p.is_notice, p.create_date, u.user_name
+		order by
 		<choose>
 			<when test="sort == 'views_desc'">P.VIEWS DESC</when>
 			<when test="sort == 'views_asc'">P.VIEWS ASC</when>
