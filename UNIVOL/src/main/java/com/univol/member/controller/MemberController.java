@@ -1,7 +1,5 @@
 package com.univol.member.controller;
 
-import java.util.ArrayList;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -105,12 +103,13 @@ public class MemberController {
 
 	/* 마이페이지 - 작성글 목록 세팅 */
 	public void setMyPostList(ModelAndView mv, String id, int page) {
-		int totalCount = mService.getMyPostCount(id);
-		PageInfo pi = Pagination.getPageInfo(page, totalCount, 5);
-		if (page < 1) page = 1;
-		if (page > pi.getMaxPage()) page = pi.getMaxPage();
-		mv.addObject("myPostList", mService.getMyPostList(pi, id));
-		mv.addObject("myPostPi", pi);
+
+	    int totalCount = mService.getMyPostCount(id);
+	    PageInfo pi = Pagination.getPageInfo(page, totalCount, 5);
+	    if (page < 1) page = 1;
+	    if (page > pi.getMaxPage()) page = pi.getMaxPage();
+	    mv.addObject("myPostList", mService.getMyPostList(pi, id));
+	    mv.addObject("myPostPi", pi);
 	}
 
 	/* 개인정보 수정 페이지 이동 */
