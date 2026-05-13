@@ -35,30 +35,37 @@
 	</select>
 	
 	  <select id="getApplyCount" parameterType="String" resultType="int">
-	    SELECT COUNT(*) FROM REPLY WHERE USER_ID = #{userId}
+		    SELECT COUNT(*) 
+		    FROM REPLY R
+		        JOIN POST P ON R.P_NUMBER = P.P_NUMBER
+		    WHERE R.USER_ID = #{userId}
+		      AND P.P_TYPE = 'V'
+		      AND R.C_STATUS = 'Y'
 	</select>
 
 	<select id="getMyPostCount" parameterType="String" resultType="int">
-	    SELECT COUNT(*) FROM POST WHERE USER_ID = #{userId}
+    	SELECT COUNT(*) FROM POST WHERE USER_ID = #{userId} AND P_STATUS = 'Y'
 	</select>
 
 	<select id="getApplyList" parameterType="String" resultType="map">
-	    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
-	           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE,
-	           CEIL(
-	               (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'V')
-	               / 10.0
-	           ) AS PAGE_NUM
-	    FROM REPLY R
-	        JOIN POST P ON R.P_NUMBER = P.P_NUMBER
-	        JOIN USERS U ON P.USER_ID = U.USER_ID
-	    WHERE R.USER_ID = #{userId}
-	    ORDER BY R.C_NUMBER DESC
+		    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
+		           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE,
+		           CEIL(
+		               (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'V')
+		               / 10.0
+		           ) AS PAGE_NUM
+		    FROM REPLY R
+		        JOIN POST P ON R.P_NUMBER = P.P_NUMBER
+		        JOIN USERS U ON P.USER_ID = U.USER_ID
+		    WHERE R.USER_ID = #{userId}
+		      AND P.P_TYPE = 'V'
+		      AND R.C_STATUS = 'Y'
+		    ORDER BY R.C_NUMBER DESC
 	</select>
 
 	<select id="getMyPostList" parameterType="String" resultType="map">
 	    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
-	           TO_CHAR(P.P_DATE, 'YYYY.MM.DD') C_DATE,
+	           TO_CHAR(P.CREATE_DATE, 'YYYY.MM.DD') CREATE_DATE,
 	           P.P_TYPE,
 	           CASE P.P_TYPE
 	               WHEN 'V' THEN CEIL(
@@ -73,6 +80,7 @@
 	    FROM POST P
 	        JOIN USERS U ON P.USER_ID = U.USER_ID
 	    WHERE P.USER_ID = #{userId}
+	    	AND P.P_STATUS = 'Y'
 	    ORDER BY P.P_NUMBER DESC
 	</select>
 	

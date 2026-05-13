@@ -76,7 +76,7 @@
   <main class="container">
     <h1 class="page-title">개인정보 수정</h1>
 
-    <form th:action="@{/edit}" method="POST" onsubmit="validatePw()">
+    <form th:action="@{/edit}" method="POST" onsubmit="return validatePw()">
 
       <!-- 기본 정보 -->
       <div class="card">
