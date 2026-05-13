@@ -76,7 +76,7 @@
   <main class="container">
     <h1 class="page-title">개인정보 수정</h1>
 
-    <form th:action="@{/edit}" method="POST">
+    <form th:action="@{/edit}" method="POST" onsubmit="validatePw()">
 
       <!-- 기본 정보 -->
       <div class="card">
@@ -163,6 +163,20 @@
   </main>
 
   <script th:inline="javascript">
+  
+  function validatePw() {
+	    const pw = document.getElementById('pwd').value;
+	    const pwCheck = document.getElementById('pwdCheck').value;
+
+	    if (pw !== '' && pw !== pwCheck) {
+	        alert('새 비밀번호가 일치하지 않습니다.');
+	        document.getElementById('pwdCheck').focus();
+	        return false;
+	    }
+	    return true;
+	}
+  
+  
     window.onload = () => {
       const loginUser = /*[[${session.loginUser}]]*/ null;
 

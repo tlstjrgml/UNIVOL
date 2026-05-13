@@ -29,124 +29,149 @@ import lombok.RequiredArgsConstructor;
 @SessionAttributes("loginUser")
 @RequiredArgsConstructor
 public class PostController {
+
 	private final PostService pService;
 	private final ReplyService rService;
 
-	/* 게시글 페이지로 이동 */
+	/* 게시글 목록 조회 */
 	@GetMapping("/post")
-	public String selectAll(Model model, 
-			@RequestParam (value = "page", defaultValue="1") int currentPage,
-			@RequestParam(value = "sort", defaultValue="latest") String sort,
-			@RequestParam(value="keyword", defaultValue="") String keyword) {
-		
+	public String selectAll(Model model,
+			@RequestParam(value = "page", defaultValue = "1") int currentPage,
+			@RequestParam(value = "sort", defaultValue = "latest") String sort,
+			@RequestParam(value = "keyword", defaultValue = "") String keyword) {
+
 		int listCount;
-		if(keyword.isEmpty()) {
+		if (keyword.isEmpty()) {
 			listCount = pService.getListCount();
-		}else {
+		} else {
 			listCount = pService.getSearchCount(keyword);
 		}
-		
+
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		
-		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
+
+		int startRow = (pi.getCurrentPage() - 1) * pi.getBoardLimit() + 1;
 		int endRow = pi.getCurrentPage() * pi.getBoardLimit();
-		
+
 		ArrayList<Post> plist;
-		if(keyword.isEmpty()) {
+		if (keyword.isEmpty()) {
 			plist = pService.selectAll(startRow, endRow, sort);
-		}else {
+		} else {
 			plist = pService.searchPosts(keyword, sort, startRow, endRow);
 		}
-		
+
 		model.addAttribute("pi", pi);
 		model.addAttribute("plist", plist);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("sort", sort);
-		
+
 		return "post/post";
 	}
 
-	/* 글 작성하는 뷰로 이동하기 */
+	/* 글 작성 페이지 이동 */
 	@GetMapping("/post/write")
 	public String postWrite() {
 		return "post/write";
 	}
 
-	/* 글 작성을 완료하면 post페이지로 보내기 */
+	/* 글 작성 처리 */
 	@PostMapping("/post/write")
 	public String insertPost(@ModelAttribute Post p, HttpSession session,
-			@RequestParam(value="isNotice", defaultValue="N") String isNotice) {
-		Member loginUser = (Member)session.getAttribute("loginUser");
+			@RequestParam(value = "isNotice", defaultValue = "N") String isNotice) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
 		p.setPType('V');
 		p.setUserId(loginUser.getUserId());
-		if(p.getIsNotice() == null) {
+		if (p.getIsNotice() == null) {
 			p.setIsNotice("N");
 		}
 		pService.insertPost(p);
 		return "redirect:/post";
 	}
 
-	/* 글 상세조회 */
-	@GetMapping("/post/{currentPage}/{pNumber}")
-	public String selectOne(@PathVariable("currentPage") int currentPage, @PathVariable("pNumber") int pNumber, Model model, HttpSession session,
-							@RequestParam(value="sort", defaultValue="latest") String sort,
-							@RequestParam(value="keyword", defaultValue="") String keyword) {
-	    Member loginUser = (Member)session.getAttribute("loginUser");
-	    String userId = null;
-	    if(loginUser != null) {
-	    	userId = loginUser.getUserId();
-	    }
+	/* 글 상세 조회 */
+	@GetMapping({"/post/{currentPage}/{pNumber}", "/post/{pNumber}"})
+	public String selectOne(
+			@PathVariable(value = "currentPage", required = false) Integer currentPage,
+			@PathVariable("pNumber") int pNumber,
+			Model model, HttpSession session,
+			@RequestParam(value = "sort", defaultValue = "latest") String sort,
+			@RequestParam(value = "keyword", defaultValue = "") String keyword) {
+
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		String userId = null;
+		if (loginUser != null) {
+			userId = loginUser.getUserId();
+		}
+
+		int page = (currentPage == null) ? 1 : currentPage;
+
 		Post post = pService.selectOne(pNumber, userId);
-	    if(post == null) {
-	        return "error/404";
-	    }
-	    int likeCount = pService.likeCount(pNumber);
-	    int isLiked = pService.postLike(pNumber, userId);
-	    ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
-	    
-	    model.addAttribute("likeCount", likeCount);
-	    model.addAttribute("isLiked", isLiked);
-	    model.addAttribute("post", post);
-	    model.addAttribute("replyList", replyList);
-	    model.addAttribute("currentPage", currentPage);
-	    model.addAttribute("sort", sort);
-	    model.addAttribute("keyword", keyword);
-	    model.addAttribute("loginUser", loginUser);
-	    return "post/detail";
+		if (post == null) {
+			return "error/404";
+		}
+
+		int likeCount = pService.likeCount(pNumber);
+		int isLiked = pService.postLike(pNumber, userId);
+		ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
+
+		model.addAttribute("likeCount", likeCount);
+		model.addAttribute("isLiked", isLiked);
+		model.addAttribute("post", post);
+		model.addAttribute("replyList", replyList);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("sort", sort);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("loginUser", loginUser);
+
+		return "post/detail";
 	}
 
-	/* 메인페이지 봉사게시판 5개 보여주기 */
+	/* 메인페이지 봉사게시판 TOP 5 */
 	@GetMapping("/post/top")
 	@ResponseBody
-	public ArrayList<Post> selectTopPost(){
-		ArrayList<Post> list = pService.selectTopPost();
-		return list;
+	public ArrayList<Post> selectTopPost() {
+		return pService.selectTopPost();
 	}
-	
-	/* 사용자 글 삭제 */
+
+	/* 글 삭제 (작성자) */
 	@PostMapping("/post/delete/{pNumber}")
 	public String userDeletePost(@PathVariable("pNumber") int pNumber) {
 		int result = pService.userDeletePost(pNumber);
-		if(result>0) {
+		if (result > 0) {
 			return "redirect:/post";
-		}else {
+		} else {
 			throw new PostException("게시글 삭제에 실패했습니다");
 		}
-		
 	}
-	
+
+	/* 글 수정 (작성자) */
+	@PostMapping("/post/edit/{pNumber}")
+	public String userEditPost(
+			@PathVariable("pNumber") int pNumber,
+			@ModelAttribute Post p,
+			@RequestParam("currentPage") int currentPage) {
+
+		p.setPNumber(pNumber);
+		int result = pService.userEditPost(p);
+
+		if (result > 0) {
+			return "redirect:/post/" + currentPage + "/" + pNumber;
+		} else {
+			throw new PostException("게시글 수정을 실패했습니다");
+		}
+	}
+
+	/* 좋아요 토글 */
 	@PostMapping("/post/like")
 	@ResponseBody
-	public HashMap<String, Object> reviewLike(@RequestParam("pNumber") int pNumber, @RequestParam("userId") String userId) {
+	public HashMap<String, Object> postLike(@RequestParam("pNumber") int pNumber, @RequestParam("userId") String userId) {
 		int result = pService.postLike(pNumber, userId);
-		
-		if(result > 0) {
+		if (result > 0) {
 			pService.deleteLike(pNumber, userId);
 		} else {
-			pService.insertLike(pNumber, userId); 
+			pService.insertLike(pNumber, userId);
 		}
 		int likeCount = pService.likeCount(pNumber);
-		
+
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("liked", result == 0);
 		map.put("likeCount", likeCount);

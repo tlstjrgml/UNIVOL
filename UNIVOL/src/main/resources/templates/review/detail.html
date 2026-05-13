@@ -35,6 +35,7 @@
     .comment-date { font-size: 12px; color: gray; margin-bottom: 5px; }
 
     /* 댓글 수정/삭제 버튼 */
+    .reply-actions { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
     .reply-btn-small { padding: 6px 14px; background: #f1f1ed; color: #555; border: 1px solid #d0d0c8; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
     .reply-btn-small:hover { background: #426B1F; color: #fff; border-color: #426B1F; }
     .reply-btn-delete { background: #fdf2f2; color: #ef4444; border-color: #fecaca; }
@@ -92,14 +93,15 @@
           <button id="editBtn">수정</button>
           <button id="deleteBtn">삭제</button>
         </th:block>
-        	<button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
-			  <span class="heart" id="heart">🤍[[${likeCount}]]</span>
-			  <span id="likeText">좋아요</span>
-			</button>
-			<button th:if="${isLiked == 1}" class="like-btn" id="likeBtn">
-			  <span class="heart" id="heart">❤️[[${likeCount}]]</span>
-			  <span id="likeText">안 좋아요</span>
-			</button>
+        <!-- 좋아요 버튼: 좋아요 상태에 따라 다르게 표시 -->
+        <button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
+          <span class="heart" id="heart">🤍[[${likeCount}]]</span>
+          <span id="likeText">좋아요</span>
+        </button>
+        <button th:if="${isLiked == 1}" class="like-btn" id="likeBtn">
+          <span class="heart" id="heart">❤️[[${likeCount}]]</span>
+          <span id="likeText">안 좋아요</span>
+        </button>
       </div>
     </div>
 
@@ -124,9 +126,15 @@
           <div class="reply-actions" th:if="${session.loginUser != null && reply.userId == session.loginUser.userId}">
             <button type="button" class="reply-btn-small"
                     th:onclick="'submitUpdate(' + ${reply.cNumber} + ', this)'">수정</button>
-            <form th:action="@{/review/reviewReply/{cno}/delete(cno=${reply.cNumber})}" method="POST" style="display:inline;">
-              <button type="submit" class="reply-btn-small reply-btn-delete"
-                      onclick="return confirm('삭제하시겠습니까?')">삭제</button>
+            <form th:action="@{/review/reviewReply/delete}" method="POST" class="delete-form" style="display:inline;">
+              <input type="hidden" name="cNumber" th:value="${reply.cNumber}">
+              <input type="hidden" name="rNumber" th:value="${r.rNumber}">
+              <input type="hidden" name="page" th:value="${page}">
+              <button type="button" class="btn-pre-delete reply-btn-small reply-btn-delete">삭제</button>
+              <span class="confirm-group" style="display:none;">
+                <button type="submit" class="reply-btn-small" style="background-color:#d33; color:white;">확인</button>
+                <button type="button" class="btn-cancel reply-btn-small">취소</button>
+              </span>
             </form>
           </div>
         </div>
@@ -214,37 +222,48 @@
         });
       });
 
-      /* 좋아요 버튼 */
-     		const likeBtn = document.getElementById('likeBtn');
-			const heart = document.getElementById('heart');
-			const likeText = document.getElementById('likeText');
-			
-			likeBtn.addEventListener('click', () => {
-				
-				$.ajax({
-					url: '/review/like',
-					method: 'POST',
-					data: {
-						pNumber: /*[[${r.rNumber}]]*/99,
-						userId: /*[[${session.loginUser.userId}]]*/'user00',
-					},
-					success: data => {
-// 						console.log(data.likeCount);
-						if(data.liked){
-							heart.innerText = '❤️' + data.likeCount; 
-							likeText.innerText = '안 좋아요';
-						} else {
-							heart.innerText = '🤍' + data.likeCount; 
-							likeText.innerText = '좋아요';	
-						}
-						
-					},
-					error: data => {
-						console.log(data);
-					}
-				})
-			})
- 	}
+      /* 좋아요 버튼: 서버 응답 기반으로 상태 업데이트 */
+      const likeBtn = document.getElementById('likeBtn');
+      const heart = document.getElementById('heart');
+      const likeText = document.getElementById('likeText');
+
+      if (likeBtn) {
+        likeBtn.addEventListener('click', () => {
+          $.ajax({
+            url: '/review/like',
+            method: 'POST',
+            data: {
+              pNumber: /*[[${r.rNumber}]]*/99,
+              userId: /*[[${session.loginUser.userId}]]*/'user00'
+            },
+            success: data => {
+              if (data.liked) {
+                heart.innerText = '❤️' + data.likeCount;
+                likeText.innerText = '안 좋아요';
+              } else {
+                heart.innerText = '🤍' + data.likeCount;
+                likeText.innerText = '좋아요';
+              }
+            },
+            error: data => console.log(data)
+          });
+        });
+      }
+
+      /* 댓글 삭제 확인/취소 버튼 */
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-pre-delete')) {
+          const form = e.target.closest('.delete-form');
+          e.target.style.display = 'none';
+          form.querySelector('.confirm-group').style.display = 'inline';
+        }
+        if (e.target.classList.contains('btn-cancel')) {
+          const form = e.target.closest('.delete-form');
+          form.querySelector('.confirm-group').style.display = 'none';
+          form.querySelector('.btn-pre-delete').style.display = 'inline';
+        }
+      });
+    };
 
     /* 댓글 수정 */
     function submitUpdate(cNumber, btn) {
@@ -266,5 +285,4 @@
   </script>
 
 </body>
-
 </html>

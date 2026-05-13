@@ -23,7 +23,6 @@ public class Post {
 	private String userId;
 	private String userName;
 	private char pStatus;
-	private int likes;
 	private String isNotice;
 	private Date createDate;
 	private int likeCount;
