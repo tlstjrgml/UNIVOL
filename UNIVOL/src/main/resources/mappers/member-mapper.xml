@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.univol.member.model.mapper.MemberMapper">
+<mapper namespace="com.univol.member.mapper.MemberMapper">
 
-    <select id="logIn" resultType="Member">
+    <select id="logIn" resultType="com.univol.member.vo.Member">
         SELECT user_id, user_pw, user_name,
                TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
                gender, phone, address, is_admin, member_status
@@ -21,28 +21,70 @@
         )
     </insert>
 
-    <select id="selectAll" resultType="com.univol.member.model.vo.Member">
-        SELECT user_id, user_pw, user_name,
-               TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
-               gender, phone, address, is_admin, member_status
-        FROM users
-    </select>
-
-    <select id="getApplyList" parameterType="String" resultType="map">
-	    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
-	           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE,
-	           CEIL(
-	               (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'V')
-	               / 10.0
-	           ) AS PAGE_NUM
-	    FROM REPLY R
-	        JOIN POST P ON R.P_NUMBER = P.P_NUMBER
-	        JOIN USERS U ON P.USER_ID = U.USER_ID
-	    WHERE R.USER_ID = #{userId}
-	    ORDER BY R.C_NUMBER DESC
+    <select id="selectAll" resultType="com.univol.member.vo.Member">
+	    select * from (
+	        select rownum as rn, A.* from (
+	            SELECT user_id, user_pw, user_name,
+	                   TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
+	                   gender, phone, address, is_admin, member_status
+	            FROM users
+	        ) A
+	        where rownum &lt;= #{endRow}
+	    )
+	    where rn >= #{startRow}
+	</select>
+	
+	  <select id="getApplyCount" parameterType="String" resultType="int">
+		    SELECT COUNT(*) 
+		    FROM REPLY R
+		        JOIN POST P ON R.P_NUMBER = P.P_NUMBER
+		    WHERE R.USER_ID = #{userId}
+		      AND P.P_TYPE = 'V'
+		      AND R.C_STATUS = 'Y'
 	</select>
 
-    <update id="updateMember">
+	<select id="getMyPostCount" parameterType="String" resultType="int">
+    	SELECT COUNT(*) FROM POST WHERE USER_ID = #{userId} AND P_STATUS = 'Y'
+	</select>
+
+	<select id="getApplyList" parameterType="String" resultType="map">
+		    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
+		           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE,
+		           CEIL(
+		               (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'V')
+		               / 10.0
+		           ) AS PAGE_NUM
+		    FROM REPLY R
+		        JOIN POST P ON R.P_NUMBER = P.P_NUMBER
+		        JOIN USERS U ON P.USER_ID = U.USER_ID
+		    WHERE R.USER_ID = #{userId}
+		      AND P.P_TYPE = 'V'
+		      AND R.C_STATUS = 'Y'
+		    ORDER BY R.C_NUMBER DESC
+	</select>
+
+	<select id="getMyPostList" parameterType="String" resultType="map">
+	    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
+	           TO_CHAR(P.CREATE_DATE, 'YYYY.MM.DD') CREATE_DATE,
+	           P.P_TYPE,
+	           CASE P.P_TYPE
+	               WHEN 'V' THEN CEIL(
+	                   (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'V')
+	                   / 10.0
+	               )
+	               WHEN 'R' THEN CEIL(
+	                   (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'R')
+	                   / 10.0
+	               )
+	           END AS PAGE_NUM
+	    FROM POST P
+	        JOIN USERS U ON P.USER_ID = U.USER_ID
+	    WHERE P.USER_ID = #{userId}
+	    	AND P.P_STATUS = 'Y'
+	    ORDER BY P.P_NUMBER DESC
+	</select>
+	
+	<update id="updateMember">
         UPDATE users
         SET user_name = #{userName},
             birth     = TO_DATE(#{birth}, 'YYYY-MM-DD'),
@@ -55,7 +97,7 @@
         WHERE user_id = #{userId}
     </update>
 
-    <select id="getMemberById" parameterType="String" resultType="Member">
+    <select id="getMemberById" parameterType="String" resultType="com.univol.member.vo.Member">
         SELECT user_id, user_pw, user_name,
                TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
                gender, phone, address, is_admin, member_status
@@ -93,4 +135,13 @@
 		where user_id = #{userId}
 	</update>
 
+	<!-- 관리자페이지 회원 페이지네이션 -->
+	<select id="getMemberCount" resultType="_int">
+		select count(*) from users
+	</select>
+	
+	<!-- id중복 체크 -->
+	<select id="checkValue" resultType="_int">
+   		select count(*) from users where user_Id = #{val}
+   </select>
 </mapper>

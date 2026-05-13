@@ -1,69 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.univol.post.model.Mapper.PostMapper">
+<mapper namespace="com.univol.post.mapper.PostMapper">
 
-	<select id="selectAll" resultType="com.univol.post.model.vo.Post">
-
-		select * from (
+	<select id="selectAll" resultType="com.univol.post.vo.Post">
+	select * from (
 			select rownum as rn, A.* from(
-				select p.*, u.user_name
+				select p.*,
+				       u.user_name,
+				       (
+				           select count(*)
+				           from p_like l
+				           where l.p_number = p.p_number
+				       ) as likeCount
 				from post p
 				join users u on p.user_id = u.user_id
 				where p.p_type = 'V'
+				and p.p_status='Y'
 				order by
 					<choose>
-						<when test="sort == 'views_desc'">p.views DESC</when>
-						<when test="sort == 'asc'">p.views ASC</when>
-						<otherwise>p.p_date DESC</otherwise>
+						<when test="sort == 'views_desc'">
+							p.views DESC
+						</when>
+						<when test="sort == 'views_asc'">
+							p.views ASC
+						</when>
+						<otherwise>
+							p.p_number DESC
+						</otherwise>
 					</choose>
 			) A
 			where rownum &lt;= #{endRow}
 		)
 		where rn &gt;= #{startRow}
 	</select>
-	
+
+<!-- 	<select id="selectAll" resultType="com.univol.post.vo.Post"> -->
+<!-- 		select * from ( -->
+<!-- 			select rownum as rn, A.* from( -->
+<!-- 				select p.*, u.user_name -->
+<!-- 				from post p -->
+<!-- 				join users u on p.user_id = u.user_id -->
+<!-- 				where p.p_type = 'V' and p.p_status='Y' -->
+<!-- 				order by -->
+<!-- 					<choose> -->
+<!-- 						<when test="sort == 'views_desc'">p.views DESC</when> -->
+<!-- 						<when test="sort == 'views_asc'">p.views ASC</when> -->
+<!-- 						<otherwise>p.p_date DESC</otherwise> -->
+<!-- 					</choose> -->
+<!-- 			) A -->
+<!-- 			where rownum &lt;= #{endRow} -->
+<!-- 		) -->
+<!-- 		where rn &gt;= #{startRow} -->
+<!-- 	</select> -->
+
 	<select id="getListCount" resultType="_int">
-		
 		select count(*) from post
-    	where p_Type='V'
+    	where p_Type='V' and p_status='Y'
 	</select>
-	
+
 	<insert id="insertPost">
 		insert into post
-		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default)
+		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default, #{isNotice}, default)
 	</insert>
-	
-	<select id="selectOne" resultType="com.univol.post.model.vo.Post">
-		select p.*, u.user_name 
+
+	<select id="selectOne" resultType="com.univol.post.vo.Post">
+		select p.*, u.user_name
 		from post p
 			join users u on p.user_id = u.user_id
 		where p_number = #{pNumber}
 	</select>
 
-	<select id="selectAllPost" resultType = "com.univol.post.model.vo.Post">
-		select * from post
-	</select>	
-	
+	<update id="updateReview">
+		update post
+		set views = views + 1
+		where p_number = #{pNumber}
+	</update>
+
+	<update id="updateViews" parameterType="_int">
+		update post
+		set views = views + 1
+		where p_number = #{pNumber}
+	</update>
+
 	<update id="rollbackPost">
 		update post
 		set p_status ='Y'
 		where p_number = #{pNumber}
 	</update>
-	
+
 	<update id="deletePost">
 		update post
 		set p_status = 'N'
 		where p_number = #{pNumber}
 	</update>
-	
-	<select id="searchPosts" resultType="com.univol.post.model.vo.Post">
+
+	<select id="searchPosts" resultType="com.univol.post.vo.Post">
 		select * from(
 			select rownum as rn, A.* from(
 				select p.*, u.user_name
 				from post p
 				join users u on p.user_id = u.user_id
-				where p.p_type = 'V'
+				where p.p_type = 'V' and p.p_status='Y'
 				and (p.p_title like '%' || #{keyword} || '%'
 					 or p.contents like '%' || #{keyword} || '%'
 					 or u.user_name like '%' || #{keyword} || '%'
@@ -76,19 +114,14 @@
 					</choose>
 			)A
 			where rownum &lt;= #{endRow}
-		
 		)
 		where rn &gt;= #{startRow}
-	
-	
 	</select>
-	
-	
-	
+
 	<select id="getSearchCount" resultType="_int">
 		select count(*) from post p
 		join users u on p.user_id = u.user_id
-		where p.p_type = 'V'
+		where p.p_type = 'V' and p.p_status='Y'
 		and (
 			p.p_title like '%' || #{keyword} || '%'
 			or p.contents like '%' || #{keyword} || '%'
@@ -96,6 +129,97 @@
 		)
 	</select>
 	
+	<update id="userDeletePost">
+		update post
+		set p_status = 'N'
+		where p_number=#{pNumber}
+	</update>
 	
+	<update id="userEditPost">
+		update post
+		set contents=#{contents}, p_Date=#{pDate}, p_Title=#{pTitle}
+		where p_number = #{pNumber}
+	</update>
 	
+	<resultMap type="com.univol.post.vo.Post" id="postResultSet">
+		<result column="p_number" property="pNumber"/>
+		<result column="P_TITLE" property="pTitle"/>
+		<result column="CONTENTS" property="contents"/>
+		<result column="VIEWS" property="views"/>
+		<result column="P_DATE" property="pDate"/>
+		<result column="P_TYPE" property="pType"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="P_STATUS" property="pStatus"/>
+	</resultMap>
+	
+	<select id="selectTop" resultMap="postResultSet">
+		select * 
+		from (select * 
+				from post join users using (user_id) 
+				where p_type = 'V' and p_status='Y' 
+				order by views desc)
+		where rownum <![CDATA[<=]]>5
+	
+	</select>
+
+	<!-- 관리자페이지용 -->
+	<select id="getPostCount" resultType="_int">
+		select count(*) from post
+	</select>
+
+	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
+		 SELECT * FROM (
+        SELECT ROWNUM AS RN, A.* FROM (
+            SELECT P.*, NVL(L.LIKE_COUNT, 0) AS LIKE_COUNT
+            FROM POST P
+            LEFT JOIN (
+                SELECT P_NUMBER, COUNT(*) AS LIKE_COUNT
+                FROM P_LIKE
+                GROUP BY P_NUMBER
+            ) L ON P.P_NUMBER = L.P_NUMBER
+            ORDER BY P.P_NUMBER DESC
+        ) A
+        WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE RN &gt;= #{startRow}
+	</select>
+	
+	<select id="selectTopPost" resultType="com.univol.post.vo.Post">
+	    select *
+		from(select p.*, u.user_name, nvl(l.like_count, 0) as like_count
+			    from post p
+			        join users u on p.user_id = u.user_id
+			        left join (
+			            select p_number, count(*) as like_count
+			            from p_like
+			            group by p_number
+			        ) l on p.p_number = l.p_number
+			 where p.p_type = 'V' and p.p_status = 'Y'
+			 order by views desc)
+	    where rownum &lt;= 5
+	</select>
+	
+	<select id="postLike" resultType="_int">
+		select count(*)
+		from p_like
+		where user_id = #{userId} and p_number = #{pNumber}
+	</select>
+
+	<delete id="deleteLike">
+		delete from p_like
+		where user_id = #{userId} and p_number = #{pNumber}
+	</delete>
+
+	<insert id="insertLike">
+		insert into p_like
+		values(#{userId}, #{pNumber})
+	</insert>
+
+	<select id="likeCount" resultType="_int">
+		select count(*)
+		from p_like
+		where p_number = #{pNumber}
+	</select>
+
 </mapper>

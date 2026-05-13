@@ -7,46 +7,23 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
     body { background: #f5f5f0; min-height: 100vh; }
-    .header {
-      background: #fff;
-      border-bottom: 1px solid #e0e0d8;
-      padding: 0 2rem;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      height: 58px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .logo { font-size: 22px; font-weight: 800; color: #426B1F; letter-spacing: 2px; cursor: pointer; }
-    .nav { display: flex; gap: 24px; justify-content: center; }
-    .nav a { font-size: 14px; color: #444; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; }
-    .nav a.active, .nav a:hover { color: #426B1F; border-bottom-color: #426B1F; }
-    .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
-    .username { font-size: 14px; color: #666; margin-right: 4px; }
-    .header-btn { font-size: 13px; padding: 6px 14px; border-radius: 8px; border: 1px solid #426B1F; cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; }
-    .btn-admin { background: #426B1F; color: #fff; }
-    .btn-admin:hover { background: #355818; }
-    .btn-outline { background: transparent; color: #426B1F; }
-    .btn-outline:hover { background: #eaf3de; }
-    .container { max-width: 1200px; margin: 2.5rem auto; padding: 0 3rem; }
-    .page-title { font-size: 22px; font-weight: 700; color: #222; margin-bottom: 1.5rem; }
-    .card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; overflow: hidden; }
 
-    /* ── card-header: 좌우 배치 ── */
-    .card-header {
-      padding: 1.1rem 1.5rem;
-      border-bottom: 1px solid #e0e0d8;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    /* 공통 레이아웃 */
+    .container { max-width: 1200px; margin: 2.5rem auto; padding: 0 3rem; display: flex; flex-direction: column; gap: 2rem; }
+    .page-title { font-size: 22px; font-weight: 700; color: #222; }
+
+    /* 카드 */
+    .card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; overflow: hidden; }
+    .card-header { padding: 1.1rem 1.5rem; border-bottom: 1px solid #e0e0d8; display: flex; align-items: center; justify-content: space-between; }
     .card-header h2 { font-size: 16px; font-weight: 700; color: #222; }
     .card-header p { font-size: 13px; color: #888; margin-top: 3px; }
 
+    /* 버튼 */
+    .header-btn { font-size: 13px; padding: 6px 14px; border-radius: 8px; border: 1px solid #426B1F; cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; }
+    .btn-outline { background: transparent; color: #426B1F; }
+    .btn-outline:hover { background: #eaf3de; }
 
-
+    /* 테이블 */
     table { width: 100%; border-collapse: collapse; }
     thead tr { background: #f7f7f2; border-bottom: 1px solid #e0e0d8; }
     thead th { padding: 10px 16px; font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; }
@@ -57,55 +34,136 @@
     tbody td { padding: 14px 16px; font-size: 14px; color: #444; text-align: center; }
     tbody td:nth-child(2) { text-align: left; color: #222; }
     .empty { padding: 3rem; text-align: center; color: #bbb; font-size: 14px; }
+
+    /* 페이지네이션 */
+    .pagination { display: flex; justify-content: center; gap: 4px; padding: 1rem; border-top: 1px solid #f0f0ea; list-style: none; }
+    .pagination a { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; font-size: 13px; text-decoration: none; color: #555; border: 1px solid #e0e0d8; }
+    .pagination a:hover { background: #eaf3de; color: #426B1F; border-color: #426B1F; }
   </style>
 </head>
 <body>
 
-<div th:replace="~{common/navbar.html}"></div>
+  <div th:replace="~{common/navbar.html}"></div>
 
-<main class="container">
-  <h1 class="page-title">마이페이지</h1>
+  <main class="container">
+    <h1 class="page-title">마이페이지</h1>
 
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <h2>신청현황</h2>
-        <p th:text="${session.loginUser.userName} + '님이 신청한 봉사 목록'"></p>
+    <!-- 신청현황 -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>신청현황</h2>
+          <p th:text="${session.loginUser.userName} + '님이 신청한 봉사 목록'"></p>
+        </div>
+        <a th:href="@{/edit}" class="header-btn btn-outline">개인정보 수정</a>
       </div>
-      <!-- 개인정보 수정 버튼 -->
-      <a th:href="@{/edit}" class="header-btn btn-outline">개인정보 수정</a>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:90px;">글번호</th>
+            <th>제목</th>
+            <th style="width:120px;">작성자</th>
+            <th style="width:100px;">신청일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:if="${#lists.isEmpty(applyList)}">
+            <td colspan="4" class="empty">신청한 봉사가 없습니다.</td>
+          </tr>
+          <tr th:each="apply : ${applyList}"
+              th:onclick="|location.href='/post/' + ${apply['PAGE_NUM']} + '/' + ${apply['P_NUMBER']}|">
+            <td th:text="'#' + ${apply['P_NUMBER']}"></td>
+            <td th:text="${apply['P_TITLE']}"></td>
+            <td th:text="${apply['USER_NAME']}"></td>
+            <td th:text="${apply['C_DATE']}"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 신청현황 페이지네이션 -->
+      <ul class="pagination">
+        <li th:if="${applyPi.currentPage > 1}">
+          <a th:href="@{/myPage(applyPage=${applyPi.currentPage - 1}, myPostPage=${myPostPi.currentPage})}">&laquo;</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(applyPi.startPage, applyPi.endPage)}">
+          <a th:if="${i != applyPi.currentPage}"
+             th:href="@{/myPage(applyPage=${i}, myPostPage=${myPostPi.currentPage})}"
+             th:text="${i}"></a>
+          <a th:if="${i == applyPi.currentPage}"
+             style="background:#426B1F; color:white;"
+             th:text="${i}"></a>
+        </li>
+        <li th:if="${applyPi.currentPage < applyPi.maxPage}">
+          <a th:href="@{/myPage(applyPage=${applyPi.currentPage + 1}, myPostPage=${myPostPi.currentPage})}">&raquo;</a>
+        </li>
+      </ul>
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th style="width: 90px;">글번호</th>
-          <th>제목</th>
-          <th style="width: 120px;">작성자</th>
-          <th style="width: 100px;">신청일</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="apply : ${applyList}"
-		    th:onclick="|location.href='/post/' + ${apply['PAGE_NUM']} + '/' + ${apply['P_NUMBER']}|">
-		    <td th:text="'#' + ${apply['P_NUMBER']}"></td>
-		    <td th:text="${apply['P_TITLE']}"></td>
-		    <td th:text="${apply['USER_NAME']}"></td>
-		    <td th:text="${apply['C_DATE']}"></td>
-		</tr>
-      </tbody>
-    </table>
-  </div>
-</main>
+    <!-- 작성한 글 -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>작성한 글</h2>
+          <p th:text="${session.loginUser.userName} + '님이 작성한 글 목록'"></p>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:90px;">글번호</th>
+            <th>제목</th>
+            <th style="width:120px;">작성자</th>
+            <th style="width:100px;">작성일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:if="${#lists.isEmpty(myPostList)}">
+            <td colspan="4" class="empty">작성한 글이 없습니다.</td>
+          </tr>
+          <tr th:each="post : ${myPostList}"
+              th:onclick="${post['P_TYPE'] == 'V'} ?
+                  |location.href='/post/' + ${post['PAGE_NUM']} + '/' + ${post['P_NUMBER']}| :
+                  |location.href='/review/' + ${post['P_NUMBER']} + '/' + ${post['PAGE_NUM']}|">
+            <td th:text="'#' + ${post['P_NUMBER']}"></td>
+            <td th:text="${post['P_TITLE']}"></td>
+            <td th:text="${post['USER_NAME']}"></td>
+            <td th:text="${post['CREATE_DATE']}"></td>
+          </tr>
+        </tbody>
+      </table>
 
-<script th:inline="javascript">
-  window.onload = () => {
-    const loginUser = /*[[${session.loginUser}]]*/ null;
-    if (loginUser == null) {
-      alert('로그인 후 이용하세요.');
-      location.href = '/login';
-    }
-  };
-</script>
+      <!-- 작성글 페이지네이션 -->
+      <ul class="pagination">
+        <li th:if="${myPostPi.currentPage > 1}">
+          <a th:href="@{/myPage(applyPage=${applyPi.currentPage}, myPostPage=${myPostPi.currentPage - 1})}">&laquo;</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(myPostPi.startPage, myPostPi.endPage)}">
+          <a th:if="${i != myPostPi.currentPage}"
+             th:href="@{/myPage(applyPage=${applyPi.currentPage}, myPostPage=${i})}"
+             th:text="${i}"></a>
+          <a th:if="${i == myPostPi.currentPage}"
+             style="background:#426B1F; color:white;"
+             th:text="${i}"></a>
+        </li>
+        <li th:if="${myPostPi.currentPage < myPostPi.maxPage}">
+          <a th:href="@{/myPage(applyPage=${applyPi.currentPage}, myPostPage=${myPostPi.currentPage + 1})}">&raquo;</a>
+        </li>
+      </ul>
+    </div>
+
+  </main>
+
+  <script th:inline="javascript">
+    window.onload = () => {
+      const loginUser = /*[[${session.loginUser}]]*/ null;
+
+      /* 비로그인 접근 차단 */
+      if (loginUser == null) {
+        alert('로그인 후 이용하세요.');
+        location.href = '/login';
+      }
+    };
+  </script>
+
 </body>
 </html>

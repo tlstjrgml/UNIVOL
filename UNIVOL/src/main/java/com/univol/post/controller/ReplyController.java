@@ -5,11 +5,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.univol.member.model.vo.Member;
-import com.univol.post.model.service.ReplyService;
-import com.univol.post.model.vo.Reply;
+import com.univol.member.vo.Member;
+import com.univol.post.service.ReplyService;
+import com.univol.post.vo.Reply;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +24,8 @@ public class ReplyController {
             @PathVariable(name = "pNumber") int pNumber,
             @ModelAttribute Reply reply,
             @RequestParam(name="currentPage", defaultValue="1") int currentPage,
+            @RequestParam(name="sort", defaultValue="latest") String sort,
+            @RequestParam(name="keyword", defaultValue="") String keyword,
             @SessionAttribute(name = "loginUser", required = false) Object loginUser) {
 
         // 로그인 확인
@@ -34,7 +37,7 @@ public class ReplyController {
         reply.setPNumber(pNumber);
         reply.setUserId(member.getUserId());
         replyService.insertReply(reply);
-        return "redirect:/post/" +currentPage+ "/"+ pNumber;
+        return "redirect:/post/" +currentPage+ "/"+ pNumber + "?sort=" + sort + "&keyword=" + keyword;
     }
 
     @PostMapping("/post/reply/{cNumber}/update")
@@ -42,6 +45,8 @@ public class ReplyController {
             @PathVariable(name = "cNumber") int cNumber,
             Reply reply,
             @RequestParam(name="currentPage", defaultValue="1") int currentPage,
+            @RequestParam(name="sort", defaultValue="latest") String sort,
+            @RequestParam(name="keyword", defaultValue="") String keyword,
             @SessionAttribute(name = "loginUser", required = false) Object loginUser) {
 
         // 로그인 확인
@@ -55,13 +60,13 @@ public class ReplyController {
         // 댓글 작성자 확인
         Member member = (Member) loginUser;
         if(!existingReply.getUserId().equals(member.getUserId())) {
-            return "redirect:/post/" +currentPage+ "/" + existingReply.getPNumber();
+            return "redirect:/post/" +currentPage+ "/" + existingReply.getPNumber() + "?sort=" + sort + "&keyword=" + keyword;
         }
 
         reply.setCNumber(cNumber);
         replyService.updateReply(reply);
 
-        return "redirect:/post/" +currentPage+ "/" + reply.getPNumber();
+        return "redirect:/post/" +currentPage+ "/" + reply.getPNumber() + "?sort=" + sort + "&keyword=" + keyword;
     }
 
     @PostMapping("/post/reply/{cNumber}/delete")
@@ -69,6 +74,8 @@ public class ReplyController {
             @PathVariable(name = "cNumber") int cNumber,
             @RequestParam(name = "pNumber") int pNumber,
             @RequestParam(name="currentPage", defaultValue="1") int currentPage,
+            @RequestParam(name="sort", defaultValue="latest") String sort,
+            @RequestParam(name="keyword", defaultValue="") String keyword,
             @SessionAttribute(name = "loginUser", required = false) Object loginUser) {
 
         // 로그인 확인
@@ -82,11 +89,15 @@ public class ReplyController {
         // 댓글 작성자 확인
         Member member = (Member) loginUser;
         if(!existingReply.getUserId().equals(member.getUserId())) {
-            return "redirect:/post/" + currentPage + "/" + pNumber;
+            return "redirect:/post/" + currentPage + "/" + pNumber + "?sort=" + sort + "&keyword=" + keyword;
         }
 
         replyService.deleteReply(cNumber);
 
-        return "redirect:/post/"+ currentPage + "/" + pNumber;
+        return "redirect:/post/"+ currentPage + "/" + pNumber + "?sort=" + sort + "&keyword=" + keyword;
     }
+    
+    
+    
+    
 }
