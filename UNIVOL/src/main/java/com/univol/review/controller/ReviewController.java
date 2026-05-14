@@ -69,8 +69,14 @@ public class ReviewController {
 
 	/* 후기 작성 페이지 이동 */
 	@GetMapping("write")
-	public String writeReview() {
-		return "review/write";
+	public String writeReview(HttpSession session) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		if(loginUser != null) {
+			return "review/write";
+		}else {
+			throw new ReviewException("로그인이 필요한 페이지입니다");
+		}
+		
 	}
 
 	/* 후기 작성 처리 */

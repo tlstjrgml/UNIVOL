@@ -69,8 +69,13 @@ public class PostController {
 
 	/* 글 작성 페이지 이동 */
 	@GetMapping("/post/write")
-	public String postWrite() {
-		return "post/write";
+	public String postWrite(HttpSession session) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		if(loginUser != null) {
+			return "post/write";
+		}else {
+			throw new PostException("로그인이 필요한 페이지입니다");
+		}
 	}
 
 	/* 글 작성 처리 */
