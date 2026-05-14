@@ -35,45 +35,45 @@ public class AdminController {
 	/* 관리자 페이지 */
 	@GetMapping("/adminPage")
 	public String adminPage(@ModelAttribute Member m, Model model, HttpSession session,
-			@RequestParam(value = "memberPage", defaultValue = "1") int memberPage,
-			@RequestParam(value = "postPage", defaultValue = "1") int postPage,
-			@RequestParam(value = "replyPage", defaultValue = "1") int replyPage) {
+	        @RequestParam(value = "memberPage", defaultValue = "1") int memberPage,
+	        @RequestParam(value = "postPage", defaultValue = "1") int postPage,
+	        @RequestParam(value = "replyPage", defaultValue = "1") int replyPage) {
 
-		/* 회원 페이지네이션 */
-		int memberCount = mService.getMemberCount();
-		PageInfo memberPi = Pagination.getPageInfo(memberPage, memberCount, 10);
-		int startRow = (memberPi.getCurrentPage() - 1) * memberPi.getBoardLimit() + 1;
-		int endRow = memberPi.getCurrentPage() * memberPi.getBoardLimit();
-		ArrayList<Member> mlist = mService.selectAll(startRow, endRow);
-		model.addAttribute("mlist", mlist);
-		model.addAttribute("memberPi", memberPi);
+	    /* 관리자 권한 확인 */
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    if (loginUser == null || loginUser.getIsAdmin().equals("N")) {
+	        model.addAttribute("message", "올바른 접근이 아닙니다.");
+	        return "error/404";
+	    }
 
-		/* 게시글 페이지네이션 */
-		int postCount = pService.getPostCount();
-		PageInfo postPi = Pagination.getPageInfo(postPage, postCount, 20);
-		int postStartRow = (postPi.getCurrentPage() - 1) * postPi.getBoardLimit() + 1;
-		int postEndRow = postPi.getCurrentPage() * postPi.getBoardLimit();
-		ArrayList<Post> plist = pService.selectAllPost(postStartRow, postEndRow);
-		model.addAttribute("plist", plist);
-		model.addAttribute("postPi", postPi);
+	    /* 회원 페이지네이션 */
+	    int memberCount = mService.getMemberCount();
+	    PageInfo memberPi = Pagination.getPageInfo(memberPage, memberCount, 10);
+	    int startRow = (memberPi.getCurrentPage() - 1) * memberPi.getBoardLimit() + 1;
+	    int endRow = memberPi.getCurrentPage() * memberPi.getBoardLimit();
+	    ArrayList<Member> mlist = mService.selectAll(startRow, endRow);
+	    model.addAttribute("mlist", mlist);
+	    model.addAttribute("memberPi", memberPi);
 
-		/* 댓글 페이지네이션 */
-		int replyCount = rService.getReplyCount();
-		PageInfo replyPi = Pagination.getPageInfo(replyPage, replyCount, 20);
-		int replyStartRow = (replyPi.getCurrentPage() - 1) * replyPi.getBoardLimit() + 1;
-		int replyEndRow = replyPi.getCurrentPage() * replyPi.getBoardLimit();
-		ArrayList<Reply> rlist = rService.selectAllReply(replyStartRow, replyEndRow);
-		model.addAttribute("replyList", rlist);
-		model.addAttribute("replyPi", replyPi);
+	    /* 게시글 페이지네이션 */
+	    int postCount = pService.getPostCount();
+	    PageInfo postPi = Pagination.getPageInfo(postPage, postCount, 20);
+	    int postStartRow = (postPi.getCurrentPage() - 1) * postPi.getBoardLimit() + 1;
+	    int postEndRow = postPi.getCurrentPage() * postPi.getBoardLimit();
+	    ArrayList<Post> plist = pService.selectAllPost(postStartRow, postEndRow);
+	    model.addAttribute("plist", plist);
+	    model.addAttribute("postPi", postPi);
 
-		/* 관리자 권한 확인 */
-		Member loginUser = (Member) session.getAttribute("loginUser");
-		if (loginUser != null && loginUser.getIsAdmin().equals("Y")) {
-			return "users/adminPage";
-		} else {
-			model.addAttribute("message", "올바른 접근이 아닙니다.");
-			return "error/404";
-		}
+	    /* 댓글 페이지네이션 */
+	    int replyCount = rService.getReplyCount();
+	    PageInfo replyPi = Pagination.getPageInfo(replyPage, replyCount, 20);
+	    int replyStartRow = (replyPi.getCurrentPage() - 1) * replyPi.getBoardLimit() + 1;
+	    int replyEndRow = replyPi.getCurrentPage() * replyPi.getBoardLimit();
+	    ArrayList<Reply> rlist = rService.selectAllReply(replyStartRow, replyEndRow);
+	    model.addAttribute("replyList", rlist);
+	    model.addAttribute("replyPi", replyPi);
+
+	    return "users/adminPage";
 	}
 
 	/* 회원 정지 */
