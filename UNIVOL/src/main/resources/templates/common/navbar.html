@@ -104,6 +104,7 @@
     <span th:if="${session.loginUser != null && session.loginUser.isAdmin == 'Y'}">
       <span class="username" th:text="${session.loginUser.userName} + '님'"></span>
       <a th:href="@{/adminPage}" class="header-btn btn-outline">관리자 페이지</a>
+      <a th:href="@{/myPage}" class="header-btn btn-outline">마이페이지</a>
       <a th:href="@{/logout}" class="header-btn btn-outline">로그아웃</a>
     </span>
 

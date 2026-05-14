@@ -122,12 +122,7 @@
           <th style="width:70px;">좋아요</th>
         </tr>
       </thead>
-<<<<<<< HEAD
-      <tbody>
-      </tbody>
-=======
       <tbody></tbody>
->>>>>>> origin/신석희
     </table>
 
     <!-- 후기게시판 TOP 5 -->
@@ -150,7 +145,6 @@
 
   </div>
 
-
   <script>
     window.onload = () => {
       /* 초기 데이터 로드 */
@@ -160,6 +154,7 @@
       /* 후기게시판 2초마다 갱신 */
       setInterval(() => {
         topList();
+        topPostList();
       }, 2000);
     };
 
@@ -172,6 +167,7 @@
           tbody.innerHTML = '';
 
           for (const r of data) {
+//         	console.log(r);
             const tr = document.createElement('tr');
             tr.onclick = () => {
               location.href = `/review/${r.rNumber}/1`;
@@ -187,9 +183,12 @@
             rWriter.innerText = r.userName;
 
             const rViews = document.createElement('td');
+            rViews.classList.add('views');
             rViews.innerText = r.rViews;
 
             const rLike = document.createElement('td');
+            rLike.classList.add('likes');
+			rLike.innerText = '♥ ' + r.likeCount; 
 
             tr.append(rNumber, rTitle, rWriter, rViews, rLike);
             tbody.append(tr);
@@ -208,6 +207,7 @@
           tbody.innerHTML = '';
 
           for (const p of data) {
+//         	console.log(p);
             const tr = document.createElement('tr');
             tr.onclick = () => {
               location.href = `/post/1/${p.pNumber}`;
@@ -223,9 +223,12 @@
             pWriter.innerText = p.userName;
 
             const pViews = document.createElement('td');
+            pViews.classList.add('views');
             pViews.innerText = p.views;
 
             const pLike = document.createElement('td');
+            pLike.classList.add('likes');
+			pLike.innerText = '♥ ' + p.likeCount; 
 
             tr.append(pNumber, pTitle, pWriter, pViews, pLike);
             tbody.append(tr);

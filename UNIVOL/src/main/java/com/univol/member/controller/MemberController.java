@@ -1,6 +1,6 @@
 package com.univol.member.controller;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +18,7 @@ import com.univol.common.PageInfo;
 import com.univol.common.Pagination;
 import com.univol.member.service.MemberService;
 import com.univol.member.vo.Member;
+import com.univol.post.model.exception.PostException;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -89,6 +90,8 @@ public class MemberController {
 			setApplyList(mv, id, applyPage);
 			setMyPostList(mv, id, myPostPage);
 			mv.setViewName("users/myPage");
+		}else {
+				throw new PostException ("로그인이 필요한 페이지입니다");
 		}
 		return mv;
 	}
@@ -105,12 +108,13 @@ public class MemberController {
 
 	/* 마이페이지 - 작성글 목록 세팅 */
 	public void setMyPostList(ModelAndView mv, String id, int page) {
-		int totalCount = mService.getMyPostCount(id);
-		PageInfo pi = Pagination.getPageInfo(page, totalCount, 5);
-		if (page < 1) page = 1;
-		if (page > pi.getMaxPage()) page = pi.getMaxPage();
-		mv.addObject("myPostList", mService.getMyPostList(pi, id));
-		mv.addObject("myPostPi", pi);
+
+	    int totalCount = mService.getMyPostCount(id);
+	    PageInfo pi = Pagination.getPageInfo(page, totalCount, 5);
+	    if (page < 1) page = 1;
+	    if (page > pi.getMaxPage()) page = pi.getMaxPage();
+	    mv.addObject("myPostList", mService.getMyPostList(pi, id));
+	    mv.addObject("myPostPi", pi);
 	}
 
 	/* 개인정보 수정 페이지 이동 */
@@ -145,5 +149,16 @@ public class MemberController {
 			status.setComplete();
 		}
 		return result;
+	}
+	
+	/*회원가입 id중복 체크 */
+	@GetMapping("/checkValue")
+	@ResponseBody
+	public int checkValue(@RequestParam("column") String col,@RequestParam("value") String val){
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("col", col);
+		map.put("val", val);
+		int count = mService.checkValue(map);
+		return count;
 	}
 }

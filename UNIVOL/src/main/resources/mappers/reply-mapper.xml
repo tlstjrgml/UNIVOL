@@ -13,11 +13,13 @@
 		<result column="C_STATUS" property="cStatus" javaType="java.lang.String"/>
 	</resultMap>
 
+	<!-- 댓글 등록 -->
 	<insert id="insertReply" parameterType="com.univol.post.vo.Reply">
 		INSERT INTO REPLY (C_NUMBER, COMMENTS, C_DATE, P_NUMBER, USER_ID, C_STATUS)
 		VALUES (SEQ_REPLY.NEXTVAL, #{comments}, SYSDATE, #{pNumber}, #{userId}, default)
 	</insert>
 
+	<!-- 게시글별 댓글 목록 조회 -->
 	<select id="selectReplyList" parameterType="int" resultMap="replyResultMap">
 		SELECT R.C_NUMBER,
 		       R.COMMENTS,
@@ -29,10 +31,11 @@
 		FROM REPLY R
 		JOIN USERS U ON (R.USER_ID = U.USER_ID)
 		WHERE R.P_NUMBER = #{pNumber}
-		AND R.C_STATUS='Y'
+		AND R.C_STATUS = 'Y'
 		ORDER BY R.C_NUMBER DESC
 	</select>
 
+	<!-- 댓글 단건 조회 -->
 	<select id="selectOne" parameterType="int" resultMap="replyResultMap">
 		SELECT R.C_NUMBER,
 		       R.COMMENTS,
@@ -46,46 +49,38 @@
 		WHERE R.C_NUMBER = #{cNumber}
 	</select>
 
+	<!-- 댓글 수정 -->
 	<update id="updateReply" parameterType="com.univol.post.vo.Reply">
 		UPDATE REPLY
 		SET COMMENTS = #{comments}
 		WHERE C_NUMBER = #{cNumber}
 	</update>
 
+	<!-- 댓글 삭제 -->
 	<delete id="deleteReply" parameterType="int">
 		DELETE FROM REPLY
 		WHERE C_NUMBER = #{cNumber}
 	</delete>
 
-<<<<<<< HEAD
-	<select id="selectAllReply" resultType="com.univol.post.vo.Reply">
-		SELECT R.C_NUMBER,
-		       R.COMMENTS,
-		       TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
-		       R.P_NUMBER,
-		       R.USER_ID,
-		       U.USER_NAME,
-		       R.C_STATUS
-		FROM REPLY R
-		JOIN USERS U ON (R.USER_ID = U.USER_ID)
-		ORDER BY R.C_NUMBER DESC
-=======
+	<!-- 관리자 - 댓글 삭제/복구 -->
 	<update id="adminDeleteReply">
-		update reply
-		set c_status='N'
-		where c_number=#{rNumber}
+		UPDATE REPLY
+		SET C_STATUS = 'N'
+		WHERE C_NUMBER = #{rNumber}
 	</update>
 
 	<update id="adminRollbackReply">
-		update reply
-		set c_status='Y'
-		where c_number=#{rNumber}
+		UPDATE REPLY
+		SET C_STATUS = 'Y'
+		WHERE C_NUMBER = #{rNumber}
 	</update>
 
+	<!-- 관리자 - 전체 댓글 수 -->
 	<select id="getReplyCount" resultType="_int">
-		select count(*) from reply
+		SELECT COUNT(*) FROM REPLY
 	</select>
 
+	<!-- 관리자 - 전체 댓글 목록 (페이지네이션) -->
 	<select id="selectAllReply" resultMap="replyResultMap">
 		SELECT * FROM (
 		    SELECT ROWNUM AS RN, A.* FROM (
@@ -103,7 +98,6 @@
 		    WHERE ROWNUM &lt;= #{endRow}
 		)
 		WHERE RN &gt;= #{startRow}
->>>>>>> origin/신석희
 	</select>
 
 </mapper>

@@ -37,4 +37,6 @@ public interface MemberMapper {
 
 	int getMyPostCount(String userId);
 	ArrayList<HashMap<String, Object>> getMyPostList(String userId, RowBounds rowBounds);
+	
+	int checkValue(HashMap<String, String> map);
 }

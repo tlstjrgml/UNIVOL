@@ -12,7 +12,7 @@
 
     /* 공통 레이아웃 */
     .container { width: 1000px; margin: 0 auto; }
-    .logo { font-family: 'Playfair Display', serif; font-size: 40px; color: #424B1F; letter-spacing: 2px; text-align: center; margin-bottom: 10px; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 40px; color: #424B1F; letter-spacing: 2px; text-align: center; margin-bottom: 10px; cursor:pointer;}
     .page-title { font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 10px; }
     .divider { border: none; border-top: 1px solid #ccc; margin: 10px 0 20px 0; }
 
@@ -123,7 +123,7 @@
             <td th:text="${p.userId}"></td>
             <td th:text="${p.contents}"></td>
             <td th:text="${p.views}"></td>
-            <td th:text="${p.likes}"></td>
+            <td th:text="${p.likeCount}"></td>
             <!-- 게시글 활성/삭제 버튼 -->
             <td>
               <div th:if="${p.pStatus.toString() == 'Y'}">
@@ -363,6 +363,12 @@
     function goToReplyPage(pageNum) {
       document.getElementById('replyPageForm-' + pageNum).submit();
     }
+    
+    document.getElementsByClassName('logo')[0].addEventListener('click', (e)=>{
+		/* console.log(e.target); */
+		location.href="/";
+    });
+    
   </script>
 
 </body>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title th:text="${post.pTitle} + ' - UNIVOL'"></title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; }
     body { background: #f5f5f0; min-height: 100vh; }
@@ -89,7 +90,7 @@
     </div>
 
     <!-- 게시글 본문: 봉사 정보 테이블 + 내용 -->
-    <div class="post-content">
+    <div class="post-content" id="post-content">
       <table style="width:100%; border-collapse:collapse; margin-bottom:1.5rem;">
         <tr>
           <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; width:120px; font-weight:700; color:#333;">봉사제목</th>
@@ -104,22 +105,37 @@
       <p style="font-size:14px; font-weight:700; color:#333; margin-bottom:8px;">봉사내용</p>
       <p th:text="${post.contents}" style="font-size:14px; line-height:1.8; color:#555; margin-bottom:1.5rem;"></p>
 
-      <!-- 게시글 수정/삭제 버튼: 작성자만 노출, 기능은 미구현 -->
-      <!-- <div th:if="${loginUser != null && loginUser.userId == post.userId}"
+      <!-- 게시글 수정/삭제 버튼: 작성자 또는 관리자만 노출 -->
+      <!-- <div th:if="${loginUser != null && (loginUser.userId == post.userId || loginUser.isAdmin == 'Y')}"
            style="display:flex; justify-content:flex-end; gap:6px;">
+        <button id="editPostBtn" type="button"
+                style="padding:6px 16px; background:#426B1F; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
+        <form th:action="@{/post/delete/{pNumber}(pNumber=${post.pNumber})}" method="post" style="display:inline;">
+          <button id="deletePostBtn" type="submit"
+                  style="padding:6px 16px; background:#c0392b; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
+        </form>
         <button id="editPostBtn" type="button" style="padding:6px 16px; background:#426B1F; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
         <button id="deletePostBtn" type="button" style="padding:6px 16px; background:#c0392b; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
       </div> -->
       
-      <div th:if="${loginUser != null && loginUser.userId == post.userId || loginUser.isAdmin == 'Y'}"
-           style="display:flex; justify-content:flex-end; gap:6px;">
-      	<form th:action="@{/post/edit/{pNumber}(pNumber=${post.pNumber})}" method="post">
-      		<button id="editPostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
-      	</form>
-      	<form th:action="@{/post/delete/{pNumber}(pNumber=${post.pNumber})}" method="post">
-      		<button id="deletePostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: red; border: none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
-      	</form>
-      	
+      <div style="display:flex; justify-content:flex-end; gap:6px;">
+       	<th:block th:if="${loginUser != null && loginUser.userId == post.userId || loginUser.isAdmin == 'Y'}">
+       	
+	      	<form th:action="@{/post/edit/{pNumber}(pNumber=${post.pNumber})}" method="post">
+	      		<button id="editPostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">수정</button>
+	      	</form>
+	      	<form th:action="@{/post/delete/{pNumber}(pNumber=${post.pNumber})}" method="post">
+	      		<button id="deletePostBtn" type="submit" style="padding:6px 16px; background:#c0392b; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
+	      	</form>
+       	</th:block>
+	      	 <button th:if="${isLiked == 0}" class="like-btn" id="likeBtn" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">
+			  <span class="heart" id="heart">🤍[[${likeCount}]]</span>
+			  <span id="likeText">좋아요</span>
+			</button>
+			<button th:if="${isLiked == 1}" class="like-btn" id="likeBtn" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">
+			  <span class="heart" id="heart">❤️[[${likeCount}]]</span>
+			  <span id="likeText">안 좋아요</span>
+			</button>
       	
       </div>
     </div>
@@ -130,7 +146,7 @@
 
       <!-- 댓글 등록 폼 -->
       <div class="reply-input-box">
-        <form action="/post/{pNumber}/reply" method="POST" th:action="@{/post/{pNumber}/reply(pNumber=${post.pNumber})}">
+        <form method="POST" th:action="@{/post/{pNumber}/reply(pNumber=${post.pNumber})}">
           <textarea class="reply-textarea" name="comments" placeholder="참여하려면 댓글을 달아주세요"></textarea>
           <input type="hidden" name="currentPage" th:value="${currentPage}">
           <input type="hidden" name="sort" th:value="${sort}">
@@ -153,10 +169,7 @@
             <div th:id="'reply-edit-form-' + ${reply.cNumber}"></div>
           </div>
 
-<<<<<<< HEAD
-=======
           <!-- 댓글 수정/삭제 버튼: 본인 댓글만 노출 -->
->>>>>>> origin/신석희
           <div class="reply-actions" th:if="${loginUser != null && reply.userId == loginUser.userId}">
             <button type="button" class="reply-btn-small"
                     th:onclick="'toggleEditForm(' + ${reply.cNumber} + ')'">수정</button>
@@ -171,17 +184,6 @@
               <button type="button" class="reply-btn-small reply-btn-delete"
                       onclick="if(confirm('댓글을 삭제하시겠습니까?')) this.form.submit();">삭제</button>
             </form>
-
-            <!-- 좋아요 버튼. -->
-            <button th:if="${isLiked == 0}" class="like-btn" id="likeBtn">
-            	<span class="heart" id="heart">🤍[[${likeCount}]]</span>
-            	<span id="likeText">좋아요</span>
-            </button>
-            <button th:if="${isLiked == 1}" class="like-btn" id="likeBtn">
-            	<span class="heart" id="heart">❤️[[${likeCount}]]</span>
-				  	<span id="likeText">좋아요</span>
-            </button>
-
           </div>
         </div>
       </div>
@@ -189,17 +191,55 @@
   </main>
 
   <script th:inline="javascript">
+    const contentDiv = document.getElementById('post-content');
+    const originalContent = contentDiv.innerHTML;
     const pNumber = /*[[${post.pNumber}]]*/0;
+    const pTitle = /*[[${post.pTitle}]]*/'';
+    const pDate = /*[[${post.pDate}]]*/'';
+    const contents = /*[[${post.contents}]]*/'';
+    const currentPage = /*[[${currentPage}]]*/1;
 
+    /* 게시글 수정 */
+    document.addEventListener('click', (e) => {
+      if (e.target.id == 'editPostBtn') {
+        contentDiv.innerHTML = `
+          <form action="/post/edit/${pNumber}" method="post" style="display:flex; flex-direction:column; gap:1rem;">
+            <table style="width:100%; border-collapse:collapse; margin-bottom:1.5rem;">
+              <tr>
+                <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; width:120px; font-weight:700; color:#333;">봉사제목</th>
+                <td style="border:1px solid #e0e0d8; padding:12px 16px;">
+                  <input type="text" name="pTitle" value="${pTitle}" style="width:100%; padding:8px; border:1px solid #d0d0c8; border-radius:6px; font-size:14px; outline:none;">
+                </td>
+              </tr>
+              <tr>
+                <th style="background:#f7f7f2; border:1px solid #e0e0d8; padding:12px 16px; font-weight:700; color:#333;">봉사날짜</th>
+                <td style="border:1px solid #e0e0d8; padding:12px 16px;">
+                  <input type="date" name="pDate" value="${pDate.substring(0,10)}" style="padding:8px; border:1px solid #d0d0c8; border-radius:6px; font-size:14px; outline:none;">
+                </td>
+              </tr>
+            </table>
+            <p style="font-size:14px; font-weight:700; color:#333; margin-bottom:8px;">봉사내용</p>
+            <textarea name="contents" style="width:100%; padding:12px; border:1px solid #d0d0c8; border-radius:8px; font-size:14px; line-height:1.8; min-height:150px; resize:vertical; outline:none;">${contents}</textarea>
+            <input type="hidden" name="currentPage" value="${currentPage}">
+            <div style="display:flex; justify-content:flex-end; gap:6px;">
+              <button type="submit" style="padding:6px 16px; background:#426B1F; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer;">저장</button>
+              <button type="button" onclick="contentDiv.innerHTML = originalContent" style="padding:6px 16px; background:#ddd; color:#666; border:none; border-radius:6px; font-size:13px; cursor:pointer;">취소</button>
+            </div>
+          </form>
+        `;
+      }
+    });
 
-    /* 게시글 삭제 - 미구현 */
-    document.getElementById('deletePostBtn').addEventListener('click', (e)=>{
-	
-		const result = confirm('정말로 삭제하시겠습니까? 삭제된 글은 복구가 어렵습니다.')
-			if(result == false){
-			e.preventDefault();
-			}
-		});
+    /* 게시글 삭제 확인 */
+    const deletePostBtn = document.getElementById('deletePostBtn');
+    if (deletePostBtn) {
+      deletePostBtn.addEventListener('click', (e) => {
+        const result = confirm('정말로 삭제하시겠습니까? 삭제된 글은 복구가 어렵습니다.');
+        if (result == false) {
+          e.preventDefault();
+        }
+      });
+    }
 
     /* 댓글 수정 폼 토글 */
     function toggleEditForm(cNumber) {
@@ -242,7 +282,6 @@
       textDiv.style.display = 'block';
     }
 
-
     /* 댓글 수정 저장 */
     function submitEditForm(event, cNumber) {
       event.preventDefault();
@@ -251,6 +290,38 @@
       form.action = `/post/reply/${cNumber}/update`;
       form.submit();
       return false;
+    }
+
+    /* 좋아요 기능 */
+    window.onload = function () {
+      const likeBtn = document.getElementById('likeBtn');
+      const heart = document.getElementById('heart');
+      const likeText = document.getElementById('likeText');
+
+      if (likeBtn) {
+        likeBtn.addEventListener('click', () => {
+          $.ajax({
+            url: '/post/like',
+            method: 'POST',
+            data: {
+              pNumber: /*[[${post.pNumber}]]*/77,
+              userId: /*[[${session.loginUser.userId}]]*/'user11',
+            },
+            success: data => {
+              if(data.liked){
+                heart.innerText = '❤️' + data.likeCount;
+                likeText.innerText = '안 좋아요';
+              } else {
+                heart.innerText = '🤍' + data.likeCount;
+                likeText.innerText = '좋아요';
+              }
+            },
+            error: data => {
+              console.log(data);
+            }
+          })
+        })
+      }
     }
   </script>
 
