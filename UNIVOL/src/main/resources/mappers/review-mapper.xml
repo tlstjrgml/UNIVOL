@@ -116,20 +116,31 @@
 	</select>
 
 	<select id="searchReviews" resultMap="reviewResultSet">
-		SELECT P.*, U.USER_NAME
-		FROM POST P
-		JOIN USERS U ON P.USER_ID = U.USER_ID
-		WHERE P.P_TYPE = 'R'
-		AND (
-			P.P_TITLE LIKE '%' || #{keyword} || '%'
-			OR U.USER_NAME LIKE '%' || #{keyword} || '%'
-		)
-		ORDER BY
-		<choose>
-			<when test="sort == 'views_desc'">P.VIEWS DESC</when>
-			<when test="sort == 'views_asc'">P.VIEWS ASC</when>
-			<otherwise>P.P_DATE DESC</otherwise>
-		</choose>
+	    SELECT 
+	        P.*,
+	        U.USER_NAME,
+	        NVL(L.LIKE_COUNT, 0) AS LIKE_COUNT
+	    FROM POST P
+	    JOIN USERS U ON P.USER_ID = U.USER_ID
+	
+	    LEFT JOIN (
+	        SELECT P_NUMBER, COUNT(*) AS LIKE_COUNT
+	        FROM P_LIKE
+	        GROUP BY P_NUMBER
+	    ) L ON P.P_NUMBER = L.P_NUMBER
+	
+	    WHERE P.P_TYPE = 'R'
+	    AND (
+	        P.P_TITLE LIKE '%' || #{keyword} || '%'
+	        OR U.USER_NAME LIKE '%' || #{keyword} || '%'
+	    )
+	
+	    ORDER BY
+	    <choose>
+	        <when test="sort == 'views_desc'">P.VIEWS DESC</when>
+	        <when test="sort == 'views_asc'">P.VIEWS ASC</when>
+	        <otherwise>P.P_DATE DESC</otherwise>
+	    </choose>
 	</select>
 
 	<select id="searchCount" resultType="int">
