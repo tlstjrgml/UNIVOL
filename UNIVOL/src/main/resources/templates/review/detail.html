@@ -218,6 +218,7 @@
     	              cDateDiv.classList.add('comment-date');
     	              cDateDiv.innerText = c.cDate.substr(0,10);
     	              const commentsDiv = document.createElement('div');
+    	              commentsDiv.id=`content-${c.cNumber}`;
     	              commentsDiv.innerText = c.comments;
     	              commentItem.append(writerDiv, cDateDiv, commentsDiv);
     	              if (c.userId === userId) {
