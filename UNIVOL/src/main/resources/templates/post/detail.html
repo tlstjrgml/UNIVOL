@@ -59,6 +59,24 @@
     .empty-message { text-align: center; padding: 2rem; color: #aaa; font-size: 13px; }
     .back-btn { display: inline-block; margin-bottom: 1rem; padding: 8px 16px; background: #eaf3de; color: #426B1F; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; text-decoration: none; transition: background 0.15s; }
     .back-btn:hover { background: #d5e8c6; }
+	.action-btn{
+		padding: 6px 16px;
+		background: #426B1F;
+		color: #fff;
+		border: none;
+		border-radius: 6px;
+		font-size: 13px;
+		cursor: pointer;
+	}
+	.action-btn-disabled {
+	    padding: 6px 16px;
+	    background: #aaa;
+	    color: #fff;
+	    border: none;
+	    border-radius: 6px;
+	    font-size: 13px;
+	    cursor: pointer;
+	}
   </style>
 </head>
 <body>
@@ -128,14 +146,21 @@
 	      		<button id="deletePostBtn" type="submit" style="padding:6px 16px; background:#426B1F; color: red; border: none; border-radius:6px; font-size:13px; cursor:pointer;">삭제</button>
 	      	</form>
        	</th:block>
-	      	 <button th:if="${isLiked == 0}" class="like-btn" id="likeBtn" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">
+	      	 <button th:if="${isLiked == 0}" class="action-btn" id="likeBtn">
 			  <span class="heart" id="heart">🤍[[${likeCount}]]</span>
 			  <span id="likeText">좋아요</span>
 			</button>
-			<button th:if="${isLiked == 1}" class="like-btn" id="likeBtn" style="padding:6px 16px; background:#426B1F; color: #fff; border: none; border-radius:6px; font-size:13px; cursor:pointer;">
+			<button th:if="${isLiked == 1}" class="action-btn" id="likeBtn">
 			  <span class="heart" id="heart">❤️[[${likeCount}]]</span>
 			  <span id="likeText">안 좋아요</span>
 			</button>
+			<th:block th:if="${loginUser != null && isApplied == 0}">
+				<button type="button" id="applyBtn" class="action-btn">참여하기</button>
+			</th:block>
+			<th:block th:if="${loginUser != null && isApplied == 1}">
+				<button type="button" id="applyBtn" class="action-btn-disabled">참여완료</button>
+			</th:block>
+			
       	
       </div>
     </div>
@@ -300,37 +325,60 @@
       return false;
     }
     
-    window.onload = function () {
-    	const likeBtn = document.getElementById('likeBtn');
-		const heart = document.getElementById('heart');
-		const likeText = document.getElementById('likeText');
-		
-		likeBtn.addEventListener('click', () => {
-			
-			$.ajax({
-				url: '/post/like',
-				method: 'POST',
-				data: {
-					pNumber: /*[[${post.pNumber}]]*/77,
-					userId: /*[[${session.loginUser.userId}]]*/'user11',
-				},
-				success: data => {
-// 						console.log(data.likeCount);
-					if(data.liked){
-						heart.innerText = '❤️' + data.likeCount; 
-						likeText.innerText = '안 좋아요';
-					} else {
-						heart.innerText = '🤍' + data.likeCount; 
-						likeText.innerText = '좋아요';	
-					}
-					
-				},
-				error: data => {
-					console.log(data);
-				}
-			})
-		})
-    } 
+	window.onload = function () {
+	    const likeBtn = document.getElementById('likeBtn');
+	    const heart = document.getElementById('heart');
+	    const likeText = document.getElementById('likeText');
+	    
+	    likeBtn.addEventListener('click', () => {
+	        $.ajax({
+	            url: '/post/like',
+	            method: 'POST',
+	            data: {
+	                pNumber: /*[[${post.pNumber}]]*/0,
+	                userId: /*[[${session.loginUser.userId}]]*/'',
+	            },
+	            success: data => {
+	                if(data.liked){
+	                    heart.innerText = '❤️' + data.likeCount; 
+	                    likeText.innerText = '안 좋아요';
+	                } else {
+	                    heart.innerText = '🤍' + data.likeCount; 
+	                    likeText.innerText = '좋아요';	
+	                }
+	            },
+	            error: data => {
+	                console.log(data);
+	            }
+	        })
+	    })
+	    
+	    const applyBtn = document.getElementById('applyBtn');
+	    if(applyBtn) {
+	        applyBtn.addEventListener('click', () => {
+	            $.ajax({
+	                url: '/post/apply',
+	                method: 'POST',
+	                data: {
+	                    pNumber: /*[[${post.pNumber}]]*/0,
+	                    userId: /*[[${session.loginUser.userId}]]*/'',
+	                },
+	                success: data => {
+	                    if(data == 0) {
+	                        applyBtn.innerText = '참여완료';
+	                        applyBtn.className = 'action-btn-disabled';
+	                    } else {
+	                        applyBtn.innerText = '참여하기';
+	                        applyBtn.className = 'action-btn';
+	                    }
+	                },
+	                error: data => {
+	                    console.log(data);
+	                }
+	            })
+	        })
+	    }
+	}
   </script>
 
 </body>

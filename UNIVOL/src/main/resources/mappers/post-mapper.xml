@@ -83,17 +83,7 @@
 		where p_number = #{pNumber}
 	</update>
 
-	<update id="rollbackPost">
-		update post
-		set p_status ='Y'
-		where p_number = #{pNumber}
-	</update>
 
-	<update id="deletePost">
-		update post
-		set p_status = 'N'
-		where p_number = #{pNumber}
-	</update>
 
 	<select id="searchPosts" resultType="com.univol.post.vo.Post">
 		select * from(
@@ -163,27 +153,7 @@
 	
 	</select>
 
-	<!-- 관리자페이지용 -->
-	<select id="getPostCount" resultType="_int">
-		select count(*) from post
-	</select>
 
-	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
-		 SELECT * FROM (
-        SELECT ROWNUM AS RN, A.* FROM (
-            SELECT P.*, NVL(L.LIKE_COUNT, 0) AS LIKE_COUNT
-            FROM POST P
-            LEFT JOIN (
-                SELECT P_NUMBER, COUNT(*) AS LIKE_COUNT
-                FROM P_LIKE
-                GROUP BY P_NUMBER
-            ) L ON P.P_NUMBER = L.P_NUMBER
-            ORDER BY P.P_NUMBER DESC
-        ) A
-        WHERE ROWNUM &lt;= #{endRow}
-    )
-    WHERE RN &gt;= #{startRow}
-	</select>
 	
 	<select id="selectTopPost" resultType="com.univol.post.vo.Post">
 	    select *
@@ -221,5 +191,22 @@
 		from p_like
 		where p_number = #{pNumber}
 	</select>
+	
+	<select id="checkApply" resultType="_int">
+		select count(*) from apply
+		where user_id=#{userId} and p_number = #{pNumber} and a_state='Y'
+	</select>
+	
+	<insert id="insertApply">
+		insert into apply 
+		values(SEQ_APPLY.nextval, 'Y', #{userId}, #{pNumber})
+	</insert>
+	
+	<delete id="cancelApply">
+    DELETE FROM APPLY
+    WHERE USER_ID=#{userId} AND P_NUMBER=#{pNumber}
+	</delete>	
+	
+	
 
 </mapper>

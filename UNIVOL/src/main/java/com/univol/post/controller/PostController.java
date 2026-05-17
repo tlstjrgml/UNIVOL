@@ -119,6 +119,7 @@ public class PostController {
 
 		int likeCount = pService.likeCount(pNumber);
 		int isLiked = pService.postLike(pNumber, userId);
+		int isApplied = pService.checkApply(pNumber, userId);
 		ArrayList<Reply> replyList = rService.selectReplyList(pNumber);
 
 		model.addAttribute("likeCount", likeCount);
@@ -129,7 +130,7 @@ public class PostController {
 		model.addAttribute("sort", sort);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("loginUser", loginUser);
-
+		model.addAttribute("isApplied", isApplied);
 		return "post/detail";
 	}
 
@@ -184,5 +185,17 @@ public class PostController {
 		map.put("liked", result == 0);
 		map.put("likeCount", likeCount);
 		return map;
+	}
+	
+	/*참여 토글 */
+	@PostMapping("/post/apply")
+	@ResponseBody
+	public int apply(@RequestParam("pNumber") int pNumber, @RequestParam("userId") String userId) {
+		int result = pService.checkApply(pNumber, userId);
+		if(result > 0) {
+			pService.cancelApply(pNumber, userId);
+		}else {
+			pService.insertApply(pNumber, userId);
+		}return result;
 	}
 }

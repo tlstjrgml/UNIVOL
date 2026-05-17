@@ -10,6 +10,7 @@ import com.univol.common.PageInfo;
 import com.univol.review.mapper.ReviewMapper;
 import com.univol.review.vo.Review;
 import com.univol.review.vo.ReviewReply;
+import com.univol.post.vo.Post;
 
 import lombok.RequiredArgsConstructor;
 
@@ -124,5 +125,10 @@ public class ReviewService {
 
 	public int likeCount(int pNumber) {
 		return mapper.likeCount(pNumber);
+	}
+	
+	/*참여목록*/
+	public ArrayList<Post> selectApplyList(String userId){
+		return mapper.selectApplyList(userId);
 	}
 }

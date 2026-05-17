@@ -42,12 +42,11 @@ public interface PostMapper {
 	void insertLike(HashMap<String, Object> map);
 	int likeCount(int pNumber);
 
-	/* 관리자 - 게시글 목록 */
-	int getPostCount();
-	ArrayList<Post> selectAllPost();
-	ArrayList<Post> selectAllPost(@Param("startRow") int startRow, @Param("endRow") int endRow);
-
-	/* 관리자 - 게시글 상태 변경 */
-	int rollbackPost(Post p);
-	int deletePost(Post p);
+//	참여
+	int checkApply(@Param("pNumber")int pNumber, @Param("userId")String userId);
+	int insertApply(@Param("pNumber")int pNumber, @Param("userId")String userId);
+	
+//	참여취소
+	int cancelApply(@Param("pNumber")int pNumber, @Param("userId")String userId);
+	
 }

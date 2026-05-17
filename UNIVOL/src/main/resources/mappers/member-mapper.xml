@@ -21,18 +21,7 @@
         )
     </insert>
 
-    <select id="selectAll" resultType="com.univol.member.vo.Member">
-	    select * from (
-	        select rownum as rn, A.* from (
-	            SELECT user_id, user_pw, user_name,
-	                   TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
-	                   gender, phone, address, is_admin, member_status
-	            FROM users
-	        ) A
-	        where rownum &lt;= #{endRow}
-	    )
-	    where rn >= #{startRow}
-	</select>
+    
 	
 	  <select id="getApplyCount" parameterType="String" resultType="int">
 		    SELECT COUNT(*) 
@@ -111,34 +100,9 @@
 		where user_id = #{userId}
 	</update>
 
-	<update id="banMember">
-		update users
-		set member_status = 'N'
-		where user_id = #{userId}
-	</update>
+	
 
-	<update id="activeMember">
-		update users
-		set member_status = 'Y'
-		where user_id = #{userId}
-	</update>
-
-	<update id="toAdminMember">
-		update users
-		set is_admin = 'Y'
-		where user_id=#{userId}
-	</update>
-
-	<update id="toNormalMember">
-		update users
-		set is_admin = 'N'
-		where user_id = #{userId}
-	</update>
-
-	<!-- 관리자페이지 회원 페이지네이션 -->
-	<select id="getMemberCount" resultType="_int">
-		select count(*) from users
-	</select>
+	
 	
 	<!-- id중복 체크 -->
 	<select id="checkValue" resultType="_int">

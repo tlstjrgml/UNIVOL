@@ -72,28 +72,7 @@ public class PostService {
 		return mapper.selectTopPost();
 	}
 
-	/* 관리자 - 게시글 목록 */
-	public int getPostCount() {
-		return mapper.getPostCount();
-	}
-
-	public ArrayList<Post> selectAllPost() {
-		return mapper.selectAllPost();
-	}
-
-	public ArrayList<Post> selectAllPost(int startRow, int endRow) {
-		return mapper.selectAllPost(startRow, endRow);
-	}
-
-	/* 관리자 - 게시글 상태 변경 */
-	public int deletePost(Post p) {
-	    return mapper.deletePost(p);
-	}
-
-	public int rollbackPost(Post p) {
-	    return mapper.rollbackPost(p);
-	}
-
+	
 	public int postLike(int pNumber, String userId) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("pNumber", pNumber);
@@ -118,5 +97,17 @@ public class PostService {
 	public int likeCount(int pNumber) {
 		HashMap<String, Object> map = new HashMap<>();
 		return mapper.likeCount(pNumber);
+	}
+	
+	public int checkApply(int pNumber, String userId) {
+		return mapper.checkApply(pNumber, userId);
+	}
+	
+	public int insertApply(int pNumber, String userId) {
+		return mapper.insertApply(pNumber, userId);
+	}
+	
+	public int cancelApply(int pNumber, String userId) {
+		return mapper.cancelApply(pNumber, userId);
 	}
 }
