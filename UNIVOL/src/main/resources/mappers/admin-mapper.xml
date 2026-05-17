@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.univol.admin.AdminMapper">
+	<!-- 관리자페이지 회원 페이지네이션 -->
+	<select id="getMemberCount" resultType="_int">
+		select count(*) from users
+	</select>
+
+<select id="selectAll" resultType="com.univol.member.vo.Member">
+	    select * from (
+	        select rownum as rn, A.* from (
+	            SELECT user_id, user_pw, user_name,
+	                   TO_CHAR(birth, 'YYYY-MM-DD') AS birth,
+	                   gender, phone, address, is_admin, member_status
+	            FROM users
+	        ) A
+	        where rownum &lt;= #{endRow}
+	    )
+	    where rn >= #{startRow}
+	</select>
+
+	<update id="banMember">
+		update users
+		set member_status = 'N'
+		where user_id = #{userId}
+	</update>
+
+	<update id="activeMember">
+		update users
+		set member_status = 'Y'
+		where user_id = #{userId}
+	</update>
+
+	<update id="toAdminMember">
+		update users
+		set is_admin = 'Y'
+		where user_id=#{userId}
+	</update>
+
+	<update id="toNormalMember">
+		update users
+		set is_admin = 'N'
+		where user_id = #{userId}
+	</update>
+
+	<!-- 관리자페이지용 -->
+	<select id="getPostCount" resultType="_int">
+		select count(*) from post
+	</select>
+
+	<select id="selectAllPost" resultType="com.univol.post.vo.Post">
+		 SELECT * FROM (
+        SELECT ROWNUM AS RN, A.* FROM (
+            SELECT P.*, NVL(L.LIKE_COUNT, 0) AS LIKE_COUNT
+            FROM POST P
+            LEFT JOIN (
+                SELECT P_NUMBER, COUNT(*) AS LIKE_COUNT
+                FROM P_LIKE
+                GROUP BY P_NUMBER
+            ) L ON P.P_NUMBER = L.P_NUMBER
+            ORDER BY P.P_NUMBER DESC
+        ) A
+        WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE RN &gt;= #{startRow}
+	</select>
+
+	<update id="rollbackPost">
+		update post
+		set p_status ='Y'
+		where p_number = #{pNumber}
+	</update>
+
+	<update id="deletePost">
+		update post
+		set p_status = 'N'
+		where p_number = #{pNumber}
+	</update>
+	
+	<!-- 관리자 - 댓글 삭제/복구 -->
+	<update id="adminDeleteReply">
+		UPDATE REPLY
+		SET C_STATUS = 'N'
+		WHERE C_NUMBER = #{rNumber}
+	</update>
+
+	<update id="adminRollbackReply">
+		UPDATE REPLY
+		SET C_STATUS = 'Y'
+		WHERE C_NUMBER = #{rNumber}
+	</update>
+
+	<!-- 관리자 - 전체 댓글 수 -->
+	<select id="getReplyCount" resultType="_int">
+		SELECT COUNT(*) FROM REPLY
+	</select>
+
+	<!-- 관리자 - 전체 댓글 목록 (페이지네이션) -->
+	<select id="selectAllReply" resultType="com.univol.post.vo.Reply">
+		SELECT * FROM (
+		    SELECT ROWNUM AS RN, A.* FROM (
+		        SELECT R.C_NUMBER,
+		               R.COMMENTS,
+		               TO_CHAR(R.C_DATE, 'YYYY-MM-DD') C_DATE,
+		               R.P_NUMBER,
+		               R.USER_ID,
+		               U.USER_NAME,
+		               R.C_STATUS
+		        FROM REPLY R
+		        JOIN USERS U ON R.USER_ID = U.USER_ID
+		        ORDER BY R.C_NUMBER DESC
+		    ) A
+		    WHERE ROWNUM &lt;= #{endRow}
+		)
+		WHERE RN &gt;= #{startRow}
+	</select>
+</mapper>
