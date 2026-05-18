@@ -91,30 +91,32 @@ public class MemberController {
 	/* 마이페이지 */
 	@GetMapping("/myPage")
 	public ModelAndView myPage(
-			HttpSession session, ModelAndView mv,
-			@RequestParam(value = "applyPage", defaultValue = "1") int applyPage,
-			@RequestParam(value = "myPostPage", defaultValue = "1") int myPostPage) {
-
-		Member loginUser = (Member) session.getAttribute("loginUser");
-		if (loginUser != null) {
-			String id = loginUser.getUserId();
-			setApplyList(mv, id, applyPage);
-			setMyPostList(mv, id, myPostPage);
-			mv.setViewName("users/myPage");
-		}else {
-				throw new PostException ("로그인이 필요한 페이지입니다");
-		}
-		return mv;
+	        HttpSession session, ModelAndView mv,
+	        @RequestParam(value = "applyPage", defaultValue = "1") int applyPage,
+	        @RequestParam(value = "myPostPage", defaultValue = "1") int myPostPage,
+	        @RequestParam(value = "filter", defaultValue = "all") String filter) {
+		
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    if (loginUser != null) {
+	        String id = loginUser.getUserId();
+	        setApplyList(mv, id, applyPage, filter);
+	        setMyPostList(mv, id, myPostPage);
+	        mv.setViewName("users/myPage");
+	        mv.addObject("filter", filter);
+	    } else {
+	        throw new PostException("로그인이 필요한 페이지입니다");
+	    }
+	    return mv;
 	}
 
 	/* 마이페이지 - 신청현황 목록 세팅 */
-	public void setApplyList(ModelAndView mv, String id, int page) {
-		int totalCount = mService.getApplyCount(id);
-		PageInfo pi = Pagination.getPageInfo(page, totalCount, 5);
-		if (page < 1) page = 1;
-		if (page > pi.getMaxPage()) page = pi.getMaxPage();
-		mv.addObject("applyList", mService.getApplyList(pi, id));
-		mv.addObject("applyPi", pi);
+	public void setApplyList(ModelAndView mv, String id, int page, String filter) {
+	    int totalCount = mService.getApplyCount(id,filter);
+	    PageInfo pi = Pagination.getPageInfo(page, totalCount, 5);
+	    if (page < 1) page = 1;
+	    if (page > pi.getMaxPage()) page = pi.getMaxPage();
+	    mv.addObject("applyList", mService.getApplyList(pi, id, filter));
+	    mv.addObject("applyPi", pi);
 	}
 
 	/* 마이페이지 - 작성글 목록 세팅 */

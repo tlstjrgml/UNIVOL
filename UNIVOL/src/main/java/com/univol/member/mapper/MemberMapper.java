@@ -22,8 +22,8 @@ public interface MemberMapper {
 	int deleteMember(Member m);
 
 	/* 마이페이지 */
-	int getApplyCount(String userId);
-	ArrayList<HashMap<String, Object>> getApplyList(String userId, RowBounds rowBounds);
+	int getApplyCount(HashMap<String, Object> params);
+	ArrayList<HashMap<String, Object>> getApplyList(HashMap<String, Object> params, RowBounds rowBounds);
 
 	int getMyPostCount(String userId);
 	ArrayList<HashMap<String, Object>> getMyPostList(String userId, RowBounds rowBounds);

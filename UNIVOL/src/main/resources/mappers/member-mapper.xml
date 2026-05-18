@@ -21,35 +21,49 @@
         )
     </insert>
 
-    
-	
-	  <select id="getApplyCount" parameterType="String" resultType="int">
-		    SELECT COUNT(*) 
-		    FROM REPLY R
-		        JOIN POST P ON R.P_NUMBER = P.P_NUMBER
-		    WHERE R.USER_ID = #{userId}
+	  <select id="getApplyCount" parameterType="map" resultType="int">
+		    SELECT COUNT(*)
+		    FROM APPLY A
+		        JOIN POST P ON A.P_NUMBER = P.P_NUMBER
+		    WHERE A.USER_ID = #{userId}
 		      AND P.P_TYPE = 'V'
-		      AND R.C_STATUS = 'Y'
+		      AND A.A_STATE = 'Y'
+		      <choose>
+				    <when test="filter == 'ongoing'">
+				        AND P.P_DATE >= SYSDATE
+				    </when>
+				    <when test="filter == 'ended'">
+				        AND P.P_DATE &lt; SYSDATE
+				    </when>
+			 </choose>
 	</select>
 
 	<select id="getMyPostCount" parameterType="String" resultType="int">
     	SELECT COUNT(*) FROM POST WHERE USER_ID = #{userId} AND P_STATUS = 'Y'
 	</select>
 
-	<select id="getApplyList" parameterType="String" resultType="map">
+		<select id="getApplyList" parameterType="map" resultType="map">
 		    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
-		           TO_CHAR(R.C_DATE, 'YYYY.MM.DD') C_DATE,
+		           TO_CHAR(A.A_DATE, 'YYYY.MM.DD') C_DATE,
 		           CEIL(
 		               (SELECT COUNT(*) FROM POST WHERE P_NUMBER >= P.P_NUMBER AND P_TYPE = 'V')
 		               / 10.0
 		           ) AS PAGE_NUM
-		    FROM REPLY R
-		        JOIN POST P ON R.P_NUMBER = P.P_NUMBER
+		    FROM APPLY A
+		        JOIN POST P ON A.P_NUMBER = P.P_NUMBER
 		        JOIN USERS U ON P.USER_ID = U.USER_ID
-		    WHERE R.USER_ID = #{userId}
+		    WHERE A.USER_ID = #{userId}
 		      AND P.P_TYPE = 'V'
-		      AND R.C_STATUS = 'Y'
-		    ORDER BY R.C_NUMBER DESC
+		      AND A.A_STATE = 'Y'
+		      <choose>
+				    <when test="filter == 'ongoing'">
+				        AND P.P_DATE >= SYSDATE
+				    </when>
+				    <when test="filter == 'ended'">
+				        AND P.P_DATE &lt; SYSDATE
+				    </when>
+			</choose>
+		    ORDER BY A.A_NUMBER DESC
 	</select>
 
 	<select id="getMyPostList" parameterType="String" resultType="map">
