@@ -199,7 +199,7 @@
 	
 	<insert id="insertApply">
 		insert into apply 
-		values(SEQ_APPLY.nextval, 'Y', #{userId}, #{pNumber})
+		values(SEQ_APPLY.nextval, 'Y', #{userId}, #{pNumber}, SYSDATE)
 	</insert>
 	
 	<delete id="cancelApply">
