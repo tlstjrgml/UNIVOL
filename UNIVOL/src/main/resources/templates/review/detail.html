@@ -55,7 +55,7 @@
   <div class="container">
 
     <!-- 목록으로 버튼 -->
-    <a class="back-btn" th:href="@{/review(page=${page})}">← 목록으로</a>
+    <a class="back-btn" th:href="@{/review(page=${currentPage}, sort=${sort}, keyword=${keyword})}">← 목록으로</a>
 
     <!-- 게시글 박스 -->
     <div class="post-box">
@@ -119,7 +119,7 @@
       <div id="rList">
         <div class="comment-item" th:each="reply : ${list}">
           <div class="comment-writer">[[${reply.userName}]]</div>
-          <div class="comment-date" th:text="${reply.cDate}"></div>
+          <div class="comment-date" th:text="${#strings.substring(reply.cDate, 0, 10)}"></div>
           <div class="comment-content-text" th:id="'content-' + ${reply.cNumber}">[[${reply.comments}]]</div>
 
           <!-- 댓글 수정/삭제 버튼: 본인 댓글만 노출 -->
@@ -197,53 +197,60 @@
       
       /* 댓글 등록 */
       document.getElementById('replyBtn').addEventListener('click', () => {
-        $.ajax({
-          url: '/review/rinsert',
-          data: {
-            comments: document.getElementById('comments').value,
-            pNumber: /*[[${r.rNumber}]]*/5,
-            userId: /*[[${session.loginUser.userId}]]*/'user'
-          },
-          success: data => {
-            const divPar = document.querySelector('#rList');
-            divPar.innerHTML = '';
-            for (const c of data) {
-              const commentItem = document.createElement('div');
-              commentItem.classList.add('comment-item');
-              const writerDiv = document.createElement('div');
-              writerDiv.classList.add('comment-writer');
-              writerDiv.innerText = c.userName;
-              const cDateDiv = document.createElement('div');
-              cDateDiv.classList.add('comment-date');
-              cDateDiv.innerText = c.cDate;
-              const commentsDiv = document.createElement('div');
-              commentsDiv.innerText = c.comments;
-              commentItem.append(writerDiv, cDateDiv, commentsDiv);
-              if (c.userId === userId) {
-                  const actionsDiv = document.createElement('div');
-                  actionsDiv.classList.add('reply-actions');
-                  actionsDiv.innerHTML = `
-                    <button type="button" class="reply-btn-small" onclick="submitUpdate(${c.cNumber}, this)">수정</button>
-                    <form action="/review/reviewReply/delete" method="POST" class="delete-form" style="display:inline;">
-                      <input type="hidden" name="cNumber" value="${c.cNumber}">
-                      <input type="hidden" name="rNumber" value="${document.getElementById('updateCno').closest('form').querySelector('[name=pNumber]').value}">
-                      <input type="hidden" name="page" value="${document.querySelector('input[name=page]').value}">
-                      <button type="button" class="btn-pre-delete reply-btn-small reply-btn-delete">삭제</button>
-                      <span class="confirm-group" style="display:none;">
-                        <button type="submit" class="reply-btn-small" style="background-color:#d33; color:white;">확인</button>
-                        <button type="button" class="btn-cancel reply-btn-small">취소</button>
-                      </span>
-                    </form>
-                  `;
-                  commentItem.append(actionsDiv);
-                }
-              
-              divPar.append(commentItem);
-            }
-            document.getElementById('comments').value = '';
-          },
-          error: data => console.log(data)
-        });
+    	  if(document.getElementById('comments').value.length != 0){
+    		  $.ajax({
+    	          url: '/review/rinsert',
+    	          data: {
+    	            comments: document.getElementById('comments').value,
+    	            pNumber: /*[[${r.rNumber}]]*/5,
+    	            userId: /*[[${session.loginUser.userId}]]*/'user'
+    	          },
+    	          success: data => {
+    	            const divPar = document.querySelector('#rList');
+    	            divPar.innerHTML = '';
+    	            for (const c of data) {
+    	              const commentItem = document.createElement('div');
+    	              commentItem.classList.add('comment-item');
+    	              const writerDiv = document.createElement('div');
+    	              writerDiv.classList.add('comment-writer');
+    	              writerDiv.innerText = c.userName;
+    	              const cDateDiv = document.createElement('div');
+    	              cDateDiv.classList.add('comment-date');
+    	              cDateDiv.innerText = c.cDate.substr(0,10);
+    	              const commentsDiv = document.createElement('div');
+    	              commentsDiv.id=`content-${c.cNumber}`;
+    	              commentsDiv.innerText = c.comments;
+    	              commentItem.append(writerDiv, cDateDiv, commentsDiv);
+    	              if (c.userId === userId) {
+    	                  const actionsDiv = document.createElement('div');
+    	                  actionsDiv.classList.add('reply-actions');
+    	                  actionsDiv.innerHTML = `
+    	                    <button type="button" class="reply-btn-small" onclick="submitUpdate(${c.cNumber}, this)">수정</button>
+    	                    <form action="/review/reviewReply/delete" method="POST" class="delete-form" style="display:inline;">
+    	                      <input type="hidden" name="cNumber" value="${c.cNumber}">
+    	                      <input type="hidden" name="rNumber" value="${document.getElementById('updateCno').closest('form').querySelector('[name=pNumber]').value}">
+    	                      <input type="hidden" name="page" value="${document.querySelector('input[name=page]').value}">
+    	                      <button type="button" class="btn-pre-delete reply-btn-small reply-btn-delete">삭제</button>
+    	                      <span class="confirm-group" style="display:none;">
+    	                        <button type="submit" class="reply-btn-small" style="background-color:#d33; color:white;">확인</button>
+    	                        <button type="button" class="btn-cancel reply-btn-small">취소</button>
+    	                      </span>
+    	                    </form>
+    	                  `;
+    	                  commentItem.append(actionsDiv);
+    	                }
+    	              
+    	              divPar.append(commentItem);
+    	            }
+    	            document.getElementById('comments').value = '';
+    	          },
+    	          error: data => console.log(data)
+    	        });
+    	  }else{
+    		alert('댓글 내용을 작성해주세요');
+  			document.getElementById('comments').focus();
+    	  }
+        
       });
 
       /* 좋아요 버튼: 서버 응답 기반으로 상태 업데이트 */

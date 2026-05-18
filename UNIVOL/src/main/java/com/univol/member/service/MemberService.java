@@ -50,31 +50,9 @@ public class MemberService {
 		return mapper.deleteMember(m);
 	}
 
-	/* 관리자 - 회원 목록 */
-	public int getMemberCount() {
-		return mapper.getMemberCount();
-	}
+	
 
-	public ArrayList<Member> selectAll(int startRow, int endRow) {
-		return mapper.selectAll(startRow, endRow);
-	}
-
-	/* 관리자 - 회원 상태/권한 변경 */
-	public int activeMember(Member m) {
-		return mapper.activeMember(m);
-	}
-
-	public int banMember(Member m) {
-		return mapper.banMember(m);
-	}
-
-	public int toAdminMember(Member m) {
-		return mapper.toAdminMember(m);
-	}
-
-	public int toNormalMember(Member m) {
-		return mapper.toNormalMember(m);
-	}
+	
 
 	/* 마이페이지 - 신청현황 */
 	public int getApplyCount(String userId) {

@@ -21,16 +21,6 @@ public interface MemberMapper {
 	int updateMember(Member m);
 	int deleteMember(Member m);
 
-	/* 관리자 - 회원 목록 */
-	int getMemberCount();
-	ArrayList<Member> selectAll(@Param("startRow") int startRow, @Param("endRow") int endRow);
-
-	/* 관리자 - 회원 상태/권한 변경 */
-	int activeMember(Member m);
-	int banMember(Member m);
-	int toAdminMember(Member m);
-	int toNormalMember(Member m);
-
 	/* 마이페이지 */
 	int getApplyCount(String userId);
 	ArrayList<HashMap<String, Object>> getApplyList(String userId, RowBounds rowBounds);

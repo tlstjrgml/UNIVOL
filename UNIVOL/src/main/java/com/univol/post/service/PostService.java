@@ -95,6 +95,7 @@ public class PostService {
 	}
 
 	/* 좋아요 기능 */
+	
 	public int postLike(int pNumber, String userId) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("pNumber", pNumber);
@@ -119,5 +120,18 @@ public class PostService {
 	public int likeCount(int pNumber) {
 		HashMap<String, Object> map = new HashMap<>();
 		return mapper.likeCount(pNumber);
+	}
+
+	
+	public int checkApply(int pNumber, String userId) {
+		return mapper.checkApply(pNumber, userId);
+	}
+	
+	public int insertApply(int pNumber, String userId) {
+		return mapper.insertApply(pNumber, userId);
+	}
+	
+	public int cancelApply(int pNumber, String userId) {
+		return mapper.cancelApply(pNumber, userId);
 	}
 }

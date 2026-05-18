@@ -76,6 +76,17 @@ public class MemberController {
 		mService.signUp(m);
 		return "redirect:/logIn";
 	}
+	
+	/* 회원 탈퇴 */
+	@PostMapping("/deleteMember")
+	@ResponseBody
+	public int deleteMember(@ModelAttribute Member m, SessionStatus status) {
+		int result = mService.deleteMember(m);
+		if (result > 0) {
+			status.setComplete();
+		}
+		return result;
+	}
 
 	/* 마이페이지 */
 	@GetMapping("/myPage")
@@ -140,16 +151,6 @@ public class MemberController {
 		return "users/edit";
 	}
 
-	/* 회원 탈퇴 */
-	@PostMapping("/deleteMember")
-	@ResponseBody
-	public int deleteMember(@ModelAttribute Member m, SessionStatus status) {
-		int result = mService.deleteMember(m);
-		if (result > 0) {
-			status.setComplete();
-		}
-		return result;
-	}
 	
 	/*회원가입 id중복 체크 */
 	@GetMapping("/checkValue")

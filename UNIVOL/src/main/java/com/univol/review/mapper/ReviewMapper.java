@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import com.univol.common.PageInfo;
+import com.univol.post.vo.Post;
 import com.univol.review.vo.Review;
 import com.univol.review.vo.ReviewReply;
 
@@ -52,4 +53,7 @@ public interface ReviewMapper {
 	int deleteLike(HashMap<String, Object> map);
 	int insertLike(HashMap<String, Object> map);
 	int likeCount(int pNumber);
+	
+	/* 참여봉사목록 */
+	ArrayList<Post> selectApplyList(@Param("userId")String userId);
 }

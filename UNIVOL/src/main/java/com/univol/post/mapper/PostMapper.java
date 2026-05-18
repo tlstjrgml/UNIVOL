@@ -50,4 +50,12 @@ public interface PostMapper {
 	/* 관리자 - 게시글 상태 변경 */
 	int rollbackPost(Post p);
 	int deletePost(Post p);
+
+//	참여
+	int checkApply(@Param("pNumber")int pNumber, @Param("userId")String userId);
+	int insertApply(@Param("pNumber")int pNumber, @Param("userId")String userId);
+	
+//	참여취소
+	int cancelApply(@Param("pNumber")int pNumber, @Param("userId")String userId);
+	
 }
