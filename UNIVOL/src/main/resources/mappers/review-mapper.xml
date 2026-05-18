@@ -36,6 +36,10 @@
 		<result column="USER_ID" property="userId"/>
 		<result column="P_STATUS" property="rStatus"/>
 		<result column="USER_NAME" property="userName"/>
+		<result column="REF_P_NUMBER" property="pNumber"/>
+		<result column="REF_TITLE" property="refTitle"/>
+		<result column="REF_CONTENTS" property="refContents"/>
+		<result column="REF_DATE" property="refDate"/>
 	</resultMap>
 
 	<resultMap id="replyResultSet" type="com.univol.review.vo.ReviewReply">
@@ -49,11 +53,16 @@
 	</resultMap>
 
 	<!-- 상세 조회 -->
+	<!-- 상세 조회 -->
 	<select id="selectReview" resultMap="reviewResultSet">
-		SELECT *
-		FROM POST
-			JOIN USERS USING(USER_ID)
-		WHERE P_NUMBER = #{id} AND P_STATUS = 'Y'
+	    SELECT r.*, u.USER_NAME,
+	           v.P_TITLE AS REF_TITLE,
+	           v.CONTENTS AS REF_CONTENTS,
+	           v.P_DATE AS REF_DATE
+	    FROM POST r
+	    JOIN USERS u ON r.USER_ID = u.USER_ID
+	    LEFT JOIN POST v ON r.REF_P_NUMBER = v.P_NUMBER
+	    WHERE r.P_NUMBER = #{id} AND r.P_STATUS = 'Y'
 	</select>
 
 	<!-- 조회수 증가 -->
@@ -75,8 +84,8 @@
 		<selectKey order="BEFORE" resultType="_int" keyProperty="rNumber">
 			SELECT SEQ_POST.NEXTVAL FROM DUAL
 		</selectKey>
-		INSERT INTO POST
-		VALUES(#{rNumber}, #{rTitle}, #{rContents}, DEFAULT, SYSDATE, #{pType}, #{userId}, 'Y','N', default)
+		INSERT INTO POST(P_NUMBER, P_TITLE, CONTENTS, VIEWS, P_DATE, P_TYPE, USER_ID, P_STATUS, IS_NOTICE, CREATE_DATE, REF_P_NUMBER)
+		VALUES(#{rNumber}, #{rTitle}, #{rContents}, DEFAULT, SYSDATE, #{pType}, #{userId}, 'Y', 'N', DEFAULT, #{pNumber})
 	</insert>
 
 	<!-- 게시글 삭제 -->
@@ -122,19 +131,16 @@
 	        NVL(L.LIKE_COUNT, 0) AS LIKE_COUNT
 	    FROM POST P
 	    JOIN USERS U ON P.USER_ID = U.USER_ID
-	
 	    LEFT JOIN (
 	        SELECT P_NUMBER, COUNT(*) AS LIKE_COUNT
 	        FROM P_LIKE
 	        GROUP BY P_NUMBER
 	    ) L ON P.P_NUMBER = L.P_NUMBER
-	
 	    WHERE P.P_TYPE = 'R'
 	    AND (
 	        P.P_TITLE LIKE '%' || #{keyword} || '%'
 	        OR U.USER_NAME LIKE '%' || #{keyword} || '%'
 	    )
-	
 	    ORDER BY
 	    <choose>
 	        <when test="sort == 'views_desc'">P.VIEWS DESC</when>

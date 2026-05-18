@@ -19,7 +19,7 @@
     .post-box, .comment-box { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
     .post-title { font-size: 28px; font-weight: 700; color: #222; margin-bottom: 1rem; }
     .post-info { display: flex; gap: 1.5rem; font-size: 13px; color: #888; border-bottom: 1px solid #f0f0ea; padding-bottom: 1rem; margin-bottom: 2rem; }
-    .post-content { line-height: 1.8; color: #333; font-size: 14px; min-height: 300px; margin-bottom: 20px; }
+    .post-content { line-height: 1.8; color: #333; font-size: 18px; min-height: 150px; margin-bottom: 20px; }
     .btn-area { text-align: right; }
 
     /* 버튼 공통 */
@@ -45,6 +45,15 @@
     .reply-edit-box { background: #f9f9f7; border-radius: 8px; padding: 1.5rem; margin-top: 10px; border: 1px solid #e2e2da; }
     .reply-edit-textarea { width: 100%; padding: 12px; border: 1px solid #d0d0c8; border-radius: 8px; font-size: 13px; resize: none; min-height: 80px; outline: none; }
     .reply-edit-textarea:focus { border-color: #426B1F; }
+	
+	/*봉사 정보*/
+	.vol-info-box { background: #f9f9f7; border: 1px solid #e0e0d8; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+	.vol-info-box table { width: 100%; border-collapse: collapse; }
+	.vol-info-box th { width: 100px; padding: 10px 14px; font-size: 13px; font-weight: 700; color: #426B1F; text-align: left; vertical-align: top; }
+	.vol-info-box td { padding: 10px 14px; font-size: 13px; color: #444; line-height: 1.7; }
+	.vol-info-box tr { border-bottom: 1px solid #ebebea; }
+	.vol-info-box tr:last-child { border-bottom: none; }
+	.vol-info-title { font-size: 13px; font-weight: 700; color: #426B1F; margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -68,24 +77,47 @@
         <span>조회수: [[${r.rViews}]]</span>
       </div>
 
+	  <p class="vol-info-title">📋 참여 봉사 정보</p>
+	  <div class="vol-info-box">
+	      <table>
+	          <tr>
+	              <th>봉사제목</th>
+	              <td th:text="${r.refTitle}"></td>
+	          </tr>
+	          <tr>
+	              <th>봉사날짜</th>
+	              <td th:text="${r.refDate}"></td>
+	          </tr>
+	          <tr>
+	              <th>봉사내용</th>
+	              <td th:text="${r.refContents}"></td>
+	          </tr>
+	      </table>
+	  </div>
       <!-- 조회 모드 -->
       <div id="view-mode">
         <div class="post-content">[[${r.rContents}]]</div>
       </div>
 
-      <!-- 수정 모드 -->
-      <div id="edit-mode" style="display:none;">
-        <form th:action="@{/review/update}" method="post">
-          <input type="hidden" name="rNumber" th:value="${r.rNumber}">
-          <input type="hidden" name="page" th:value="${page}">
-          <input type="text" name="rTitle" th:value="${r.rTitle}" style="width:100%; padding:10px; margin-bottom:10px;">
-          <textarea name="rContents">[[${r.rContents}]]</textarea>
-          <div class="btn-area">
-            <button type="submit">저장</button>
-            <button type="button" id="cancelBtn">취소</button>
-          </div>
-        </form>
-      </div>
+	  <!-- 수정 모드 -->
+	  <div id="edit-mode" style="display:none;">
+	    <form th:action="@{/review/update}" method="post">
+	      <input type="hidden" name="rNumber" th:value="${r.rNumber}">
+	      <input type="hidden" name="page" th:value="${page}">
+	      <div style="margin-bottom:10px;">
+	        <label style="font-size:13px; font-weight:700; color:#426B1F; display:block; margin-bottom:6px;">제목</label>
+	        <input type="text" name="rTitle" th:value="${r.rTitle}" style="width:100%; padding:10px; border:1px solid #d0d0c8; border-radius:8px; font-size:14px; outline:none;">
+	      </div>
+	      <div style="margin-bottom:10px;">
+	        <label style="font-size:13px; font-weight:700; color:#426B1F; display:block; margin-bottom:6px;">내용</label>
+	        <textarea name="rContents" style="height:200px;">[[${r.rContents}]]</textarea>
+	      </div>
+	      <div class="btn-area">
+	        <button type="submit">저장</button>
+	        <button type="button" id="cancelBtn">취소</button>
+	      </div>
+	    </form>
+	  </div>
 
       <!-- 수정/삭제/좋아요 버튼: 작성자만 수정/삭제 노출 -->
       <div class="btn-area" id="view-btn">

@@ -99,35 +99,35 @@ public class ReviewController {
 
 	/* 후기 상세 조회 */
 	@GetMapping("/{id}/{page}")
-	public String selectReview(@PathVariable("id") int bId, @PathVariable("page") int page,
-			HttpSession session, Model model) {
-		Member loginUser = (Member) session.getAttribute("loginUser");
-		if(loginUser== null) {
-			throw new PostException ("로그인이 필요한 페이지입니다");
-		}
-		String id = null;
-		if (loginUser != null) {
-			id = loginUser.getUserId();
-		}
+	public String selectReview(@PathVariable("id") int bId, 
+	        @PathVariable("page") int page,
+	        @RequestParam(value = "sort", defaultValue = "latest") String sort,
+	        @RequestParam(value = "keyword", defaultValue = "") String keyword,
+	        HttpSession session, Model model) {
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    if(loginUser == null) {
+	        throw new PostException("로그인이 필요한 페이지입니다");
+	    }
+	    String id = loginUser.getUserId();
 
-		int likeCount = rService.likeCount(bId);
-		int isLiked = 0;
-		if(id != null) {
-			isLiked = rService.reviewLike(bId, id);
-		}
+	    int likeCount = rService.likeCount(bId);
+	    int isLiked = rService.reviewLike(bId, id);
 
-		Review r = rService.selectReview(bId, id);
-		ArrayList<ReviewReply> list = rService.selectReplyList(bId);
-		if (r != null) {
-			model.addAttribute("isLiked", isLiked);
-			model.addAttribute("likeCount", likeCount);
-			model.addAttribute("r", r);
-			model.addAttribute("page", page);
-			model.addAttribute("list", list);
-			return "review/detail";
-		} else {
-			throw new ReviewException("게시글 상세보기를 실패하였습니다.");
-		}
+	    Review r = rService.selectReview(bId, id);
+	    ArrayList<ReviewReply> list = rService.selectReplyList(bId);
+	    if (r != null) {
+	        model.addAttribute("isLiked", isLiked);
+	        model.addAttribute("likeCount", likeCount);
+	        model.addAttribute("r", r);
+	        model.addAttribute("page", page);
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("sort", sort);
+	        model.addAttribute("keyword", keyword);
+	        model.addAttribute("list", list);
+	        return "review/detail";
+	    } else {
+	        throw new ReviewException("게시글 상세보기를 실패하였습니다.");
+	    }
 	}
 
 	/* 수정 후 상세 조회 */
