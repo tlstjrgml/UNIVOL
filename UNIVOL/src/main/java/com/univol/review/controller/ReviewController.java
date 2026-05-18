@@ -22,6 +22,7 @@ import com.univol.review.exception.ReviewException;
 import com.univol.review.service.ReviewService;
 import com.univol.review.vo.Review;
 import com.univol.review.vo.ReviewReply;
+import com.univol.post.vo.Post;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -69,9 +70,11 @@ public class ReviewController {
 
 	/* 후기 작성 페이지 이동 */
 	@GetMapping("write")
-	public String writeReview(HttpSession session) {
+	public String writeReview(HttpSession session, Model model) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		if(loginUser != null) {
+			ArrayList<Post>applyList = rService.selectApplyList(loginUser.getUserId());
+			model.addAttribute("applyList", applyList);
 			return "review/write";
 		}else {
 			throw new ReviewException("로그인이 필요한 페이지입니다");
@@ -243,8 +246,7 @@ public class ReviewController {
 		}
 	}
 	
-
-	
 	/* 검색 */
+	
 	
 }

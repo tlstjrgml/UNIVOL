@@ -219,10 +219,10 @@
 		WHERE P_NUMBER = #{pNumber}
 	</select>
 
-	<select id="applyList" resultType="com.univol.post.vo.Post">
-		select * from apply a 
+	<select id="selectApplyList" resultType="com.univol.post.vo.Post">
+		select p.p_number, p.p_title from apply a 
 			join post p on a.p_number = p.p_number 
-		where user_id=#{userId} and a_state='Y'
+		where a.user_id=#{userId} and a.a_state='Y'
 	</select>
 	
 </mapper>
