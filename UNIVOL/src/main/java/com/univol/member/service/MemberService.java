@@ -50,19 +50,23 @@ public class MemberService {
 		return mapper.deleteMember(m);
 	}
 
-	
 
-	
 
 	/* 마이페이지 - 신청현황 */
-	public int getApplyCount(String userId) {
-		return mapper.getApplyCount(userId);
+	public int getApplyCount(String userId, String filter) {
+	    HashMap<String, Object> params = new HashMap<>();
+	    params.put("userId", userId);
+	    params.put("filter", filter);
+	    return mapper.getApplyCount(params);
 	}
 
-	public ArrayList<HashMap<String, Object>> getApplyList(PageInfo pi, String userId) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.getApplyList(userId, rowBounds);
+	public ArrayList<HashMap<String, Object>> getApplyList(PageInfo pi, String userId, String filter) {
+	    int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+	    RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+	    HashMap<String, Object> params = new HashMap<>();
+	    params.put("userId", userId);
+	    params.put("filter", filter);
+	    return mapper.getApplyList(params, rowBounds);
 	}
 
 	/* 마이페이지 - 작성글 */
