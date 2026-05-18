@@ -15,7 +15,7 @@
     /* 카드 */
     .card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; overflow: hidden; }
     .card-header { padding: 1.1rem 1.5rem; border-bottom: 1px solid #e0e0d8; display: flex; align-items: center; justify-content: space-between; }
-    .card-header h2 { font-size: 16px; font-weight: 700; color: #222; }
+    .card-header h2 { font-size: 20px; font-weight: 700; color: #222; }
     .card-header p { font-size: 13px; color: #888; margin-top: 3px; }
 
     /* 버튼 */
@@ -50,13 +50,21 @@
 
     <!-- 신청현황 -->
     <div class="card">
-      <div class="card-header">
+    <div class="card-header">
         <div>
-          <h2>신청현황</h2>
-          <p th:text="${session.loginUser.userName} + '님이 신청한 봉사 목록'"></p>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <h2>신청현황</h2>
+                <select th:onchange="|location.href='/myPage?filter='+this.value+'&applyPage=1&myPostPage=' + ${myPostPi.currentPage}|"
+                        style="padding:6px 12px; border:1px solid #000000; border-radius:8px; font-size:13px; color:#000000; cursor:pointer; outline:none;">
+                    <option value="all"     th:selected="${filter == 'all'}">전체</option>
+                    <option value="ongoing" th:selected="${filter == 'ongoing'}">신청중인 봉사</option>
+                    <option value="ended"   th:selected="${filter == 'ended'}">끝난 봉사</option>
+                </select>
+            </div>
+            <p th:text="${session.loginUser.userName} + '님이 신청한 봉사 목록'"></p>
         </div>
         <a th:href="@{/edit}" class="header-btn btn-outline">개인정보 수정</a>
-      </div>
+    </div>
       <table>
         <thead>
           <tr>

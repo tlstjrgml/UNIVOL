@@ -69,6 +69,7 @@
 		from post p
 			join users u on p.user_id = u.user_id
 		where p_number = #{pNumber}
+		and p.p_status = 'Y'
 	</select>
 
 	<update id="updateReview">
@@ -199,7 +200,8 @@
 	
 	<insert id="insertApply">
 		insert into apply 
-		values(SEQ_APPLY.nextval, 'Y', #{userId}, #{pNumber}, SYSDATE)
+		values(SEQ_APPLY.nextval, 'Y', #{userId}, #{pNumber}, default)
+
 	</insert>
 	
 	<delete id="cancelApply">

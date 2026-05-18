@@ -21,20 +21,28 @@
         )
     </insert>
 
-	    <select id="getApplyCount" parameterType="String" resultType="int">
-		    SELECT COUNT(*) 
+	  <select id="getApplyCount" parameterType="map" resultType="int">
+		    SELECT COUNT(*)
 		    FROM APPLY A
 		        JOIN POST P ON A.P_NUMBER = P.P_NUMBER
 		    WHERE A.USER_ID = #{userId}
 		      AND P.P_TYPE = 'V'
 		      AND A.A_STATE = 'Y'
+		      <choose>
+				    <when test="filter == 'ongoing'">
+				        AND P.P_DATE >= SYSDATE
+				    </when>
+				    <when test="filter == 'ended'">
+				        AND P.P_DATE &lt; SYSDATE
+				    </when>
+			 </choose>
 	</select>
 
 	<select id="getMyPostCount" parameterType="String" resultType="int">
     	SELECT COUNT(*) FROM POST WHERE USER_ID = #{userId} AND P_STATUS = 'Y'
 	</select>
 
-	<select id="getApplyList" parameterType="String" resultType="map">
+		<select id="getApplyList" parameterType="map" resultType="map">
 		    SELECT P.P_NUMBER, P.P_TITLE, U.USER_NAME,
 		           TO_CHAR(A.A_DATE, 'YYYY.MM.DD') C_DATE,
 		           CEIL(
@@ -47,6 +55,14 @@
 		    WHERE A.USER_ID = #{userId}
 		      AND P.P_TYPE = 'V'
 		      AND A.A_STATE = 'Y'
+		      <choose>
+				    <when test="filter == 'ongoing'">
+				        AND P.P_DATE >= SYSDATE
+				    </when>
+				    <when test="filter == 'ended'">
+				        AND P.P_DATE &lt; SYSDATE
+				    </when>
+			</choose>
 		    ORDER BY A.A_NUMBER DESC
 	</select>
 
