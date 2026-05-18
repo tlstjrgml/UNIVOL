@@ -154,13 +154,26 @@
 			  <span class="heart" id="heart">❤️[[${likeCount}]]</span>
 			  <span id="likeText">안 좋아요</span>
 			</button>
-			<th:block th:if="${loginUser != null && isApplied == 0}">
-				<button type="button" id="applyBtn" class="action-btn">참여하기</button>
+			<!-- 날짜 안 지났을 때 참여 버튼 표시 -->
+			<th:block th:if="${!post.pDate.before(#dates.createNow())}">
+			    <th:block th:if="${loginUser != null && post.userId != loginUser.userId}">
+			        <th:block th:if="${isApplied == 0}">
+			            <button type="button" id="applyBtn" class="action-btn">참여하기</button>
+			        </th:block>
+			        <th:block th:if="${isApplied == 1}">
+			            <button type="button" id="applyBtn" class="action-btn-disabled">신청완료</button>
+			        </th:block>
+			    </th:block>
 			</th:block>
-			<th:block th:if="${loginUser != null && isApplied == 1}">
-				<button type="button" id="applyBtn" class="action-btn-disabled">참여완료</button>
+
+			<!-- 날짜 지났을 때 마감 버튼 표시 -->
+			<th:block th:if="${post.pDate.before(#dates.createNow())}">
+			    <th:block th:if="${loginUser != null && post.userId != loginUser.userId}">
+			        <button type="button" class="action-btn-disabled">신청마감</button>
+			    </th:block>
 			</th:block>
 			
+				
       	
       </div>
     </div>
@@ -356,6 +369,9 @@
 	    const applyBtn = document.getElementById('applyBtn');
 	    if(applyBtn) {
 	        applyBtn.addEventListener('click', () => {
+				if(applyBtn.className === 'action-btn-disabled'){
+					if(!confirm('정말로 취소할까요?'))return;
+				}
 	            $.ajax({
 	                url: '/post/apply',
 	                method: 'POST',
@@ -365,11 +381,14 @@
 	                },
 	                success: data => {
 	                    if(data == 0) {
-	                        applyBtn.innerText = '참여완료';
+	                        applyBtn.innerText = '신청완료';
 	                        applyBtn.className = 'action-btn-disabled';
+							alert('신청되었습니다');
 	                    } else {
 	                        applyBtn.innerText = '참여하기';
 	                        applyBtn.className = 'action-btn';
+							
+								
 	                    }
 	                },
 	                error: data => {
