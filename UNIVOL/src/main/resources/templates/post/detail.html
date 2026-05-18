@@ -161,7 +161,11 @@
 			            <button type="button" id="applyBtn" class="action-btn">참여하기</button>
 			        </th:block>
 			        <th:block th:if="${isApplied == 1}">
+<<<<<<< Updated upstream
 			            <button type="button" id="applyBtn" class="action-btn-disabled">취소하기</button>
+=======
+			            <button type="button" id="applyBtn" class="action-btn-disabled">신청취소</button>
+>>>>>>> Stashed changes
 			        </th:block>
 			    </th:block>
 			</th:block>
@@ -381,11 +385,15 @@
 	                },
 	                success: data => {
 	                    if(data == 0) {
+<<<<<<< Updated upstream
 	                        applyBtn.innerText = '취소하기';
+=======
+	                        applyBtn.innerText = '신청취소';
+>>>>>>> Stashed changes
 	                        applyBtn.className = 'action-btn-disabled';
 							alert('신청되었습니다');
 	                    } else {
-	                        applyBtn.innerText = '참여하기';
+	                        applyBtn.innerText = '신청하기';
 	                        applyBtn.className = 'action-btn';
 							
 								
