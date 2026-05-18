@@ -173,7 +173,7 @@
 			        <th:block th:each="apply : ${applyList}">
 			            <option th:value="${apply.pNumber}" 
 			            	th:text="${apply.pDate} + ' / ' + ${apply.pTitle}"
-			            	th:disabled="${#dates.createNow().after(apply.pDate)}"></option>
+			            	th:disabled="${#dates.createNow().before(apply.pDate)}"></option>
 			        </th:block>
 			    </select>
 			</div>
