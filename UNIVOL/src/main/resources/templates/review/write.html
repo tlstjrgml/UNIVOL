@@ -169,11 +169,9 @@
 			<div class="unv-field full">
 			    <label for="pNumber">참여 봉사</label>
 			    <select id="pNumber" name="pNumber" style="width:100%; padding:13px 16px; border:1px solid #ccc; border-radius:8px; font-size:15px; font-family:'Noto Sans KR',sans-serif; color:#222; background:#fafaf7; outline:none;">
-			        <option value="0">봉사를 선택하세요</option>
+			        <option value="">봉사를 선택하세요</option>
 			        <th:block th:each="apply : ${applyList}">
-			            <option th:value="${apply.pNumber}" 
-			            	th:text="${apply.pDate} + ' / ' + ${apply.pTitle}"
-			            	th:disabled="${#dates.createNow().after(apply.pDate)}"></option>
+			            <option th:value="${apply.pNumber}" th:text="${apply.pTitle}"></option>
 			        </th:block>
 			    </select>
 			</div>
@@ -193,7 +191,7 @@
 
           <!-- 등록/취소 버튼 -->
           <div class="unv-btn-group">
-            <button id="complete" type="button" class="btn-primary">완료</button>
+            <button type="submit" class="btn-primary">완료</button>
             <button type="button" class="btn-secondary" onclick="history.back()">취소</button>
           </div>
         </form>
@@ -238,46 +236,6 @@
 
     </div>
   </div>
-  
-  <script>
-  	window.onload = () => {
-  		const pNumber = document.getElementById('pNumber');
-  		let apply = '';
-  		pNumber.addEventListener('change', () => {
-  			apply = pNumber.value;
-	  		console.log(apply);
-  		})
-  		
-  		const complete = document.getElementById('complete');
-  		complete.addEventListener('click', () => {
-  			if(apply == 0){
-  				alert('봉사를 선택해주세요');
-  				return;
-  			}
-  			document.querySelector('form').submit();
-  		})
-  	}
-  
-  
-  
-  
-  
-  
-  
-  </script>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
 </body>
 </html>

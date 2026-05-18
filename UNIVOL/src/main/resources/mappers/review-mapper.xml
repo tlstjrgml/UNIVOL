@@ -220,7 +220,7 @@
 	</select>
 
 	<select id="selectApplyList" resultType="com.univol.post.vo.Post">
-		select p.p_number, p.p_title, p_date from apply a 
+		select p.p_number, p.p_title from apply a 
 			join post p on a.p_number = p.p_number 
 		where a.user_id=#{userId} and a.a_state='Y'
 	</select>
