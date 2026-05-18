@@ -60,8 +60,8 @@
 	</select>
 
 	<insert id="insertPost">
-		insert into post
-		values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default, #{isNotice}, default)
+    	insert into post(P_NUMBER, P_TITLE, CONTENTS, VIEWS, P_DATE, P_TYPE, USER_ID, P_STATUS, IS_NOTICE, CREATE_DATE, REF_P_NUMBER)
+    	values(SEQ_POST.nextval, #{pTitle}, #{contents}, 0, #{pDate}, #{pType}, #{userId}, default, #{isNotice}, default, null)
 	</insert>
 
 	<select id="selectOne" resultType="com.univol.post.vo.Post">
