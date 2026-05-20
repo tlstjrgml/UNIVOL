@@ -17,6 +17,7 @@
 				join users u on p.user_id = u.user_id
 				where p.p_type = 'V'
 				and p.p_status='Y'
+				and u.member_status='Y'
 				order by
 					<choose>
 						<when test="sort == 'views_desc'">
