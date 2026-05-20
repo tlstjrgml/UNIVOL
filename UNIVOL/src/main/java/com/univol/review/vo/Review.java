@@ -24,4 +24,8 @@ public class Review {
 	private String rStatus;
 	private String userName;
 	private int likeCount;
+	private int pNumber;
+	private String refTitle;
+	private String refContents;
+	private java.sql.Date refDate;
 }
